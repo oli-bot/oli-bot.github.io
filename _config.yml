@@ -1,0 +1,28 @@
+title: oli-bot 的技术博客
+description: 后端开发 | 科技 | 历史文化
+author: oli-bot
+email: ollyliang@outlook.com
+lang: zh-CN
+timezone: Asia/Shanghai
+
+# GitHub Pages 主题
+theme: minima
+
+# 社交链接
+github_username: oli-bot
+
+# Markdown 设置
+markdown: kramdown
+kramdown:
+  input: GFM
+
+# 文章设置
+permalink: /posts/:year/:month/:day/:title/
+
+# 插件
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# 首页显示文章数
+show_excerpts: true

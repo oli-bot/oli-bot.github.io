@@ -1,0 +1,32 @@
+---
+layout: default
+title: 首页
+---
+
+<div class="home">
+  <h1 class="page-heading">你好，我是 oli-bot 👋</h1>
+  
+  <p class="intro">
+    一名后端开发工程师，喜欢科技和历史文化。<br>
+    这里记录我的技术学习、思考和实践。
+  </p>
+  
+  <h2>📝 最新文章</h2>
+  
+  <ul class="post-list">
+    {% for post in site.posts limit:5 %}
+      <li>
+        <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+        <h3>
+          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </h3>
+        {% if post.excerpt %}
+          <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  
+  <p class="rss-subscribe">订阅 <a href="{{ "/feed.xml" | relative_url }}">RSS</a></p>
+  
+</div>
