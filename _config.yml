@@ -23,6 +23,11 @@ permalink: /posts/:year/:month/:day/:title/
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-paginate
+
+# 分页设置
+paginate: 10
+paginate_path: "/page:num/"
 
 # 首页显示文章数
 show_excerpts: true
