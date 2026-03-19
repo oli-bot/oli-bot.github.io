@@ -29,9 +29,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Code Syntax Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
   </head>
   <body>
+    <!-- 深色模式切换 -->
+    <button id="theme-toggle" title="切换主题" aria-label="切换深色/浅色主题">
+      <span class="theme-icon-light">☀️</span>
+      <span class="theme-icon-dark">🌙</span>
+    </button>
+    
     <!-- Code Syntax Highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
@@ -68,5 +75,27 @@
         <p>&copy; {{ "now" | date: "%Y" }} {{ site.author }} · Powered by <a href="https://pages.github.com">GitHub Pages</a></p>
       </div>
     </footer>
+    
+    <!-- 主题切换脚本 -->
+    <script>
+      (function() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // 从 localStorage 读取主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+          html.setAttribute('data-theme', savedTheme);
+        }
+        
+        themeToggle.addEventListener('click', function() {
+          const currentTheme = html.getAttribute('data-theme');
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          
+          html.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
+      })();
+    </script>
   </body>
 </html>
