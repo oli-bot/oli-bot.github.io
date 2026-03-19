@@ -24,6 +24,23 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-sitemap
+
+# SEO 设置
+url: "https://oli-bot.github.io"
+twitter:
+  username: oli_bot
+social:
+  name: oli-bot
+  links:
+    - https://github.com/oli-bot
+
+# 默认 SEO 图片
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/images/og-default.png
 
 # 分页设置
 paginate: 10
