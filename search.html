@@ -1,0 +1,241 @@
+---
+layout: default
+title: 搜索
+permalink: /search/
+---
+
+<div class="search-page">
+  <h1 class="page-title">🔍 搜索文章</h1>
+  
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="输入关键词搜索..." autocomplete="off">
+    <button id="search-button">搜索</button>
+  </div>
+  
+  <div id="search-results" class="search-results"></div>
+  
+  <div id="search-empty" class="search-empty" style="display: none;">
+    <p>未找到相关文章</p>
+  </div>
+  
+  <div id="search-hint" class="search-hint">
+    <p>输入关键词开始搜索，支持标题和内容搜索</p>
+  </div>
+</div>
+
+<!-- 搜索数据 -->
+<script>
+const searchData = [
+  {% for post in site.posts %}
+  {
+    title: {{ post.title | jsonify }},
+    url: {{ post.url | relative_url | jsonify }},
+    date: {{ post.date | date: "%Y-%m-%d" | jsonify }},
+    tags: {{ post.tags | jsonify }},
+    content: {{ post.content | strip_html | strip_newlines | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+];
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('search-input');
+  const searchButton = document.getElementById('search-button');
+  const searchResults = document.getElementById('search-results');
+  const searchEmpty = document.getElementById('search-empty');
+  const searchHint = document.getElementById('search-hint');
+  
+  function performSearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    
+    if (!query) {
+      searchResults.innerHTML = '';
+      searchEmpty.style.display = 'none';
+      searchHint.style.display = 'block';
+      return;
+    }
+    
+    searchHint.style.display = 'none';
+    
+    const results = searchData.filter(post => {
+      return post.title.toLowerCase().includes(query) || 
+             post.content.toLowerCase().includes(query) ||
+             post.tags.some(tag => tag.toLowerCase().includes(query));
+    });
+    
+    if (results.length === 0) {
+      searchResults.innerHTML = '';
+      searchEmpty.style.display = 'block';
+      return;
+    }
+    
+    searchEmpty.style.display = 'none';
+    
+    searchResults.innerHTML = results.map(post => {
+      let excerpt = post.content.substring(0, 200);
+      const queryIndex = post.content.toLowerCase().indexOf(query);
+      if (queryIndex > -1) {
+        const start = Math.max(0, queryIndex - 50);
+        const end = Math.min(post.content.length, queryIndex + 150);
+        excerpt = (start > 0 ? '...' : '') + 
+                  post.content.substring(start, end) + 
+                  (end < post.content.length ? '...' : '');
+      }
+      
+      // 高亮关键词
+      const regex = new RegExp(`(${query})`, 'gi');
+      const highlightedTitle = post.title.replace(regex, '<mark>$1</mark>');
+      const highlightedExcerpt = excerpt.replace(regex, '<mark>$1</mark>');
+      
+      return `
+        <article class="search-result-item">
+          <h3><a href="${post.url}">${highlightedTitle}</a></h3>
+          <p class="search-excerpt">${highlightedExcerpt}</p>
+          <div class="search-meta">
+            <time>${post.date}</time>
+            ${post.tags.length > 0 ? `<span class="search-tags">${post.tags.map(t => `<span class="mini-tag">${t}</span>`).join('')}</span>` : ''}
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+  
+  searchButton.addEventListener('click', performSearch);
+  
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      performSearch();
+    }
+  });
+  
+  // 实时搜索
+  searchInput.addEventListener('input', function() {
+    if (this.value.length >= 2) {
+      performSearch();
+    } else if (this.value.length === 0) {
+      searchResults.innerHTML = '';
+      searchEmpty.style.display = 'none';
+      searchHint.style.display = 'block';
+    }
+  });
+});
+</script>
+
+<style>
+.search-page .page-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 12px 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--bg-secondary);
+  color: var(--text-color);
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.search-box button {
+  padding: 12px 30px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.search-box button:hover {
+  background: #1d4ed8;
+}
+
+.search-results {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.search-result-item {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.search-result-item h3 {
+  margin: 0 0 10px;
+}
+
+.search-result-item h3 a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.search-result-item h3 a:hover {
+  color: var(--primary-color);
+}
+
+.search-excerpt {
+  color: var(--text-light);
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.search-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.search-meta time {
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+.search-tags {
+  display: flex;
+  gap: 5px;
+}
+
+.mini-tag {
+  background: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+mark {
+  background: #fef08a;
+  color: #000;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.search-empty, .search-hint {
+  text-align: center;
+  color: var(--text-light);
+  padding: 40px;
+}
+
+@media (max-width: 600px) {
+  .search-box {
+    flex-direction: column;
+  }
+}
+</style>
