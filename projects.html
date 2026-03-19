@@ -1,0 +1,135 @@
+---
+layout: default
+title: 项目
+permalink: /projects/
+---
+
+<div class="projects-page">
+  <h1 class="page-title">🚀 我的项目</h1>
+  
+  <div class="projects-grid">
+    <!-- 项目卡片示例 -->
+    <article class="project-card">
+      <div class="project-icon">🤖</div>
+      <h3 class="project-title">oli-bot.github.io</h3>
+      <p class="project-description">个人技术博客，基于 Jekyll 构建，记录技术学习与思考。</p>
+      <div class="project-tags">
+        <span class="project-tag">Jekyll</span>
+        <span class="project-tag">GitHub Pages</span>
+        <span class="project-tag">CSS</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/oli-bot/oli-bot.github.io" class="project-link">GitHub</a>
+        <a href="https://oli-bot.github.io" class="project-link">在线预览</a>
+      </div>
+    </article>
+    
+    <article class="project-card">
+      <div class="project-icon">🔧</div>
+      <h3 class="project-title">OpenClaw</h3>
+      <p class="project-description">开源的 AI 助手框架，支持多平台集成和自定义扩展。</p>
+      <div class="project-tags">
+        <span class="project-tag">TypeScript</span>
+        <span class="project-tag">AI</span>
+        <span class="project-tag">开源</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/openclaw" class="project-link">GitHub</a>
+      </div>
+    </article>
+    
+    <!-- 更多项目可以在这里添加 -->
+  </div>
+  
+  <div class="projects-cta">
+    <p>想了解更多项目？欢迎访问我的 <a href="https://github.com/oli-bot">GitHub</a></p>
+  </div>
+</div>
+
+<style>
+.projects-page .page-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.project-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 30px;
+  transition: all 0.3s;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+.project-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.project-title {
+  margin: 0 0 15px;
+  font-size: 1.25rem;
+  color: var(--text-color);
+}
+
+.project-description {
+  color: var(--text-light);
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.project-tag {
+  background: var(--primary-color);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.project-links {
+  display: flex;
+  gap: 15px;
+}
+
+.project-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.project-link:hover {
+  text-decoration: underline;
+}
+
+.projects-cta {
+  text-align: center;
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid var(--border-color);
+}
+
+.projects-cta a {
+  color: var(--primary-color);
+}
+</style>
