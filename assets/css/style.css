@@ -7,6 +7,7 @@
   --bg-secondary: #f9fafb;
   --border-color: #e5e7eb;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --progress-color: #3b82f6;
 }
 
 /* 深色模式变量 */
@@ -533,4 +534,253 @@ body, .site-header, .site-footer, .post, .page-link, .tag-item, #back-to-top, #t
   .search-box {
     flex-direction: column;
   }
+}
+
+/* ===== 新增功能样式 ===== */
+
+/* 阅读进度条 */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--border-color);
+  z-index: 9999;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--progress-color), #8b5cf6);
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+/* 代码复制按钮 */
+pre {
+  position: relative;
+}
+
+.copy-code-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e2e8f0;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+pre:hover .copy-code-btn {
+  opacity: 1;
+}
+
+.copy-code-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.copy-code-btn.copied {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+/* 文章翻页导航 */
+.post-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 2px solid var(--border-color);
+  gap: 20px;
+}
+
+.post-nav-item {
+  flex: 1;
+  padding: 15px 20px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s;
+}
+
+.post-nav-item:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.post-nav-item.next {
+  text-align: right;
+}
+
+.post-nav-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 5px;
+}
+
+.post-nav-title {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.post-nav-item:hover .post-nav-title {
+  color: var(--primary-color);
+}
+
+/* 文章元信息增强 */
+.post-meta-enhanced {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.post-meta-enhanced .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.post-meta-enhanced .meta-icon {
+  font-size: 1.1rem;
+}
+
+/* 图片灯箱 */
+.post-content img {
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+
+.post-content img:hover {
+  transform: scale(1.02);
+}
+
+.image-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+
+.image-lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.image-lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  cursor: zoom-out;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.lightbox-close:hover {
+  transform: scale(1.2);
+}
+
+/* 目录高亮 */
+.toc-content a.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-left: 3px solid var(--primary-color);
+  padding-left: 10px;
+  margin-left: -13px;
+}
+
+/* 分享按钮 */
+.share-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.share-buttons h4 {
+  margin: 0;
+  margin-right: 15px;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+}
+
+.share-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.share-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.share-btn.weibo {
+  background: #e6162d;
+  color: white;
+}
+
+.share-btn.twitter {
+  background: #1da1f2;
+  color: white;
+}
+
+.share-btn.copy {
+  background: var(--primary-color);
+  color: white;
+}
+
+.share-btn.qrcode {
+  background: #07c160;
+  color: white;
+}
+
+/* 字数统计 */
+.word-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }

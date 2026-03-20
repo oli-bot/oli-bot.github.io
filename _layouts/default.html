@@ -33,6 +33,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
   </head>
   <body>
+    <!-- 阅读进度条 -->
+    <div class="reading-progress" id="reading-progress">
+      <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
     <!-- 深色模式切换 -->
     <button id="theme-toggle" title="切换主题" aria-label="切换深色/浅色主题">
       <span class="theme-icon-light">☀️</span>
@@ -76,13 +81,98 @@
       </div>
     </footer>
     
-    <!-- 主题切换脚本 -->
+    <!-- 图片灯箱容器 -->
+    <div class="image-lightbox" id="image-lightbox">
+      <span class="lightbox-close">&times;</span>
+      <img src="" alt="放大图片">
+    </div>
+    
+    <!-- 功能脚本 -->
     <script>
       (function() {
+        // ===== 1. 阅读进度条 =====
+        const progressBar = document.getElementById('reading-progress-bar');
+        
+        function updateReadingProgress() {
+          const scrollTop = window.scrollY;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = (scrollTop / docHeight) * 100;
+          progressBar.style.width = progress + '%';
+        }
+        
+        window.addEventListener('scroll', updateReadingProgress);
+        updateReadingProgress();
+        
+        // ===== 2. 代码复制按钮 =====
+        document.querySelectorAll('pre').forEach(pre => {
+          const btn = document.createElement('button');
+          btn.className = 'copy-code-btn';
+          btn.textContent = '复制';
+          
+          btn.addEventListener('click', async () => {
+            const code = pre.querySelector('code')?.textContent || pre.textContent;
+            
+            try {
+              await navigator.clipboard.writeText(code);
+              btn.textContent = '已复制!';
+              btn.classList.add('copied');
+              
+              setTimeout(() => {
+                btn.textContent = '复制';
+                btn.classList.remove('copied');
+              }, 2000);
+            } catch (err) {
+              btn.textContent = '复制失败';
+              setTimeout(() => btn.textContent = '复制', 2000);
+            }
+          });
+          
+          pre.appendChild(btn);
+        });
+        
+        // ===== 3. 图片灯箱效果 =====
+        const lightbox = document.getElementById('image-lightbox');
+        const lightboxImg = lightbox.querySelector('img');
+        
+        document.querySelectorAll('.post-content img').forEach(img => {
+          img.addEventListener('click', () => {
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          });
+        });
+        
+        lightbox.addEventListener('click', () => {
+          lightbox.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+        
+        // ===== 4. 目录高亮跟随 =====
+        const tocLinks = document.querySelectorAll('.toc-content a');
+        const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+        
+        if (tocLinks.length > 0 && headings.length > 0) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                tocLinks.forEach(link => {
+                  link.classList.remove('active');
+                  if (link.getAttribute('href') === '#' + id) {
+                    link.classList.add('active');
+                  }
+                });
+              }
+            });
+          }, { threshold: 0.5 });
+          
+          headings.forEach(heading => observer.observe(heading));
+        }
+        
+        // ===== 5. 主题切换 =====
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
         
-        // 从 localStorage 读取主题
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
           html.setAttribute('data-theme', savedTheme);

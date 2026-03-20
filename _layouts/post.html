@@ -10,6 +10,24 @@ layout: default
       {% if page.tags %}· {{ page.tags | join: ", " }}{% endif %}
       <span class="reading-time">· 阅读约 {% capture words %}{{ content | number_of_words }}{% endcapture %}{% assign reading_time = words | divided_by: 400 %}{% if reading_time < 1 %}1{% else %}{{ reading_time }}{% endif %} 分钟</span>
     </p>
+    
+    <!-- 增强的文章元信息 -->
+    <div class="post-meta-enhanced">
+      <div class="meta-item">
+        <span class="meta-icon">📝</span>
+        <span class="word-count">{% capture word_count %}{{ content | number_of_words }}{% endcapture %}{{ word_count }} 字</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">⏱️</span>
+        <span>阅读 {% capture words %}{{ content | number_of_words }}{% endcapture %}{% assign reading_time = words | divided_by: 400 %}{% if reading_time < 1 %}1{% else %}{{ reading_time }}{% endif %} 分钟</span>
+      </div>
+      {% if page.last_modified_at %}
+      <div class="meta-item">
+        <span class="meta-icon">🔄</span>
+        <span>更新于 {{ page.last_modified_at | date: "%Y-%m-%d" }}</span>
+      </div>
+      {% endif %}
+    </div>
   </header>
   
   <!-- 文章目录 -->
@@ -31,7 +49,43 @@ layout: default
     {% endfor %}
   </div>
   {% endif %}
+  
+  <!-- 社交分享按钮 -->
+  <div class="share-buttons">
+    <h4>分享文章：</h4>
+    <a href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url }}&title={{ page.title }}" target="_blank" class="share-btn weibo" title="分享到微博">📱</a>
+    <a href="https://twitter.com/intent/tweet?url={{ page.url | absolute_url }}&text={{ page.title }}" target="_blank" class="share-btn twitter" title="分享到 Twitter">🐦</a>
+    <button onclick="copyArticleLink()" class="share-btn copy" title="复制链接">🔗</button>
+    <button onclick="showQRCode()" class="share-btn qrcode" title="微信扫码阅读">💬</button>
+  </div>
 </article>
+
+<!-- 文章翻页导航 -->
+<nav class="post-navigation">
+  {% if page.previous.url %}
+  <a href="{{ page.previous.url }}" class="post-nav-item prev">
+    <span class="post-nav-label">← 上一篇</span>
+    <span class="post-nav-title">{{ page.previous.title }}</span>
+  </a>
+  {% else %}
+  <div class="post-nav-item prev" style="opacity: 0.5;">
+    <span class="post-nav-label">← 上一篇</span>
+    <span class="post-nav-title">已是最新</span>
+  </div>
+  {% endif %}
+  
+  {% if page.next.url %}
+  <a href="{{ page.next.url }}" class="post-nav-item next">
+    <span class="post-nav-label">下一篇 →</span>
+    <span class="post-nav-title">{{ page.next.title }}</span>
+  </a>
+  {% else %}
+  <div class="post-nav-item next" style="opacity: 0.5;">
+    <span class="post-nav-label">下一篇 →</span>
+    <span class="post-nav-title">已是最后</span>
+  </div>
+  {% endif %}
+</nav>
 
 <!-- Giscus 评论系统 -->
 <div class="comments-section">
@@ -105,4 +159,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// 分享功能
+function copyArticleLink() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    alert('✅ 链接已复制到剪贴板！');
+  }).catch(() => {
+    alert('❌ 复制失败，请手动复制链接');
+  });
+}
+
+function showQRCode() {
+  const url = window.location.href;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+  
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    cursor: pointer;
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: white; padding: 30px; border-radius: 12px; text-align: center;">
+      <img src="${qrUrl}" alt="二维码" style="margin-bottom: 15px;">
+      <p style="margin: 0; color: #333;">微信扫码阅读</p>
+    </div>
+  `;
+  
+  modal.addEventListener('click', () => modal.remove());
+  document.body.appendChild(modal);
+}
 </script>
