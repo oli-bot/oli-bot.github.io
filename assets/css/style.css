@@ -245,7 +245,8 @@ a:hover {
 /* GitHub 风格表格 */
 .post-content table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 20px 0;
   font-size: 0.95rem;
   border: 1px solid var(--border-color);
@@ -260,8 +261,18 @@ a:hover {
 }
 
 .post-content th, .post-content td {
-  border: 1px solid var(--border-color);
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
   padding: 10px 14px;
+}
+
+.post-content th:last-child, .post-content td:last-child {
+  border-right: none;
+}
+
+.post-content tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .post-content tbody tr:nth-child(even) {
