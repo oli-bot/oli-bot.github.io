@@ -23,14 +23,11 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
     
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
-    
+    {% if page.layout == 'post' %}
     <!-- Code Syntax Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+    <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" disabled>
+    {% endif %}
   </head>
   <body>
     <!-- 阅读进度条 -->
@@ -44,17 +41,6 @@
       <span class="theme-icon-dark">🌙</span>
     </button>
     
-    <!-- Code Syntax Highlighting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
-    <script>hljs.highlightAll();</script>
     <header class="site-header">
       <div class="wrapper">
         <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title }}</a>
@@ -130,11 +116,13 @@
           pre.appendChild(btn);
         });
         
-        // ===== 3. 图片灯箱效果 =====
+        // ===== 3. 图片灯箱效果 + 懒加载 =====
         const lightbox = document.getElementById('image-lightbox');
         const lightboxImg = lightbox.querySelector('img');
         
         document.querySelectorAll('.post-content img').forEach(img => {
+          img.loading = 'lazy';
+          img.decoding = 'async';
           img.addEventListener('click', () => {
             lightboxImg.src = img.src;
             lightbox.classList.add('active');
@@ -178,14 +166,63 @@
           html.setAttribute('data-theme', savedTheme);
         }
         
+        // 5.1 代码高亮主题跟随切换
+        function applyHljsTheme() {
+          const light = document.getElementById('hljs-light');
+          const dark = document.getElementById('hljs-dark');
+          if (!light || !dark) return;
+          const isDark = html.getAttribute('data-theme') === 'dark';
+          light.disabled = isDark;
+          dark.disabled = !isDark;
+        }
+        
+        // 5.2 Giscus 评论主题跟随切换
+        function setGiscusTheme() {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({
+            giscus: { setConfig: { theme: html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light' } }
+          }, 'https://giscus.app');
+        }
+        
+        applyHljsTheme();
+        
+        // Giscus iframe 异步加载，轮询等待出现后应用主题
+        const giscusTimer = setInterval(() => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (iframe) {
+            setGiscusTheme();
+            clearInterval(giscusTimer);
+          }
+        }, 500);
+        setTimeout(() => clearInterval(giscusTimer), 15000);
+        
         themeToggle.addEventListener('click', function() {
           const currentTheme = html.getAttribute('data-theme');
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
           
           html.setAttribute('data-theme', newTheme);
           localStorage.setItem('theme', newTheme);
+          applyHljsTheme();
+          setGiscusTheme();
         });
       })();
     </script>
+    
+    {% if page.layout == 'post' %}
+    <!-- Code Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script>
+      document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+    </script>
+    {% endif %}
   </body>
 </html>
