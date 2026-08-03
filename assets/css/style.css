@@ -44,6 +44,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
   font-size: 16px;
   line-height: 1.7;
+  letter-spacing: 0.02em;
   color: var(--text-color);
   background-color: var(--bg-color);
 }
@@ -165,51 +166,164 @@ a:hover {
 
 .post-content {
   line-height: 1.8;
+  color: var(--text-color);
 }
 
+/* 标题分级（GitHub 风格） */
 .post-content h2 {
-  margin: 40px 0 15px;
-  font-size: 1.5rem;
+  margin: 40px 0 16px;
+  padding-bottom: 8px;
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .post-content h3 {
-  margin: 30px 0 10px;
-  font-size: 1.25rem;
+  margin: 32px 0 12px;
+  font-size: 1.25em;
+}
+
+.post-content h4 {
+  margin: 24px 0 10px;
+  font-size: 1.05em;
+  color: var(--primary-color);
 }
 
 .post-content p {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
+/* 代码块 */
 .post-content pre {
-  background: #1e293b;
-  color: #e2e8f0;
-  padding: 15px;
+  position: relative;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow-x: auto;
-  margin: 15px 0;
+  margin: 16px 0;
+  padding: 14px 16px;
+  line-height: 1.6;
+}
+
+.post-content pre code {
+  display: block;
+  overflow-x: auto;
+  font-size: 0.9em;
 }
 
 .post-content code {
-  font-family: 'Fira Code', 'Monaco', monospace;
-  font-size: 0.9rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 }
 
+/* 列表 */
 .post-content ul, .post-content ol {
-  margin: 15px 0;
-  padding-left: 25px;
+  margin: 16px 0;
+  padding-left: 28px;
+}
+
+.post-content ul {
+  list-style: disc;
 }
 
 .post-content li {
   margin-bottom: 8px;
 }
 
+.post-content li > ul, .post-content li > ol {
+  margin: 6px 0;
+}
+
+/* GitHub 风格引用块 */
 .post-content blockquote {
   border-left: 4px solid var(--primary-color);
-  padding-left: 20px;
+  background: var(--bg-secondary);
+  padding: 12px 20px;
   margin: 20px 0;
+  border-radius: 0 8px 8px 0;
   color: var(--text-light);
-  font-style: italic;
+}
+
+/* GitHub 风格表格 */
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.95rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.post-content th {
+  background: var(--bg-secondary);
+  font-weight: 600;
+  text-align: left;
+}
+
+.post-content th, .post-content td {
+  border: 1px solid var(--border-color);
+  padding: 10px 14px;
+}
+
+.post-content tbody tr:nth-child(even) {
+  background: var(--bg-secondary);
+}
+
+.post-content tbody tr:hover {
+  background: color-mix(in srgb, var(--primary-color) 6%, transparent);
+}
+
+/* 分割线 */
+.post-content hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 32px 0;
+}
+
+/* 链接悬停下划线 */
+.post-content a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 图片圆角边框 */
+.post-content img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* 键盘按键 */
+.post-content kbd {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+
+/* 折叠面板 */
+.post-content details {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  background: var(--bg-secondary);
+}
+
+.post-content summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* 行内代码 */
+.post-content :not(pre) > code {
+  background: var(--bg-secondary);
+  color: var(--primary-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
 }
 
 .post-tags {
@@ -380,25 +494,6 @@ a:hover {
   transform: translateY(-3px);
 }
 
-/* 代码块样式增强 */
-.post-content pre {
-  position: relative;
-}
-
-.post-content pre code {
-  display: block;
-  overflow-x: auto;
-}
-
-/* 行内代码 */
-.post-content :not(pre) > code {
-  background: #f1f5f9;
-  color: #e11d48;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.85em;
-}
-
 /* 评论区样式 */
 .comments-section {
   margin-top: 60px;
@@ -445,12 +540,6 @@ a:hover {
 
 [data-theme="dark"] .theme-icon-dark {
   display: inline;
-}
-
-/* 深色模式下的行内代码 */
-[data-theme="dark"] .post-content :not(pre) > code {
-  background: #374151;
-  color: #fbbf24;
 }
 
 /* 动画效果 */
@@ -806,3 +895,31 @@ pre:hover .copy-code-btn {
 .not-found-link {
   font-weight: 600;
 }
+
+/* GitHub 风格提示块（> [!NOTE] 等） */
+.post-content blockquote.callout {
+  border-left: 4px solid;
+  font-style: normal;
+  color: var(--text-color);
+}
+
+.post-content blockquote.callout::before {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.post-content blockquote.callout-note { border-left-color: #0969da; }
+.post-content blockquote.callout-note::before { content: "💡 提示"; color: #0969da; }
+
+.post-content blockquote.callout-tip { border-left-color: #1a7f37; }
+.post-content blockquote.callout-tip::before { content: "💡 建议"; color: #1a7f37; }
+
+.post-content blockquote.callout-important { border-left-color: #8250df; }
+.post-content blockquote.callout-important::before { content: "🔔 重要"; color: #8250df; }
+
+.post-content blockquote.callout-warning { border-left-color: #9a6700; }
+.post-content blockquote.callout-warning::before { content: "⚠️ 注意"; color: #9a6700; }
+
+.post-content blockquote.callout-caution { border-left-color: #cf222e; }
+.post-content blockquote.callout-caution::before { content: "⛔ 警告"; color: #cf222e; }
