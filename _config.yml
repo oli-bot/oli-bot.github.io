@@ -51,3 +51,7 @@ paginate_path: "/page:num/"
 
 # 首页显示文章数
 show_excerpts: true
+
+# RSS Feed 输出全部文章（默认仅 10 条）
+feed:
+  posts_limit: 100

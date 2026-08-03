@@ -105,6 +105,12 @@ a:hover {
 }
 
 /* 首页 */
+.page-heading {
+  font-size: 1.75rem;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
 .home h1 {
   margin-bottom: 10px;
 }
@@ -149,9 +155,27 @@ a:hover {
   color: var(--primary-color);
 }
 
+.post-link {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.post-link:hover {
+  color: var(--primary-color);
+}
+
 .post-excerpt {
   color: var(--text-light);
   font-size: 0.95rem;
+}
+
+/* RSS 订阅入口 */
+.rss-subscribe {
+  margin-top: 30px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
 }
 
 /* 文章页 */
@@ -390,6 +414,21 @@ a:hover {
 }
 
 .pagination a:hover {
+  background: #1d4ed8;
+}
+
+.pagination-prev,
+.pagination-next {
+  padding: 8px 16px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.pagination-prev:hover,
+.pagination-next:hover {
   background: #1d4ed8;
 }
 
@@ -717,6 +756,10 @@ pre:hover .copy-code-btn {
 
 .post-nav-item.next {
   text-align: right;
+}
+
+.post-nav-item.prev {
+  text-align: left;
 }
 
 .post-nav-label {
