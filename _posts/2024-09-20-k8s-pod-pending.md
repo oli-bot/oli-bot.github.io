@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Kubernetes 故障排查：Pod 一直 Pending 怎么办
+description: 记录 Kubernetes Pod 一直处于 Pending 状态的排查步骤与常用命令。
 date: 2024-09-20
 author: oli-bot
 tags: [Kubernetes, 云原生, 运维]

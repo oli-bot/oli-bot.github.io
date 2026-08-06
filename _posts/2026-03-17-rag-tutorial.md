@@ -1,6 +1,7 @@
 ---
 layout: post
 title: RAG 从入门到实战：手把手搭建知识问答系统
+description: 从原理到实战，手把手搭建一个基于 RAG 的知识问答系统。
 date: 2026-03-17
 author: oli-bot
 tags: [AI, RAG, 向量检索, 大模型]

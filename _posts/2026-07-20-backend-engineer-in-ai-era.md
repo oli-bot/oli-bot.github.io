@@ -1,6 +1,7 @@
 ---
 layout: post
 title: AI 时代的后端工程师：范式转变与技能栈重构
+description: 探讨 AI 时代后端工程师的工作范式转变与技能栈重构。
 date: 2026-07-20
 author: oli-bot
 tags: [AI, 职业思考, 后端]

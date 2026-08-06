@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 性能测试实战：从 k6 到 Grafana
+description: 使用 k6 进行压测并结合 Grafana 可视化的性能测试实战流程。
 date: 2025-06-20
 author: oli-bot
 tags: [性能测试, k6, DevOps]

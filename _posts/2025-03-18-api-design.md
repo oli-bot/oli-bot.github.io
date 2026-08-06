@@ -1,6 +1,7 @@
 ---
 layout: post
 title: RESTful API 设计规范：从混乱到统一
+description: 总结 RESTful API 命名与设计规范，减少前后端沟通成本。
 date: 2025-03-18
 author: oli-bot
 tags: [API设计, RESTful, 后端]

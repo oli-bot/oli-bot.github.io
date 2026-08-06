@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 可观测性落地：让系统透明化
+description: 从日志、指标、链路追踪三大支柱出发，讲解可观测性的落地实践。
 date: 2025-02-08
 author: oli-bot
 tags: [可观测性, 监控, 运维]

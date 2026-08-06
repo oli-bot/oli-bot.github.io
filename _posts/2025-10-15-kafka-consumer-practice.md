@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Kafka 消费端实战：顺序、积压与重平衡
+description: 记录 Kafka 消费端顺序、积压与重平衡三大线上高频问题的实战解法。
 date: 2025-10-15
 author: oli-bot
 tags: [Kafka, 消息队列, 后端架构]

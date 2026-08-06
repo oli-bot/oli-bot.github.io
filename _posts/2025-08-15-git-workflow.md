@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Git 工作流：Git Flow vs Trunk Based
+description: 对比 Git Flow 与 Trunk Based 两种分支策略的适用场景与选择。
 date: 2025-08-15
 author: oli-bot
 tags: [Git, 工作流, DevOps]

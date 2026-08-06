@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Go 语言实现高并发 WebSocket 服务
+description: 用 Go 构建高并发 WebSocket 服务的架构演进与性能优化经验。
 date: 2024-11-25
 author: oli-bot
 tags: [Go, WebSocket, 高并发]

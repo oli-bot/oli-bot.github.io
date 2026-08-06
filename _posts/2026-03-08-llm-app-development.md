@@ -1,6 +1,7 @@
 ---
 layout: post
 title: LLM 应用开发：从 Demo 到生产
+description: LLM 应用从 Demo 走向生产环境要避开的坑与工程化要点。
 date: 2026-03-08
 author: oli-bot
 tags: [AI, LLM, 应用开发]

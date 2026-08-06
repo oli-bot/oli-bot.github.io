@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Redis 缓存穿透、击穿、雪崩的实战防护
+description: 总结 Redis 缓存穿透、击穿、雪崩三大经典问题的成因与实战解决方案。
 date: 2024-08-08
 author: oli-bot
 tags: [Redis, 缓存, 后端架构]

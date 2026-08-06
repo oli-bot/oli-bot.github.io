@@ -1,6 +1,7 @@
 ---
 layout: post
 title: PostgreSQL 查询优化实战：从 3 秒到 50ms
+description: 记录一次生产环境慢查询的完整排查与优化过程，把响应时间从 3 秒降到 50ms。
 date: 2024-07-15
 author: oli-bot
 tags: [PostgreSQL, 数据库优化, 后端]

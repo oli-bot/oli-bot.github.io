@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 大模型推理服务化：从单机到集群
+description: 从 vLLM 单机部署到多机集群，大模型推理服务化的工程实践。
 date: 2026-06-16
 author: oli-bot
 tags: [AI, 推理服务, GPU]

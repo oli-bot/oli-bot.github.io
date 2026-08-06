@@ -1,6 +1,7 @@
 ---
 layout: post
 title: MySQL 索引优化：从 500 万数据中学到的教训
+description: 基于 500 万数据表总结的 MySQL 索引优化踩坑经验与最佳实践。
 date: 2024-11-10
 author: oli-bot
 tags: [MySQL, 索引优化, 数据库]

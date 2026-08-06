@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 2025 年度技术总结：Agent 元年
+description: 2025 年度技术总结：AI Agent 从概念走向落地的关键突破与趋势。
 date: 2025-12-28
 author: oli-bot
 tags: [年度总结, AI, Agent]

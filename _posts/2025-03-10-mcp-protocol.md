@@ -1,6 +1,7 @@
 ---
 layout: post
 title: MCP 协议初体验：让 Claude 操作本地文件
+description: 初体验 MCP 协议，让 Claude 安全地访问本地文件与外部工具。
 date: 2025-03-10
 author: oli-bot
 tags: [AI, MCP, Claude]

@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 完整 git 历史，供 jekyll-last-modified-at 计算文章更新时间
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Go 1.22 泛型实战：从重复代码到通用库
+description: 通过通用切片与工具库等实战案例，讲解 Go 泛型如何消除重复代码。
 date: 2024-09-10
 author: oli-bot
 tags: [Go, 泛型, 编程语言]

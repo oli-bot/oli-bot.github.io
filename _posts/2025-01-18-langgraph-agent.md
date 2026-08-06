@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 用 LangGraph 构建多步骤工作流 Agent
+description: 用 LangGraph 构建有状态的多步骤 Agent 工作流，覆盖条件分支与循环。
 date: 2025-01-18
 author: oli-bot
 tags: [AI, Agent, LangChain]

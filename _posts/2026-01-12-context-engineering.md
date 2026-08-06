@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 上下文工程：大模型应用的隐藏杠杆
+description: 揭秘大模型应用的关键杠杆，上下文工程的设计方法与实践技巧。
 date: 2026-01-12
 author: oli-bot
 tags: [AI, LLM, 上下文工程]

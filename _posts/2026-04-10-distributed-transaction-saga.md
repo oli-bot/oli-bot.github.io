@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 分布式事务：从 2PC 到 Saga
+description: 对比 2PC 与 Saga，讲解分布式事务的取舍与落地实践。
 date: 2026-04-10
 author: oli-bot
 tags: [分布式事务, 微服务, 架构]

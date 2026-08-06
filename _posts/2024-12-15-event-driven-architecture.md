@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 事件驱动架构实践：从同步到异步的演进
+description: 从同步调用到事件驱动，讲解架构演进路径与异步化的落地要点。
 date: 2024-12-15
 author: oli-bot
 tags: [事件驱动, 架构, 异步]

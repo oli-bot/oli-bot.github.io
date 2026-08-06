@@ -1,6 +1,7 @@
 ---
 layout: post
 title: DDD 实践：如何划分领域边界
+description: 通过电商系统实例讲解 DDD 中如何划分限界上下文与领域边界。
 date: 2024-10-28
 author: oli-bot
 tags: [DDD, 架构设计, 微服务]

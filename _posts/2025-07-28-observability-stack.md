@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 从零搭建可观测性平台
+description: 从零搭建 Prometheus 加 Loki 加 Grafana 可观测性平台的完整方案。
 date: 2025-07-28
 author: oli-bot
 tags: [可观测性, Prometheus, Grafana]

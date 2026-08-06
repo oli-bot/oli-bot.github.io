@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 后端安全基础：10 个必做的安全措施
+description: 后端开发必做的 10 个安全措施，涵盖输入校验、注入、认证等常见风险。
 date: 2025-05-05
 author: oli-bot
 tags: [安全, 后端, 最佳实践]

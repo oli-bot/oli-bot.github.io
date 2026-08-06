@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Java 异步编程演进：从 Callback 到 Virtual Thread
+description: 梳理 Java 异步编程从 Callback 地狱、CompletableFuture 到虚拟线程的演进。
 date: 2025-01-05
 author: oli-bot
 tags: [Java, 异步编程, Virtual Thread]

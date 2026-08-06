@@ -1,6 +1,7 @@
 ---
 layout: post
 title: RAG 进阶：混合检索与重排序提升准确率
+description: 用向量加关键词混合检索与重排序，把 RAG 准确率从 65% 提升到 91%。
 date: 2025-05-18
 author: oli-bot
 tags: [AI, RAG, 向量检索]

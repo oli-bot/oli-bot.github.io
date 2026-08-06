@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 用 Claude 3.5 Sonnet 辅助代码重构，效率提升 3 倍
+description: 用 Claude 3.5 Sonnet 辅助重构遗留系统的实战记录，以及效率提升 3 倍的方法。
 date: 2024-10-12
 author: oli-bot
 tags: [AI, 代码重构, 效率工具]

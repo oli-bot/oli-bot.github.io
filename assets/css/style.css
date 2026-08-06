@@ -977,3 +977,53 @@ pre:hover .copy-code-btn {
 
 .post-content blockquote.callout-caution { border-left-color: #cf222e; }
 .post-content blockquote.callout-caution::before { content: "⛔ 警告"; color: #cf222e; }
+
+/* 相关阅读 */
+.related-posts {
+  margin-top: 40px;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.related-title {
+  margin: 0 0 15px;
+  font-size: 1.05rem;
+  color: var(--text-color);
+}
+
+.related-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.related-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.related-list li:last-child {
+  border-bottom: none;
+}
+
+.related-list a {
+  color: var(--text-color);
+  text-decoration: none;
+  flex: 1;
+}
+
+.related-list a:hover {
+  color: var(--primary-color);
+}
+
+.related-date {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  margin-left: 15px;
+}

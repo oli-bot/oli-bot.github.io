@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 微服务熔断器实战：从 Resilience4j 到 Sentinel
+description: 从 Resilience4j 到 Sentinel，讲解微服务熔断器的原理、配置与落地实践。
 date: 2024-08-25
 author: oli-bot
 tags: [微服务, 熔断器, 架构]

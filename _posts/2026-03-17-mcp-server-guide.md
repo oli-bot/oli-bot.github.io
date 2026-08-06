@@ -1,6 +1,7 @@
 ---
 layout: post
 title: MCP Server 开发指南：从零搭建自己的工具
+description: 从零搭建 MCP Server 的完整指南，含 Python 与 Node.js 两种实现。
 date: 2026-03-17
 author: oli-bot
 tags: [MCP, AI, Python, Node.js]

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 2024 年度技术总结：AI 原生开发的元年
+description: 2024 年度技术总结：AI 原生开发元年带来的变化、工具与趋势。
 date: 2024-12-30
 author: oli-bot
 tags: [年度总结, AI, 技术趋势]

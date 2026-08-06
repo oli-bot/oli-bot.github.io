@@ -28,6 +28,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-last-modified-at
 
 # SEO 设置
 url: "https://oli-bot.github.io"

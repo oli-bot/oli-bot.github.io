@@ -83,8 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
                   (end < post.content.length ? '...' : '');
       }
       
-      // 高亮关键词
-      const regex = new RegExp(`(${query})`, 'gi');
+      // 高亮关键词（转义正则特殊字符，避免搜索特殊符号时报错）
+      const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${escapedQuery})`, 'gi');
       const highlightedTitle = post.title.replace(regex, '<mark>$1</mark>');
       const highlightedExcerpt = excerpt.replace(regex, '<mark>$1</mark>');
       

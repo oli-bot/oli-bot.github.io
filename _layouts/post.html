@@ -87,6 +87,43 @@ layout: default
   {% endif %}
 </nav>
 
+<!-- 相关文章推荐（按标签相似度匹配） -->
+{% assign maxRelated = 4 %}
+{% assign minCommonTags = 1 %}
+{% assign relatedPosts = '' | split: ',' %}
+{% assign relatedCount = 0 %}
+{% for post in site.posts %}
+  {% if post.url != page.url %}
+    {% assign sameTagCount = 0 %}
+    {% for tag in post.tags %}
+      {% if page.tags contains tag %}
+        {% assign sameTagCount = sameTagCount | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+    {% if sameTagCount >= minCommonTags %}
+      {% assign relatedPosts = relatedPosts | push: post %}
+      {% assign relatedCount = relatedCount | plus: 1 %}
+      {% if relatedCount >= maxRelated %}
+        {% break %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if relatedPosts.size > 0 %}
+<nav class="related-posts">
+  <h3 class="related-title">📌 相关阅读</h3>
+  <ul class="related-list">
+    {% for post in relatedPosts %}
+    <li>
+      <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+      <span class="related-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+
 <!-- Giscus 评论系统 -->
 <div class="comments-section">
   <h3 class="comments-title">💬 评论区</h3>

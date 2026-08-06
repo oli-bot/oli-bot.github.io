@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 分库分表实战：从选型到平滑迁移
+description: 分库分表从选型到平滑迁移的实战经验、分片键选择与注意事项。
 date: 2026-05-14
 author: oli-bot
 tags: [MySQL, 分库分表, 数据库]

@@ -10,20 +10,22 @@
 - 阅读进度条、代码一键复制、图片灯箱、目录高亮跟随
 - 深色/浅色主题切换（localStorage 记忆 + 评论与代码高亮联动）
 - 文章翻页导航、字数统计、社交分享（微博 / Twitter / 微信二维码）
+- 相关阅读推荐、文章更新时间自动标注
 - Giscus 评论系统（基于 GitHub Discussions）
 - 全文搜索、标签归档、项目展示
 - GitHub Actions 自动构建部署
 
 ## 本地开发
 
-需要 Ruby 3.x 和 Bundler：
+需要 Ruby 3.x 和 Bundler。项目提供 `.tool-versions`，推荐用 [mise](https://mise.jdx.dev) 管理 Ruby 版本：
 
 ```bash
+mise install          # 安装 .tool-versions 声明的 Ruby 版本
 bundle install
 bundle exec jekyll serve
 ```
 
-然后访问 <http://localhost:4000>。
+然后访问 <http://localhost:4000>。（不使用 mise 的话，自备 Ruby 3.x + Bundler 2.5+ 亦可）
 
 ## 发布流程
 

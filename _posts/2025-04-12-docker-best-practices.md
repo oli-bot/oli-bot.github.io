@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Docker 最佳实践：镜像瘦身 90%
+description: 通过多阶段构建等技巧，将 Java 应用镜像从 800MB 瘦身到 80MB。
 date: 2025-04-12
 author: oli-bot
 tags: [Docker, 容器, DevOps]
