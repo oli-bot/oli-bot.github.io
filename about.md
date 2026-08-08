@@ -9,7 +9,7 @@ permalink: /about/
     <div class="hero-avatar">👨‍💻</div>
     <p class="hero-path">~/about</p>
     <h1 class="hero-title">&gt; whoami<span class="hero-cursor"></span></h1>
-    <p class="hero-sub">梁安邦 · 热爱技术的开发者 · 后端开发与系统架构</p>
+    <p class="hero-sub">oli-bot · 热爱技术的开发者 · 后端开发与系统架构</p>
     <div class="hero-badges">
       <img src="https://img.shields.io/github/followers/oli-bot?style=for-the-badge&label=GitHub%20Followers&color=2563eb" alt="GitHub Followers">
       <img src="https://img.shields.io/badge/Backend-Go%20%2F%20Python-3fb950?style=for-the-badge" alt="Backend">
@@ -469,7 +469,7 @@ permalink: /about/
     { t: 'out', s: 'last login: ' + new Date().toLocaleString('zh-CN') + ' on tty001' },
     { t: 'sep' },
     { t: 'cmd', s: 'whoami' },
-    { t: 'out', s: '梁安邦 · oli-bot' },
+    { t: 'out', s: 'oli-bot' },
     { t: 'out', s: '热爱技术的开发者，专注后端开发与系统架构设计' },
     { t: 'sep' },
     { t: 'cmd', s: 'cat ~/skills.txt' },
