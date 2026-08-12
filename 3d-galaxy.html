@@ -211,6 +211,26 @@
       border-color: transparent; font-weight: 600;
     }
 
+    /* 临时提示 */
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 64px;
+      transform: translateX(-50%) translateY(8px);
+      z-index: 8;
+      font-size: 13px;
+      color: #dfe8f2;
+      background: rgba(10, 12, 28, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 8px 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
     @media (max-width: 600px) {
       .overlay { top: 12px; left: 12px; right: 12px; padding: 12px 16px; }
       .title { font-size: 17px; }
@@ -252,9 +272,9 @@
       </div>
       <div class="time-row">
         <span class="t-label" style="margin:0;">播放速率</span>
-        <button class="rate-chip" data-rate="30">30天/秒</button>
-        <button class="rate-chip active" data-rate="300">300天/秒</button>
-        <button class="rate-chip" data-rate="3000">3000天/秒</button>
+        <button class="rate-chip" data-rate="10">10天/秒</button>
+        <button class="rate-chip active" data-rate="100">100天/秒</button>
+        <button class="rate-chip" data-rate="1000">1000天/秒</button>
       </div>
     </div>
   </div>
@@ -266,6 +286,8 @@
     抱歉，你的浏览器不支持 WebGL，无法渲染 3D 场景。<br>
     请尝试升级浏览器或在设备上开启硬件加速。
   </div>
+
+  <div id="toast" role="status"></div>
 
   <!-- 行星科普信息卡 -->
   <div id="info-card">
@@ -921,9 +943,17 @@
     // 模拟时间（天），以 2000-01-01 为基准；默认落在「现在」
     let simulatedDays = Math.max(SLIDER_MIN, Math.min(SLIDER_MAX, dateToDays(new Date())));
     let playing = false;
-    let rateDaysPerSec = 300;
+    let rateDaysPerSec = 100;
     function updatePlayLabel() {
       btnPlay.textContent = `${playing ? '⏸ 暂停' : '▶ 播放'} · ${rateDaysPerSec}天/秒`;
+    }
+    const toastEl = document.getElementById('toast');
+    let toastTimer = null;
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
     }
     document.querySelectorAll('.rate-chip').forEach((chip) => {
       chip.addEventListener('click', () => {
@@ -931,10 +961,9 @@
         chip.classList.add('active');
         rateDaysPerSec = Number(chip.dataset.rate);
         updatePlayLabel();
-        // 点击速率立即开始播放，让速率变化立刻看得见
+        // 速率只决定「多快」，是否流动仍由 ▶ 播放 控制（暂停时不自动开始）
         if (!playing) {
-          playing = true;
-          updatePlayLabel();
+          showToast(`已设为 ${rateDaysPerSec} 天/秒，点 ▶ 播放 查看效果`);
         }
       });
     });
