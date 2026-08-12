@@ -24,6 +24,7 @@
       top: 18px;
       left: 18px;
       z-index: 5;
+      pointer-events: none;
       padding: 16px 20px;
       border-radius: 14px;
       background: rgba(10, 12, 28, 0.55);
@@ -81,7 +82,7 @@
     .credit {
       position: fixed;
       right: 18px;
-      bottom: 18px;
+      top: 18px;
       z-index: 5;
       font-size: 12px;
       opacity: 0.5;
@@ -104,6 +105,112 @@
     }
     #fallback[hidden] { display: none; }
 
+    /* 行星科普信息卡 */
+    #info-card {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 6;
+      width: min(340px, calc(100vw - 36px));
+      max-height: 70vh;
+      overflow-y: auto;
+      background: rgba(10, 12, 28, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      padding: 18px 20px;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    #info-card.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    #info-card .info-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    #info-card .info-name { font-size: 18px; font-weight: 700; flex: 1; }
+    #info-card .info-type {
+      font-size: 11px; color: #0a0c1c;
+      background: linear-gradient(90deg, #ffd27a, #a06bff);
+      padding: 3px 10px; border-radius: 12px; font-weight: 600;
+      white-space: nowrap;
+    }
+    #info-card table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    #info-card td { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    #info-card td:first-child { color: rgba(223,232,242,0.6); width: 42%; }
+    #info-card td:last-child { text-align: right; font-weight: 500; }
+    #info-card .info-note {
+      margin-top: 12px; padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(160, 107, 255, 0.12);
+      border-left: 3px solid #a06bff;
+      font-size: 13px; line-height: 1.6;
+    }
+    #info-card .info-hint { margin-top: 8px; font-size: 12px; opacity: 0.55; }
+    .info-close {
+      background: none; border: none; color: #dfe8f2;
+      font-size: 16px; cursor: pointer; opacity: 0.7; padding: 4px; line-height: 1;
+    }
+    .info-close:hover { opacity: 1; }
+
+    /* 科普弹窗 */
+    #modal {
+      position: fixed; inset: 0; z-index: 10;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+      background: rgba(2, 3, 12, 0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    #modal.show { display: flex; }
+    #modal .modal-card {
+      width: min(680px, 100%); max-height: 82vh; overflow-y: auto;
+      background: rgba(12, 14, 32, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px; padding: 24px 28px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+    #modal .modal-title {
+      font-size: 20px; font-weight: 700; margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    #modal h4 { font-size: 15px; color: #ffd27a; margin: 0 0 6px; }
+    #modal p {
+      font-size: 13.5px; line-height: 1.7;
+      color: rgba(223, 232, 242, 0.85); margin: 0 0 16px;
+    }
+
+    /* 时间旅行控制 */
+    .time {
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.10);
+      pointer-events: auto;
+    }
+    .time .t-label { font-size: 12px; opacity: 0.6; margin-bottom: 8px; letter-spacing: 1px; }
+    .time-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .time .date-display {
+      font-size: 14px; font-weight: 600; color: #ffd27a;
+      font-variant-numeric: tabular-nums;
+    }
+    .time select {
+      font-family: inherit; font-size: 12px; color: #dfe8f2;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 8px; padding: 5px 8px; cursor: pointer;
+    }
+    .time input[type="range"] { flex: 1; accent-color: #a06bff; min-width: 120px; }
+    .time .rate-chip {
+      font-size: 12px; padding: 5px 10px; border-radius: 8px;
+      color: rgba(223,232,242,0.7);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+    }
+    .time .rate-chip.active {
+      color: #0a0c1c; background: linear-gradient(90deg, #ffd27a, #a06bff);
+      border-color: transparent; font-weight: 600;
+    }
+
     @media (max-width: 600px) {
       .overlay { top: 12px; left: 12px; right: 12px; padding: 12px 16px; }
       .title { font-size: 17px; }
@@ -116,20 +223,79 @@
 
   <div class="overlay">
     <div class="title">🪐 太阳系 Solar System</div>
-    <div class="subtitle">Three.js · 八大行星 · 公转速度按开普勒定律</div>
+    <div class="subtitle">八大行星 · 开普勒定律 · 点击行星查看科普</div>
     <div class="actions">
       <button id="auto">⏸ 暂停自转</button>
-      <a class="back" href="/">← 返回博客</a>
+      <button id="quiz">📖 科普知识</button>
+    </div>
+    <div class="time">
+      <div class="t-label">⏳ 时间旅行</div>
+      <div class="time-row">
+        <span class="date-display" id="date-display"></span>
+        <button id="btn-now">现在</button>
+        <button id="btn-play">▶ 播放</button>
+      </div>
+      <div class="time-row">
+        <input type="range" id="time-slider" min="0" max="1000" value="0" aria-label="时间进度">
+      </div>
+      <div class="time-row">
+        <span class="t-label" style="margin:0;">步长</span>
+        <select id="step-unit">
+          <option value="分">分钟</option>
+          <option value="时" selected>小时</option>
+          <option value="日">天</option>
+          <option value="月">月</option>
+          <option value="年">年</option>
+        </select>
+        <button id="step-minus">−</button>
+        <button id="step-plus">+</button>
+      </div>
+      <div class="time-row">
+        <span class="t-label" style="margin:0;">播放速率</span>
+        <button class="rate-chip" data-rate="30">30天/秒</button>
+        <button class="rate-chip active" data-rate="300">300天/秒</button>
+        <button class="rate-chip" data-rate="3000">3000天/秒</button>
+      </div>
     </div>
   </div>
 
-  <div class="hint">🖱️ 拖拽 360° 任意旋转 · 滚轮缩放 · 触屏手势同样支持</div>
+  <div class="hint">🖱️ 拖拽 360° 旋转 · 滚轮缩放 · 点击行星查看科普 · 拨动时间观察公转</div>
   <div class="credit">oli-bot</div>
 
   <div id="fallback" hidden>
     抱歉，你的浏览器不支持 WebGL，无法渲染 3D 场景。<br>
-    请尝试升级浏览器或在设备上开启硬件加速。<br>
-    <a class="back" href="/" style="display:inline-block; margin-top:12px;">← 返回博客</a>
+    请尝试升级浏览器或在设备上开启硬件加速。
+  </div>
+
+  <!-- 行星科普信息卡 -->
+  <div id="info-card">
+    <div class="info-head">
+      <span class="info-name" id="info-name"></span>
+      <span class="info-type" id="info-type"></span>
+      <button class="info-close" id="info-close" aria-label="关闭">✕</button>
+    </div>
+    <table id="info-table"></table>
+    <div class="info-note" id="info-note"></div>
+    <div class="info-hint" id="info-hint"></div>
+  </div>
+
+  <!-- 科普知识弹窗 -->
+  <div id="modal">
+    <div class="modal-card">
+      <div class="modal-title">📖 太阳系科普知识 <button class="info-close" id="modal-close" aria-label="关闭">✕</button></div>
+      <h4>① 开普勒第三定律</h4>
+      <p>行星公转周期的平方与轨道半长轴的立方成正比（T² ∝ a³）。离太阳越远，公转越慢：水星 88 天转一圈，海王星却要 165 年。用上方「时间旅行」拨动时间，就能直观看到内圈行星转得飞快、外圈行星慢如蜗牛。</p>
+      <h4>② 光的速度是有限的</h4>
+      <p>太阳光到达地球需要 8 分 20 秒——你看到的太阳其实是 8 分钟前的太阳；看到海王星时，则是 4 个多小时前的景象。天文学家因此常用「光年」来度量宇宙距离。</p>
+      <h4>③ 行星的三大类</h4>
+      <p>类地行星（水星·金星·地球·火星）：岩石表面、体积小而密度大；气态巨行星（木星·土星）：主要由氢和氦组成，体积巨大；冰巨星（天王星·海王星）：富含水、氨、甲烷等「冰」质。一颗木星能装下 1300 多个地球。</p>
+      <h4>④ 小行星带为什么没聚成行星</h4>
+      <p>火星与木星之间的小行星带本可能形成一颗行星，但木星的强大引力不断扰动，使碎片始终无法凝聚。小行星带总质量只有月球的约 4%，且彼此平均相隔数十万公里，远比电影里稀疏。</p>
+      <h4>⑤ 土星环并不是固体</h4>
+      <p>土星环由无数冰粒与岩石碎片组成，宽约 28 万公里，可以并排放下约 22 个地球，但平均厚度只有约 10 米——按比例比一张纸还薄。环中的缝隙（如卡西尼缝）是卫星引力清扫出来的。</p>
+      <h4>⑥ 太阳系其实非常空旷</h4>
+      <p>如果把太阳比作一颗篮球（约 24 厘米），地球会在约 26 米外，海王星在约 780 米外。为了让八大行星都能看清，本页采用了艺术缩放——真实比例下，内圈行星会挤成一团无法观察。</p>
+    </div>
   </div>
 
   <script type="importmap">
@@ -389,21 +555,23 @@
     }
 
     // ---------- 行星标签 ----------
-    function makeLabel(text) {
+    function makeLabel(text, opts = {}) {
+      const { opacity = 1, color = '#ffffff', fontSize = 40 } = opts;
       const c = document.createElement('canvas');
       c.width = 256; c.height = 64;
       const ctx = c.getContext('2d');
-      ctx.font = '700 40px "PingFang SC", "Microsoft YaHei", sans-serif';
+      ctx.font = `700 ${fontSize}px "PingFang SC", "Microsoft YaHei", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'rgba(0,0,0,0.9)';
       ctx.shadowBlur = 10;
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = color;
       ctx.fillText(text, 128, 32);
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
         map: new THREE.CanvasTexture(c),
         transparent: true,
-        depthTest: false
+        depthTest: false,
+        opacity
       }));
       return sprite;
     }
@@ -411,17 +579,21 @@
     // ---------- 行星数据 ----------
     // 半径与轨道半径经过艺术缩放，保证内圈行星可见；公转速度按开普勒定律 a^-1.5 近似
     const planetsData = [
-      { name: '水星', radius: 0.45, distance: 6,   speed: 2.41, spin: 0.35, tex: mercuryTex },
-      { name: '金星', radius: 0.80, distance: 7.5, speed: 1.46, spin: -0.12, tex: venusTex },
-      { name: '地球', radius: 0.90, distance: 9.5, speed: 1.00, spin: 2.20, tex: earthTex, moon: true },
-      { name: '火星', radius: 0.60, distance: 12,  speed: 0.65, spin: 2.00, tex: marsTex },
-      { name: '木星', radius: 2.60, distance: 17,  speed: 0.385, spin: 2.40, tex: jupiterTex },
-      { name: '土星', radius: 2.20, distance: 22,  speed: 0.262, spin: 2.10, tex: saturnTex, rings: true },
-      { name: '天王星', radius: 1.30, distance: 27, speed: 0.192, spin: 1.50, tex: uranusTex },
-      { name: '海王星', radius: 1.25, distance: 32, speed: 0.149, spin: 1.60, tex: neptuneTex }
+      { name: '水星', radius: 0.45, distance: 6,   periodDays: 87.97,  phase: 0.0, spin: 0.30, tex: mercuryTex },
+      { name: '金星', radius: 0.80, distance: 7.5, periodDays: 224.7,  phase: 2.4, spin: -0.10, tex: venusTex },
+      { name: '地球', radius: 0.90, distance: 9.5, periodDays: 365.25, phase: 4.1, spin: 0.60, tex: earthTex, moon: true },
+      { name: '火星', radius: 0.60, distance: 12,  periodDays: 686.98, phase: 5.6, spin: 0.50, tex: marsTex },
+      { name: '木星', radius: 2.60, distance: 17,  periodDays: 4332.6, phase: 1.2, spin: 0.90, tex: jupiterTex },
+      { name: '土星', radius: 2.20, distance: 22,  periodDays: 10759,  phase: 3.4, spin: 0.80, tex: saturnTex, rings: true },
+      { name: '天王星', radius: 1.30, distance: 27, periodDays: 30687,  phase: 5.0, spin: 0.60, tex: uranusTex },
+      { name: '海王星', radius: 1.25, distance: 32, periodDays: 60190,  phase: 2.9, spin: 0.65, tex: neptuneTex }
     ];
 
-    const BASE_SPEED = 0.18; // 地球公转角速度基准 (rad/s)
+    const AU_LABELS = {
+      '水星': '0.39 AU', '金星': '0.72 AU', '地球': '1 AU',
+      '火星': '1.52 AU', '木星': '5.2 AU', '土星': '9.5 AU',
+      '天王星': '19.2 AU', '海王星': '30.1 AU'
+    };
 
     const planets = planetsData.map((p) => {
       const pivot = new THREE.Group();
@@ -436,8 +608,9 @@
       pivot.add(mesh);
 
       // 土星环
+      let ring = null;
       if (p.rings) {
-        const ring = new THREE.Mesh(
+        ring = new THREE.Mesh(
           new THREE.RingGeometry(p.radius * 1.3, p.radius * 2.1, 128),
           new THREE.MeshBasicMaterial({
             map: saturnRingTex,
@@ -470,6 +643,12 @@
       label.scale.set(p.radius * 5, p.radius * 1.25, 1);
       pivot.add(label);
 
+      // 轨道距离小标（AU）
+      const au = makeLabel(AU_LABELS[p.name], { opacity: 0.5, fontSize: 30 });
+      au.position.set(p.distance, -1.4, 0);
+      au.scale.set(2.8, 0.7, 1);
+      scene.add(au);
+
       // 轨道线
       scene.add(orbitLine(p.distance, 0x8fb3ff));
 
@@ -480,8 +659,9 @@
         mesh,
         label,
         moonPivot,
-        angle: Math.random() * Math.PI * 2,
-        speed: p.speed * BASE_SPEED,
+        ring: p.rings ? ring : null,
+        phase: p.phase,
+        periodDays: p.periodDays,
         spin: p.spin,
         name: p.name
       };
@@ -531,21 +711,301 @@
       renderer.setSize(innerWidth, innerHeight);
     });
 
+    // ---------- 科普数据 ----------
+    const SUN_INFO = {
+      type: '黄矮星（G 型主序星）',
+      rows: [
+        ['直径', '139.27 万 km（地球的 109 倍）'],
+        ['质量', '1.989×10³⁰ kg（地球的 33 万倍）'],
+        ['表面温度', '约 5,500 °C'],
+        ['核心温度', '约 1,500 万 °C'],
+        ['自转周期', '约 25.4 天（赤道）'],
+        ['年龄', '约 46 亿年']
+      ],
+      note: '太阳占据了太阳系 99.86% 的质量。它内部每秒约有 400 万吨物质通过核聚变转化为能量，为地球带来光和热。',
+      extra: '☀️ 光到达地球：约 8 分 20 秒'
+    };
+
+    const PLANET_INFO = {
+      '水星': {
+        type: '类地行星',
+        rows: [
+          ['距太阳', '5,790 万 km（0.39 AU）'],
+          ['直径', '4,879 km（地球的 0.38 倍）'],
+          ['质量', '3.30×10²³ kg（地球的 5.5%）'],
+          ['公转周期', '88 天'],
+          ['自转周期', '58.6 天'],
+          ['表面温度', '-173 ~ 427 °C'],
+          ['已知卫星', '0 颗']
+        ],
+        note: '水星是太阳系中昼夜温差最大的行星：白天地表可达 427°C，夜晚骤降至 -173°C。它的自转周期（58.6 天）比公转周期（88 天）还长，一个「水星日」约等于 176 个地球日。',
+        extra: '☀️ 光到达：约 3 分 13 秒'
+      },
+      '金星': {
+        type: '类地行星',
+        rows: [
+          ['距太阳', '1.082 亿 km（0.72 AU）'],
+          ['直径', '12,104 km（地球的 0.95 倍）'],
+          ['质量', '4.87×10²⁴ kg（地球的 82%）'],
+          ['公转周期', '225 天'],
+          ['自转周期', '243 天（逆行）'],
+          ['表面温度', '约 465 °C'],
+          ['已知卫星', '0 颗']
+        ],
+        note: '金星是太阳系最热的行星。它的自转方向与其他行星相反（逆行），且自转一周比公转一周还慢。浓密的二氧化碳大气引发失控温室效应，使表面温度高达 465°C，足以熔化铅。',
+        extra: '☀️ 光到达：约 6 分钟'
+      },
+      '地球': {
+        type: '类地行星',
+        rows: [
+          ['距太阳', '1.496 亿 km（1 AU）'],
+          ['直径', '12,742 km'],
+          ['质量', '5.97×10²⁴ kg'],
+          ['公转周期', '365.25 天'],
+          ['自转周期', '23 小时 56 分'],
+          ['表面温度', '平均约 15 °C'],
+          ['已知卫星', '1 颗（月球）']
+        ],
+        note: '地球是已知唯一存在生命、且表面存在稳定液态水的行星。日地距离（1 AU ≈ 1.496 亿 km）被用作天文学的基本长度单位。',
+        extra: '☀️ 光到达：约 8 分 20 秒'
+      },
+      '火星': {
+        type: '类地行星',
+        rows: [
+          ['距太阳', '2.279 亿 km（1.52 AU）'],
+          ['直径', '6,779 km（地球的 0.53 倍）'],
+          ['质量', '6.42×10²³ kg（地球的 11%）'],
+          ['公转周期', '687 天'],
+          ['自转周期', '24 小时 37 分'],
+          ['表面温度', '平均约 -63 °C'],
+          ['已知卫星', '2 颗']
+        ],
+        note: '火星的一天与地球几乎一样长（约 24.6 小时）。太阳系最高的火山奥林帕斯山高约 22 公里，是珠穆朗玛峰的 2.5 倍，就位于火星上。',
+        extra: '☀️ 光到达：约 12.7 分钟'
+      },
+      '木星': {
+        type: '气态巨行星',
+        rows: [
+          ['距太阳', '7.786 亿 km（5.2 AU）'],
+          ['直径', '142,984 km（地球的 11.2 倍）'],
+          ['质量', '1.898×10²⁷ kg（地球的 318 倍）'],
+          ['公转周期', '11.86 年'],
+          ['自转周期', '9 小时 56 分'],
+          ['表面温度', '约 -108 °C'],
+          ['已知卫星', '95 颗']
+        ],
+        note: '木星是太阳系最大的行星，质量比其余所有行星总和还大 2.5 倍，约 1300 多个地球才能填满它。大红斑是一场持续数百年、比地球还大的巨型风暴。',
+        extra: '☀️ 光到达：约 43 分钟'
+      },
+      '土星': {
+        type: '气态巨行星',
+        rows: [
+          ['距太阳', '14.34 亿 km（9.5 AU）'],
+          ['直径', '120,536 km（地球的 9.5 倍）'],
+          ['质量', '5.68×10²⁶ kg（地球的 95 倍）'],
+          ['公转周期', '29.46 年'],
+          ['自转周期', '10 小时 42 分'],
+          ['表面温度', '约 -139 °C'],
+          ['已知卫星', '274 颗（2025 年统计）']
+        ],
+        note: '土星的密度比水还小——如果有足够大的海洋，它真的能浮起来。它的环宽约 28 万公里，但平均厚度只有约 10 米，主要由冰粒和岩石碎片组成。',
+        extra: '☀️ 光到达：约 80 分钟'
+      },
+      '天王星': {
+        type: '冰巨星',
+        rows: [
+          ['距太阳', '28.71 亿 km（19.2 AU）'],
+          ['直径', '51,118 km（地球的 4 倍）'],
+          ['质量', '8.68×10²⁵ kg（地球的 15 倍）'],
+          ['公转周期', '84 年'],
+          ['自转周期', '17 小时 14 分'],
+          ['表面温度', '约 -197 °C'],
+          ['已知卫星', '28 颗']
+        ],
+        note: '天王星几乎是「躺着」绕太阳转的——自转轴倾角约 98°，很可能是远古时期一次巨大撞击造成的。它因此有长达 42 年的极昼和极夜。',
+        extra: '☀️ 光到达：约 2 小时 40 分'
+      },
+      '海王星': {
+        type: '冰巨星',
+        rows: [
+          ['距太阳', '45.04 亿 km（30.1 AU）'],
+          ['直径', '49,528 km（地球的 3.9 倍）'],
+          ['质量', '1.02×10²⁶ kg（地球的 17 倍）'],
+          ['公转周期', '164.8 年'],
+          ['自转周期', '16 小时 6 分'],
+          ['表面温度', '约 -201 °C'],
+          ['已知卫星', '16 颗']
+        ],
+        note: '海王星是 1846 年先通过数学计算预测、再被望远镜证实发现的「笔尖上的行星」。它拥有太阳系最快的风速，最高可达每小时 2,100 公里。',
+        extra: '☀️ 光到达：约 4 小时 10 分'
+      }
+    };
+
+    // ---------- 点击 / 悬停交互 ----------
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const clickables = [];
+    planets.forEach((p) => { clickables.push(p.mesh); if (p.ring) clickables.push(p.ring); });
+    clickables.push(sun);
+
+    let downPos = null;
+    canvas.addEventListener('pointerdown', (e) => { downPos = { x: e.clientX, y: e.clientY }; });
+    canvas.addEventListener('pointerup', (e) => {
+      if (!downPos) return;
+      const moved = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
+      downPos = null;
+      if (moved > 6) return; // 是拖拽旋转，非点击
+      pick(e.clientX, e.clientY);
+    });
+    addEventListener('pointermove', (e) => {
+      pointer.x = (e.clientX / innerWidth) * 2 - 1;
+      pointer.y = -(e.clientY / innerHeight) * 2 + 1;
+    });
+
+    function pick(cx, cy) {
+      const rect = canvas.getBoundingClientRect();
+      const px = ((cx - rect.left) / rect.width) * 2 - 1;
+      const py = -((cy - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(new THREE.Vector2(px, py), camera);
+      const hits = raycaster.intersectObjects(clickables, false);
+      if (!hits.length) { closeInfo(); return; }
+      const obj = hits[0].object;
+      if (obj === sun) { showInfo('太阳'); return; }
+      const hit = planets.find((p) => p.mesh === obj || p.ring === obj);
+      if (hit) showInfo(hit.name);
+    }
+
+    function showInfo(name) {
+      const d = name === '太阳' ? SUN_INFO : PLANET_INFO[name];
+      if (!d) return;
+      document.getElementById('info-name').textContent = name;
+      document.getElementById('info-type').textContent = d.type;
+      document.getElementById('info-note').textContent = d.note;
+      document.getElementById('info-hint').textContent = d.extra;
+      document.getElementById('info-table').innerHTML =
+        d.rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+      document.getElementById('info-card').classList.add('show');
+    }
+    function closeInfo() {
+      document.getElementById('info-card').classList.remove('show');
+    }
+
+    document.getElementById('info-close').addEventListener('click', closeInfo);
+    document.getElementById('quiz').addEventListener('click', () => {
+      document.getElementById('modal').classList.add('show');
+    });
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('modal').classList.remove('show');
+    });
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+    });
+
+    // ---------- 时间旅行 ----------
+    const BASE_DATE = new Date(2000, 0, 1);
+    const DAY_MS = 86400000;
+    const dateToDays = (d) => (d.getTime() - BASE_DATE.getTime()) / DAY_MS;
+    const daysToDate = (days) => new Date(BASE_DATE.getTime() + days * DAY_MS);
+
+    const SLIDER_MIN = dateToDays(new Date(1950, 0, 1));
+    const SLIDER_MAX = dateToDays(new Date(2150, 0, 1));
+
+    const timeSlider = document.getElementById('time-slider');
+    const dateDisplay = document.getElementById('date-display');
+    const btnNow = document.getElementById('btn-now');
+    const btnPlay = document.getElementById('btn-play');
+    const stepUnit = document.getElementById('step-unit');
+    const stepMinus = document.getElementById('step-minus');
+    const stepPlus = document.getElementById('step-plus');
+
+    // 模拟时间（天），以 2000-01-01 为基准；默认落在「现在」
+    let simulatedDays = Math.max(SLIDER_MIN, Math.min(SLIDER_MAX, dateToDays(new Date())));
+    let playing = false;
+    let rateDaysPerSec = 300;
+    document.querySelectorAll('.rate-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.rate-chip').forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        rateDaysPerSec = Number(chip.dataset.rate);
+      });
+    });
+
+    function clampDays() {
+      simulatedDays = Math.max(SLIDER_MIN, Math.min(SLIDER_MAX, simulatedDays));
+    }
+    function syncSlider() {
+      timeSlider.value = String(Math.round(((simulatedDays - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 1000));
+    }
+    function syncDate() {
+      const d = daysToDate(simulatedDays);
+      dateDisplay.textContent =
+        `${d.getFullYear()}年${String(d.getMonth() + 1).padStart(2, '0')}月${String(d.getDate()).padStart(2, '0')}日 ` +
+        `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+    function stepBy(unit, dir) {
+      const d = daysToDate(simulatedDays);
+      switch (unit) {
+        case '分': d.setMinutes(d.getMinutes() + dir); break;
+        case '时': d.setHours(d.getHours() + dir); break;
+        case '日': d.setDate(d.getDate() + dir); break;
+        case '月': d.setMonth(d.getMonth() + dir); break;
+        case '年': d.setFullYear(d.getFullYear() + dir); break;
+      }
+      simulatedDays = dateToDays(d);
+      clampDays(); syncSlider(); syncDate();
+    }
+    timeSlider.addEventListener('input', () => {
+      simulatedDays = SLIDER_MIN + (timeSlider.value / 1000) * (SLIDER_MAX - SLIDER_MIN);
+      syncDate();
+    });
+    btnNow.addEventListener('click', () => {
+      simulatedDays = dateToDays(new Date());
+      clampDays(); syncSlider(); syncDate();
+    });
+    btnPlay.addEventListener('click', () => {
+      playing = !playing;
+      btnPlay.textContent = playing ? '⏸ 暂停' : '▶ 播放';
+    });
+    stepMinus.addEventListener('click', () => stepBy(stepUnit.value, -1));
+    stepPlus.addEventListener('click', () => stepBy(stepUnit.value, 1));
+
+    // 月球公转周期（真实约 27.3 天）
+    const MOON_PERIOD_DAYS = 27.32;
+    const MOON_PHASE = 1.8;
+    syncSlider(); syncDate();
+
     // ---------- 渲染循环 ----------
     const clock = new THREE.Clock();
     renderer.setAnimationLoop(() => {
       const delta = Math.min(clock.getDelta(), 0.05);
 
-      // 公转
+      // 播放模式下按设定速率推进模拟时间
+      if (playing) {
+        simulatedDays += rateDaysPerSec * delta;
+        if (simulatedDays >= SLIDER_MAX) {
+          simulatedDays = SLIDER_MAX;
+          playing = false;
+          btnPlay.textContent = '▶ 播放';
+        }
+        syncSlider(); syncDate();
+      }
+
+      // 时间驱动公转：角度 = 相位 + 经过天数 / 公转周期 × 2π
       for (const p of planets) {
-        p.angle += p.speed * delta;
-        p.pivot.rotation.y = p.angle;
-        p.mesh.rotation.y += p.spin * delta;      // 自转
-        if (p.moonPivot) p.moonPivot.rotation.y += 1.4 * delta; // 月球公转
+        p.pivot.rotation.y = p.phase + (simulatedDays / p.periodDays) * Math.PI * 2;
+        p.mesh.rotation.y += p.spin * delta;      // 自转（装饰性）
+        if (p.moonPivot) {
+          p.moonPivot.rotation.y = MOON_PHASE + (simulatedDays / MOON_PERIOD_DAYS) * Math.PI * 2;
+        }
       }
 
       sun.rotation.y += 0.02 * delta;
       belt.rotation.y += 0.015 * delta;
+
+      // 悬停光标
+      raycaster.setFromCamera(pointer, camera);
+      const hover = raycaster.intersectObjects(clickables, false);
+      canvas.style.cursor = hover.length ? 'pointer' : 'default';
 
       controls.update();
       renderer.render(scene, camera);
