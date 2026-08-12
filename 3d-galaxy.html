@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="星河 —— 基于 Three.js 的 WebGL 粒子星系 3D 演示">
-  <title>星河 · 3D 粒子演示 | oli-bot</title>
+  <meta name="description" content="太阳系 —— 基于 Three.js 的 WebGL 真实太阳系 3D 演示">
+  <title>太阳系 · 3D 演示 | oli-bot</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; overflow: hidden; background: #050510; }
@@ -78,8 +78,6 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
-
-    /* 右下滑块：手动旋转时的力度指示（装饰用） */
     .credit {
       position: fixed;
       right: 18px;
@@ -117,15 +115,15 @@
   <canvas id="scene"></canvas>
 
   <div class="overlay">
-    <div class="title">✨ 星河 Galaxy</div>
-    <div class="subtitle">Three.js · WebGL · 6 万粒子星系</div>
+    <div class="title">🪐 太阳系 Solar System</div>
+    <div class="subtitle">Three.js · 八大行星 · 公转速度按开普勒定律</div>
     <div class="actions">
       <button id="auto">⏸ 暂停自转</button>
       <a class="back" href="/">← 返回博客</a>
     </div>
   </div>
 
-  <div class="hint">🖱️ 拖拽旋转 · 滚轮缩放 · 触屏手势同样支持</div>
+  <div class="hint">🖱️ 拖拽 360° 任意旋转 · 滚轮缩放 · 触屏手势同样支持</div>
   <div class="credit">oli-bot</div>
 
   <div id="fallback" hidden>
@@ -150,8 +148,9 @@
     const canvas = document.getElementById('scene');
     const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 500);
-    camera.position.set(2, 3, 13);
+    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 2000);
+    camera.position.set(0, 42, 70);
+    camera.lookAt(0, 0, 0);
 
     let renderer;
     try {
@@ -164,13 +163,165 @@
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.setClearColor(0x050510);
+    // 使用旧式光照单位，避免物理光照的衰减调参，效果更直观
+    renderer.useLegacyLights = true;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+
+    // ---------- 程序化贴图工具 ----------
+    function canvasTexture(size, draw) {
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const ctx = c.getContext('2d');
+      draw(ctx, size);
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    // 横条纹带纹理（木星/土星/天王星/海王星等）
+    function bandedTexture(base, bands) {
+      return canvasTexture(512, (ctx, s) => {
+        ctx.fillStyle = base;
+        ctx.fillRect(0, 0, s, s);
+        let y = 0;
+        while (y < s) {
+          const h = 12 + Math.random() * 36;
+          ctx.fillStyle = bands[Math.floor(Math.random() * bands.length)];
+          ctx.globalAlpha = 0.25 + Math.random() * 0.4;
+          ctx.fillRect(0, y, s, h);
+          y += h;
+        }
+        ctx.globalAlpha = 1;
+        for (let i = 0; i < 900; i++) {
+          ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.10)';
+          ctx.fillRect(Math.random() * s, Math.random() * s, 2, 2);
+        }
+      });
+    }
+
+    // 带环形山的岩石纹理（水星/月球）
+    function craterTexture(base, count) {
+      return canvasTexture(256, (ctx, s) => {
+        ctx.fillStyle = base;
+        ctx.fillRect(0, 0, s, s);
+        for (let i = 0; i < count; i++) {
+          ctx.fillStyle = `rgba(30,30,34,${0.12 + Math.random() * 0.28})`;
+          const r = 2 + Math.random() * 12;
+          ctx.beginPath();
+          ctx.arc(Math.random() * s, Math.random() * s, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        for (let i = 0; i < 300; i++) {
+          ctx.fillStyle = `rgba(255,255,255,${0.04 + Math.random() * 0.08})`;
+          ctx.fillRect(Math.random() * s, Math.random() * s, 2, 2);
+        }
+      });
+    }
+
+    const sunTex   = canvasTexture(512, (ctx, s) => {
+      ctx.fillStyle = '#ffb03a';
+      ctx.fillRect(0, 0, s, s);
+      const colors = ['#ff8a00', '#ffc93c', '#ffe08a', '#ff6a00'];
+      for (let i = 0; i < 3200; i++) {
+        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+        ctx.globalAlpha = 0.25 + Math.random() * 0.5;
+        ctx.beginPath();
+        ctx.arc(Math.random() * s, Math.random() * s, 1 + Math.random() * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+    const mercuryTex = craterTexture('#8c8178', 260);
+    const venusTex   = canvasTexture(256, (ctx, s) => {
+      ctx.fillStyle = '#d9a441';
+      ctx.fillRect(0, 0, s, s);
+      ctx.globalAlpha = 0.4;
+      for (let i = 0; i < 260; i++) {
+        ctx.fillStyle = i % 2 ? '#f2dcae' : '#c0852e';
+        const w = 20 + Math.random() * 80;
+        ctx.fillRect(Math.random() * s, Math.random() * s, w, 2 + Math.random() * 4);
+      }
+      ctx.globalAlpha = 1;
+    });
+    const earthTex   = canvasTexture(512, (ctx, s) => {
+      ctx.fillStyle = '#1a4d8f';
+      ctx.fillRect(0, 0, s, s);
+      for (let i = 0; i < 1600; i++) {
+        ctx.fillStyle = `rgba(255,255,255,${0.02 + Math.random() * 0.04})`;
+        ctx.fillRect(Math.random() * s, Math.random() * s, 2, 2);
+      }
+      const greens = ['#2e7d32', '#4c8f3f', '#6b8e3a', '#8d6e2e'];
+      ctx.globalAlpha = 0.92;
+      for (let i = 0; i < 42; i++) {
+        const cx = Math.random() * s, cy = Math.random() * s;
+        const r = 18 + Math.random() * 56;
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        g.addColorStop(0, greens[i % 4]);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = 'rgba(240,244,250,0.9)';
+      ctx.fillRect(0, 0, s, 16);
+      ctx.fillRect(0, s - 16, s, 16);
+      ctx.globalAlpha = 1;
+    });
+    const marsTex    = canvasTexture(256, (ctx, s) => {
+      ctx.fillStyle = '#b5542e';
+      ctx.fillRect(0, 0, s, s);
+      for (let i = 0; i < 26; i++) {
+        const cx = Math.random() * s, cy = Math.random() * s;
+        const r = 14 + Math.random() * 40;
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        g.addColorStop(0, 'rgba(90,40,25,0.5)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.fillStyle = 'rgba(255,245,235,0.85)';
+      ctx.fillRect(0, 0, s, 10);
+      ctx.fillRect(0, s - 10, s, 10);
+    });
+    const jupiterTex = bandedTexture('#c98e4b', ['rgba(214,170,110,0.8)', 'rgba(166,110,66,0.8)', 'rgba(245,220,180,0.6)', 'rgba(120,74,48,0.7)']);
+    // 大红斑
+    (() => {
+      const c = document.createElement('canvas'); c.width = c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(jupiterTex.image, 0, 0);
+      const g = ctx.createRadialGradient(360, 150, 4, 360, 150, 26);
+      g.addColorStop(0, 'rgba(200,80,60,0.9)');
+      g.addColorStop(0.6, 'rgba(190,70,50,0.55)');
+      g.addColorStop(1, 'rgba(190,70,50,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.ellipse(360, 150, 26, 14, 0, 0, Math.PI * 2); ctx.fill();
+      jupiterTex.image = c;
+    })();
+    const saturnTex  = bandedTexture('#e0c58a', ['rgba(222,196,140,0.8)', 'rgba(178,150,106,0.8)', 'rgba(245,228,185,0.6)', 'rgba(140,115,80,0.7)']);
+    const uranusTex  = bandedTexture('#7fd4d0', ['rgba(190,240,238,0.7)', 'rgba(120,205,202,0.7)', 'rgba(230,250,248,0.5)', 'rgba(90,175,175,0.7)']);
+    const neptuneTex = bandedTexture('#2f6fd0', ['rgba(90,150,235,0.7)', 'rgba(40,95,200,0.7)', 'rgba(150,195,255,0.5)', 'rgba(25,70,165,0.7)']);
+    const moonTex    = craterTexture('#9a9a9a', 220);
+
+    // 土星环纹理：横轴=环绕角向，竖轴=半径方向（内→外）
+    const saturnRingTex = canvasTexture(512, (ctx, s) => {
+      ctx.clearRect(0, 0, s, s);
+      for (let row = 0; row < s; row++) {
+        const t = row / s; // 0=内缘 -> 1=外缘
+        let alpha = 0.30 + 0.45 * Math.sin(t * 42) * Math.sin(t * 42);
+        // 卡西尼缝（内侧空白带）
+        if ((t > 0.44 && t < 0.47) || (t > 0.60 && t < 0.615)) alpha = 0;
+        alpha *= (0.4 + t) * (1 - t * 0.45);
+        ctx.fillStyle = `rgba(201,184,148,${Math.max(0, Math.min(0.95, alpha))})`;
+        ctx.fillRect(0, row, s, 1);
+      }
+    });
 
     // ---------- 背景星场 ----------
     function createStars() {
       const count = 2500;
       const positions = new Float32Array(count * 3);
       for (let i = 0; i < count; i++) {
-        const r = 80 + Math.random() * 130;
+        const r = 400 + Math.random() * 900;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
         positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
@@ -181,7 +332,7 @@
       geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
       const mat = new THREE.PointsMaterial({
         color: 0xbfd4ff,
-        size: 0.35,
+        size: 0.7,
         sizeAttenuation: true,
         transparent: true,
         opacity: 0.85
@@ -190,90 +341,182 @@
     }
     scene.add(createStars());
 
-    // ---------- 星系（粒子螺旋臂） ----------
-    const galaxy = (() => {
-      const count = 60000;
-      const radius = 6;
-      const branches = 4;
-      const positions = new Float32Array(count * 3);
-      const colors = new Float32Array(count * 3);
-      const colorInside = new THREE.Color('#ffd27a');
-      const colorOutside = new THREE.Color('#a06bff');
+    // ---------- 光照 ----------
+    const sunLight = new THREE.PointLight(0xfff3e0, 1.6, 0);
+    sunLight.position.set(0, 0, 0);
+    scene.add(sunLight);
+    scene.add(new THREE.AmbientLight(0x334466, 0.3));
 
-      for (let i = 0; i < count; i++) {
-        const i3 = i * 3;
-        const r = Math.pow(Math.random(), 1.4) * radius;
-        const branchAngle = (i % branches) / branches * Math.PI * 2;
-        const spinAngle = r * 1.6;
-        const spread = 0.32 * (r / radius);
+    // ---------- 太阳 ----------
+    const sun = new THREE.Mesh(
+      new THREE.SphereGeometry(3.2, 64, 64),
+      new THREE.MeshBasicMaterial({ map: sunTex })
+    );
+    scene.add(sun);
 
-        const rx = (Math.random() - 0.5) * spread * 1.8;
-        const ry = (Math.random() - 0.5) * spread * 1.2;
-        const rz = (Math.random() - 0.5) * spread * 1.8;
-
-        positions[i3]     = Math.cos(branchAngle + spinAngle) * r + rx;
-        positions[i3 + 1] = ry;
-        positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * r + rz;
-
-        const mixed = colorInside.clone().lerp(colorOutside, r / radius);
-        colors[i3] = mixed.r;
-        colors[i3 + 1] = mixed.g;
-        colors[i3 + 2] = mixed.b;
-      }
-
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-      const mat = new THREE.PointsMaterial({
-        size: 0.022,
-        sizeAttenuation: true,
-        vertexColors: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        transparent: true
-      });
-
-      const points = new THREE.Points(geo, mat);
-      points.rotation.x = Math.PI * 0.12;
-      return points;
-    })();
-    scene.add(galaxy);
-
-    // ---------- 星系中心光晕 ----------
+    // 太阳光晕
     function glowTexture() {
       const c = document.createElement('canvas');
-      c.width = c.height = 128;
+      c.width = c.height = 256;
       const ctx = c.getContext('2d');
-      const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-      g.addColorStop(0, 'rgba(255, 214, 170, 1)');
-      g.addColorStop(0.25, 'rgba(255, 170, 120, 0.55)');
-      g.addColorStop(1, 'rgba(255, 140, 100, 0)');
+      const g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      g.addColorStop(0, 'rgba(255, 214, 170, 0.85)');
+      g.addColorStop(0.3, 'rgba(255, 170, 100, 0.28)');
+      g.addColorStop(1, 'rgba(255, 120, 60, 0)');
       ctx.fillStyle = g;
-      ctx.fillRect(0, 0, 128, 128);
+      ctx.fillRect(0, 0, 256, 256);
       return new THREE.CanvasTexture(c);
     }
-    const core = new THREE.Sprite(new THREE.SpriteMaterial({
+    const glow = new THREE.Sprite(new THREE.SpriteMaterial({
       map: glowTexture(),
       blending: THREE.AdditiveBlending,
       transparent: true,
       depthWrite: false
     }));
-    core.scale.set(3.2, 3.2, 1);
-    scene.add(core);
+    glow.scale.set(22, 22, 1);
+    scene.add(glow);
 
-    // 柔和点光源，为光晕添加体积感
-    scene.add(new THREE.PointLight(0xffd9b0, 1.5, 20));
+    // ---------- 轨道线 ----------
+    function orbitLine(radius, color) {
+      const pts = [];
+      for (let i = 0; i <= 128; i++) {
+        const a = (i / 128) * Math.PI * 2;
+        pts.push(new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius));
+      }
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.18 });
+      return new THREE.LineLoop(geo, mat);
+    }
+
+    // ---------- 行星标签 ----------
+    function makeLabel(text) {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 64;
+      const ctx = c.getContext('2d');
+      ctx.font = '700 40px "PingFang SC", "Microsoft YaHei", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0,0,0,0.9)';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(text, 128, 32);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(c),
+        transparent: true,
+        depthTest: false
+      }));
+      return sprite;
+    }
+
+    // ---------- 行星数据 ----------
+    // 半径与轨道半径经过艺术缩放，保证内圈行星可见；公转速度按开普勒定律 a^-1.5 近似
+    const planetsData = [
+      { name: '水星', radius: 0.45, distance: 6,   speed: 2.41, spin: 0.35, tex: mercuryTex },
+      { name: '金星', radius: 0.80, distance: 7.5, speed: 1.46, spin: -0.12, tex: venusTex },
+      { name: '地球', radius: 0.90, distance: 9.5, speed: 1.00, spin: 2.20, tex: earthTex, moon: true },
+      { name: '火星', radius: 0.60, distance: 12,  speed: 0.65, spin: 2.00, tex: marsTex },
+      { name: '木星', radius: 2.60, distance: 17,  speed: 0.385, spin: 2.40, tex: jupiterTex },
+      { name: '土星', radius: 2.20, distance: 22,  speed: 0.262, spin: 2.10, tex: saturnTex, rings: true },
+      { name: '天王星', radius: 1.30, distance: 27, speed: 0.192, spin: 1.50, tex: uranusTex },
+      { name: '海王星', radius: 1.25, distance: 32, speed: 0.149, spin: 1.60, tex: neptuneTex }
+    ];
+
+    const BASE_SPEED = 0.18; // 地球公转角速度基准 (rad/s)
+
+    const planets = planetsData.map((p) => {
+      const pivot = new THREE.Group();
+      pivot.position.set(0, 0, 0);
+
+      const mesh = new THREE.Mesh(
+        new THREE.SphereGeometry(p.radius, 48, 32),
+        new THREE.MeshStandardMaterial({ map: p.tex, roughness: 0.9, metalness: 0 })
+      );
+      mesh.position.set(p.distance, 0, 0);
+      mesh.rotation.y = Math.random() * Math.PI * 2; // 自转初始角度
+      pivot.add(mesh);
+
+      // 土星环
+      if (p.rings) {
+        const ring = new THREE.Mesh(
+          new THREE.RingGeometry(p.radius * 1.3, p.radius * 2.1, 128),
+          new THREE.MeshBasicMaterial({
+            map: saturnRingTex,
+            side: THREE.DoubleSide,
+            transparent: true,
+            depthWrite: false
+          })
+        );
+        ring.rotation.x = -Math.PI / 2;
+        mesh.add(ring);
+      }
+
+      // 地球月球
+      let moonPivot = null;
+      if (p.moon) {
+        moonPivot = new THREE.Group();
+        moonPivot.position.set(p.distance, 0, 0);
+        const moon = new THREE.Mesh(
+          new THREE.SphereGeometry(0.26, 24, 16),
+          new THREE.MeshStandardMaterial({ map: moonTex, roughness: 1, metalness: 0 })
+        );
+        moon.position.set(1.1, 0, 0);
+        moonPivot.add(moon);
+        pivot.add(moonPivot);
+      }
+
+      // 标签
+      const label = makeLabel(p.name);
+      label.position.set(p.distance, p.radius + 1.6, 0);
+      label.scale.set(p.radius * 5, p.radius * 1.25, 1);
+      pivot.add(label);
+
+      // 轨道线
+      scene.add(orbitLine(p.distance, 0x8fb3ff));
+
+      scene.add(pivot);
+
+      return {
+        pivot,
+        mesh,
+        label,
+        moonPivot,
+        angle: Math.random() * Math.PI * 2,
+        speed: p.speed * BASE_SPEED,
+        spin: p.spin,
+        name: p.name
+      };
+    });
+
+    // ---------- 小行星带（火星与木星之间） ----------
+    const belt = (() => {
+      const count = 700;
+      const positions = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        const r = 14.2 + Math.random() * 1.8;
+        const a = Math.random() * Math.PI * 2;
+        positions[i * 3]     = Math.cos(a) * r;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 0.7;
+        positions[i * 3 + 2] = Math.sin(a) * r;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({ color: 0x8a8a8a, size: 0.1, sizeAttenuation: true });
+      return new THREE.Points(geo, mat);
+    })();
+    scene.add(belt);
 
     // ---------- 控制器 ----------
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.8;
+    controls.autoRotateSpeed = 0.6;
     controls.enablePan = false;
     controls.minDistance = 3;
-    controls.maxDistance = 30;
+    controls.maxDistance = 260;
+    // 解除极角限制，实现真正 360° 全向自由旋转
+    controls.minPolarAngle = -Infinity;
+    controls.maxPolarAngle = Infinity;
 
     // ---------- UI ----------
     const autoBtn = document.getElementById('auto');
@@ -289,8 +532,21 @@
     });
 
     // ---------- 渲染循环 ----------
+    const clock = new THREE.Clock();
     renderer.setAnimationLoop(() => {
-      galaxy.rotation.y += 0.0002;
+      const delta = Math.min(clock.getDelta(), 0.05);
+
+      // 公转
+      for (const p of planets) {
+        p.angle += p.speed * delta;
+        p.pivot.rotation.y = p.angle;
+        p.mesh.rotation.y += p.spin * delta;      // 自转
+        if (p.moonPivot) p.moonPivot.rotation.y += 1.4 * delta; // 月球公转
+      }
+
+      sun.rotation.y += 0.02 * delta;
+      belt.rotation.y += 0.015 * delta;
+
       controls.update();
       renderer.render(scene, camera);
     });
