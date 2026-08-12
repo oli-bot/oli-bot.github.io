@@ -922,11 +922,20 @@
     let simulatedDays = Math.max(SLIDER_MIN, Math.min(SLIDER_MAX, dateToDays(new Date())));
     let playing = false;
     let rateDaysPerSec = 300;
+    function updatePlayLabel() {
+      btnPlay.textContent = `${playing ? '⏸ 暂停' : '▶ 播放'} · ${rateDaysPerSec}天/秒`;
+    }
     document.querySelectorAll('.rate-chip').forEach((chip) => {
       chip.addEventListener('click', () => {
         document.querySelectorAll('.rate-chip').forEach((c) => c.classList.remove('active'));
         chip.classList.add('active');
         rateDaysPerSec = Number(chip.dataset.rate);
+        updatePlayLabel();
+        // 点击速率立即开始播放，让速率变化立刻看得见
+        if (!playing) {
+          playing = true;
+          updatePlayLabel();
+        }
       });
     });
 
@@ -964,7 +973,7 @@
     });
     btnPlay.addEventListener('click', () => {
       playing = !playing;
-      btnPlay.textContent = playing ? '⏸ 暂停' : '▶ 播放';
+      updatePlayLabel();
     });
     stepMinus.addEventListener('click', () => stepBy(stepUnit.value, -1));
     stepPlus.addEventListener('click', () => stepBy(stepUnit.value, 1));
@@ -973,6 +982,7 @@
     const MOON_PERIOD_DAYS = 27.32;
     const MOON_PHASE = 1.8;
     syncSlider(); syncDate();
+    updatePlayLabel();
 
     // ---------- 渲染循环 ----------
     const clock = new THREE.Clock();
@@ -985,7 +995,7 @@
         if (simulatedDays >= SLIDER_MAX) {
           simulatedDays = SLIDER_MAX;
           playing = false;
-          btnPlay.textContent = '▶ 播放';
+          updatePlayLabel();
         }
         syncSlider(); syncDate();
       }
