@@ -187,6 +187,15 @@
       pointer-events: auto;
     }
     .time .t-label { font-size: 12px; opacity: 0.6; margin-bottom: 8px; letter-spacing: 1px; }
+    .time-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    #time-toggle {
+      display: none; /* 桌面端不需要折叠 */
+      font-size: 14px; padding: 3px 14px; line-height: 1.6;
+      color: rgba(223,232,242,0.85);
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 10px; cursor: pointer;
+    }
     .time-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .time .date-display {
       font-size: 14px; font-weight: 600; color: #ffd27a;
@@ -236,6 +245,13 @@
       .title { font-size: 17px; }
       .hint { font-size: 12px; white-space: normal; }
     }
+
+    /* 竖屏手机：时间旅行默认收起，点 ⬇️ 展开 / ⬆️ 收起 */
+    @media (max-width: 600px) and (orientation: portrait) {
+      .time-body { display: none; }
+      .time.open .time-body { display: block; }
+      #time-toggle { display: inline-block; }
+    }
   </style>
 </head>
 <body>
@@ -249,32 +265,37 @@
       <button id="quiz">📖 科普知识</button>
     </div>
     <div class="time">
-      <div class="t-label">⏳ 时间旅行</div>
-      <div class="time-row">
-        <span class="date-display" id="date-display"></span>
-        <button id="btn-now">现在</button>
-        <button id="btn-play">▶ 播放</button>
+      <div class="time-head">
+        <div class="t-label" style="margin:0;">⏳ 时间旅行</div>
+        <button id="time-toggle" aria-label="展开或收起时间旅行" aria-expanded="false">⬇️</button>
       </div>
-      <div class="time-row">
-        <input type="range" id="time-slider" min="0" max="1000" value="0" aria-label="时间进度">
-      </div>
-      <div class="time-row">
-        <span class="t-label" style="margin:0;">步长</span>
-        <select id="step-unit">
-          <option value="分">分钟</option>
-          <option value="时" selected>小时</option>
-          <option value="日">天</option>
-          <option value="月">月</option>
-          <option value="年">年</option>
-        </select>
-        <button id="step-minus">−</button>
-        <button id="step-plus">+</button>
-      </div>
-      <div class="time-row">
-        <span class="t-label" style="margin:0;">播放速率</span>
-        <button class="rate-chip" data-rate="10">10天/秒</button>
-        <button class="rate-chip active" data-rate="100">100天/秒</button>
-        <button class="rate-chip" data-rate="1000">1000天/秒</button>
+      <div class="time-body">
+        <div class="time-row">
+          <span class="date-display" id="date-display"></span>
+          <button id="btn-now">现在</button>
+          <button id="btn-play">▶ 播放</button>
+        </div>
+        <div class="time-row">
+          <input type="range" id="time-slider" min="0" max="1000" value="0" aria-label="时间进度">
+        </div>
+        <div class="time-row">
+          <span class="t-label" style="margin:0;">步长</span>
+          <select id="step-unit">
+            <option value="分">分钟</option>
+            <option value="时" selected>小时</option>
+            <option value="日">天</option>
+            <option value="月">月</option>
+            <option value="年">年</option>
+          </select>
+          <button id="step-minus">−</button>
+          <button id="step-plus">+</button>
+        </div>
+        <div class="time-row">
+          <span class="t-label" style="margin:0;">播放速率</span>
+          <button class="rate-chip" data-rate="10">10天/秒</button>
+          <button class="rate-chip active" data-rate="100">100天/秒</button>
+          <button class="rate-chip" data-rate="1000">1000天/秒</button>
+        </div>
       </div>
     </div>
   </div>
@@ -924,6 +945,16 @@
     });
 
     // ---------- 时间旅行 ----------
+    // 竖屏手机：时间旅行默认收起，点 ⬇️ 展开、再点 ⬆️ 收起
+    const timeToggle = document.getElementById('time-toggle');
+    const timeBox = document.querySelector('.time');
+    if (timeToggle && timeBox) {
+      timeToggle.addEventListener('click', () => {
+        const open = timeBox.classList.toggle('open');
+        timeToggle.textContent = open ? '⬆️' : '⬇️';
+        timeToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
     const BASE_DATE = new Date(2000, 0, 1);
     const DAY_MS = 86400000;
     const dateToDays = (d) => (d.getTime() - BASE_DATE.getTime()) / DAY_MS;
