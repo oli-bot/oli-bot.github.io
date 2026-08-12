@@ -187,14 +187,23 @@
       pointer-events: auto;
     }
     .time .t-label { font-size: 12px; opacity: 0.6; margin-bottom: 8px; letter-spacing: 1px; }
-    .time-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
     #time-toggle {
-      display: none; /* 桌面端不需要折叠 */
-      font-size: 14px; padding: 3px 14px; line-height: 1.6;
-      color: rgba(223,232,242,0.85);
+      display: none; /* 桌面端不需要折叠，始终显示面板 */
+      font-size: 13px; padding: 6px 14px;
+      color: rgba(223,232,242,0.9);
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.20);
       border-radius: 10px; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+    }
+    #time-toggle:hover { background: rgba(255,255,255,0.20); }
+    #time-toggle:active { transform: scale(0.96); }
+    /* 展开态：紫色渐变高亮，与速率选中态呼应 */
+    #time-toggle.active {
+      color: #0a0c1c;
+      background: linear-gradient(90deg, #ffd27a, #a06bff);
+      border-color: transparent;
+      font-weight: 700;
     }
     .time-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .time .date-display {
@@ -246,10 +255,10 @@
       .hint { font-size: 12px; white-space: normal; }
     }
 
-    /* 竖屏手机：时间旅行默认收起，点 ⬇️ 展开 / ⬆️ 收起 */
+    /* 竖屏手机：时间旅行整个面板默认收起，点「时间旅行」按钮展开 */
     @media (max-width: 600px) and (orientation: portrait) {
-      .time-body { display: none; }
-      .time.open .time-body { display: block; }
+      .time { display: none; }
+      .time.open { display: block; }
       #time-toggle { display: inline-block; }
     }
   </style>
@@ -263,39 +272,35 @@
     <div class="actions">
       <button id="auto">⏸ 暂停自转</button>
       <button id="quiz">📖 科普知识</button>
+      <button id="time-toggle" aria-label="展开或收起时间旅行" aria-expanded="false">⏳ 时间旅行</button>
     </div>
     <div class="time">
-      <div class="time-head">
-        <div class="t-label" style="margin:0;">⏳ 时间旅行</div>
-        <button id="time-toggle" aria-label="展开或收起时间旅行" aria-expanded="false">⬇️</button>
+      <div class="t-label">⏳ 时间旅行</div>
+      <div class="time-row">
+        <span class="date-display" id="date-display"></span>
+        <button id="btn-now">现在</button>
+        <button id="btn-play">▶ 播放</button>
       </div>
-      <div class="time-body">
-        <div class="time-row">
-          <span class="date-display" id="date-display"></span>
-          <button id="btn-now">现在</button>
-          <button id="btn-play">▶ 播放</button>
-        </div>
-        <div class="time-row">
-          <input type="range" id="time-slider" min="0" max="1000" value="0" aria-label="时间进度">
-        </div>
-        <div class="time-row">
-          <span class="t-label" style="margin:0;">步长</span>
-          <select id="step-unit">
-            <option value="分">分钟</option>
-            <option value="时" selected>小时</option>
-            <option value="日">天</option>
-            <option value="月">月</option>
-            <option value="年">年</option>
-          </select>
-          <button id="step-minus">−</button>
-          <button id="step-plus">+</button>
-        </div>
-        <div class="time-row">
-          <span class="t-label" style="margin:0;">播放速率</span>
-          <button class="rate-chip" data-rate="10">10天/秒</button>
-          <button class="rate-chip active" data-rate="100">100天/秒</button>
-          <button class="rate-chip" data-rate="1000">1000天/秒</button>
-        </div>
+      <div class="time-row">
+        <input type="range" id="time-slider" min="0" max="1000" value="0" aria-label="时间进度">
+      </div>
+      <div class="time-row">
+        <span class="t-label" style="margin:0;">步长</span>
+        <select id="step-unit">
+          <option value="分">分钟</option>
+          <option value="时" selected>小时</option>
+          <option value="日">天</option>
+          <option value="月">月</option>
+          <option value="年">年</option>
+        </select>
+        <button id="step-minus">−</button>
+        <button id="step-plus">+</button>
+      </div>
+      <div class="time-row">
+        <span class="t-label" style="margin:0;">播放速率</span>
+        <button class="rate-chip" data-rate="10">10天/秒</button>
+        <button class="rate-chip active" data-rate="100">100天/秒</button>
+        <button class="rate-chip" data-rate="1000">1000天/秒</button>
       </div>
     </div>
   </div>
@@ -945,13 +950,13 @@
     });
 
     // ---------- 时间旅行 ----------
-    // 竖屏手机：时间旅行默认收起，点 ⬇️ 展开、再点 ⬆️ 收起
+    // 竖屏手机：整个面板默认收起，点「时间旅行」按钮展开，再点收起
     const timeToggle = document.getElementById('time-toggle');
     const timeBox = document.querySelector('.time');
     if (timeToggle && timeBox) {
       timeToggle.addEventListener('click', () => {
         const open = timeBox.classList.toggle('open');
-        timeToggle.textContent = open ? '⬆️' : '⬇️';
+        timeToggle.classList.toggle('active', open);
         timeToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     }
