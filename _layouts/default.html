@@ -7,8 +7,8 @@
     <script>
       (function() {
         try {
-          var theme = localStorage.getItem('theme');
-          if (theme) document.documentElement.setAttribute('data-theme', theme);
+          var theme = localStorage.getItem('theme') || 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
         } catch (e) {}
       })();
     </script>
@@ -32,9 +32,7 @@
     <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
     
     {% if page.layout == 'post' %}
-    <!-- Code Syntax Highlighting -->
-    <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
-    <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" disabled>
+    <!-- 代码高亮配色由 assets/css/style.css 内置（终端配色） -->
     {% endif %}
   </head>
   <body>
@@ -50,8 +48,16 @@
     </button>
     
     <header class="site-header">
-      <div class="wrapper">
-        <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title }}</a>
+      <div class="terminal-topbar">
+        <div class="wrapper topbar-inner">
+          <span class="topbar-left"><span class="status-dot"></span> SYSTEM ONLINE · oli-bot.github.io</span>
+          <span class="topbar-right">zsh · TZ=Asia/Shanghai · v3.0.0</span>
+        </div>
+      </div>
+      <div class="wrapper header-main">
+        <a class="site-title" href="{{ "/" | relative_url }}" aria-label="{{ site.title }}">
+          <span class="prompt-user">oli@blog</span>:<span class="prompt-path">~/blog</span>$
+        </a>
         <nav class="site-nav">
           <a class="page-link" href="{{ "/" | relative_url }}">首页</a>
           <a class="page-link" href="{{ "/archive/" | relative_url }}">归档</a>
@@ -71,14 +77,14 @@
     
     <footer class="site-footer">
       <div class="wrapper">
-        <p>&copy; {{ "now" | date: "%Y" }} {{ site.author }} · Powered by <a href="https://pages.github.com">GitHub Pages</a></p>
+        <p class="footer-line"><span class="prompt">oli@blog:~$</span> echo "&copy; {{ "now" | date: "%Y" }} {{ site.author }} · Powered by GitHub Pages"</p>
+        <p class="footer-output">&copy; {{ "now" | date: "%Y" }} {{ site.author }} · Powered by <a href="https://pages.github.com">GitHub Pages</a></p>
       </div>
     </footer>
     
     <!-- 图片灯箱容器 -->
     <div class="image-lightbox" id="image-lightbox">
       <span class="lightbox-close">&times;</span>
-      <img src="" alt="放大图片">
     </div>
     
     <!-- 功能脚本 -->
@@ -98,7 +104,7 @@
         updateReadingProgress();
         
         // ===== 2. 代码复制按钮 =====
-        document.querySelectorAll('pre').forEach(pre => {
+        document.querySelectorAll('.post-content pre').forEach(pre => {
           const btn = document.createElement('button');
           btn.className = 'copy-code-btn';
           btn.textContent = '复制';
@@ -124,24 +130,32 @@
           pre.appendChild(btn);
         });
         
-        // ===== 3. 图片灯箱效果 + 懒加载 =====
+        // ===== 3. 图片灯箱效果 + 懒加载（灯箱图片在首次点击时才创建，页面不常驻 <img>） =====
         const lightbox = document.getElementById('image-lightbox');
-        const lightboxImg = lightbox.querySelector('img');
-        
-        document.querySelectorAll('.post-content img').forEach(img => {
-          img.loading = 'lazy';
-          img.decoding = 'async';
-          img.addEventListener('click', () => {
-            lightboxImg.src = img.src;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+        if (lightbox) {
+          let lightboxImg = null;
+          
+          document.querySelectorAll('.post-content img').forEach(img => {
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.addEventListener('click', () => {
+              if (!lightboxImg) {
+                lightboxImg = document.createElement('img');
+                lightbox.appendChild(lightboxImg);
+              }
+              lightboxImg.src = img.src;
+              lightboxImg.alt = img.alt || '';
+              lightbox.classList.add('active');
+              document.body.style.overflow = 'hidden';
+            });
           });
-        });
-        
-        lightbox.addEventListener('click', () => {
-          lightbox.classList.remove('active');
-          document.body.style.overflow = '';
-        });
+          
+          lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            if (lightboxImg) lightboxImg.removeAttribute('src');
+          });
+        }
         
         // ===== 4. 目录高亮跟随 =====
         const tocLinks = document.querySelectorAll('.toc-content a');
@@ -174,22 +188,12 @@
           html.setAttribute('data-theme', savedTheme);
         }
         
-        // 5.1 代码高亮主题跟随切换
-        function applyHljsTheme() {
-          const light = document.getElementById('hljs-light');
-          const dark = document.getElementById('hljs-dark');
-          if (!light || !dark) return;
-          const isDark = html.getAttribute('data-theme') === 'dark';
-          light.disabled = isDark;
-          dark.disabled = !isDark;
-        }
-        
         // 5.2 Giscus 评论主题跟随切换
         function setGiscusTheme() {
           const iframe = document.querySelector('iframe.giscus-frame');
           if (!iframe) return;
           iframe.contentWindow.postMessage({
-            giscus: { setConfig: { theme: html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light' } }
+            giscus: { setConfig: { theme: html.getAttribute('data-theme') !== 'light' ? 'dark' : 'light' } }
           }, 'https://giscus.app');
         }
         
@@ -204,15 +208,12 @@
           }
         });
         
-        applyHljsTheme();
-        
         themeToggle.addEventListener('click', function() {
           const currentTheme = html.getAttribute('data-theme');
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
           
           html.setAttribute('data-theme', newTheme);
           localStorage.setItem('theme', newTheme);
-          applyHljsTheme();
           giscusPending = true;
           setGiscusTheme();
         });

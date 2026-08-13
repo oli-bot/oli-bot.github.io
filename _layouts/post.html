@@ -14,17 +14,21 @@ layout: default
     <!-- 增强的文章元信息 -->
     <div class="post-meta-enhanced">
       <div class="meta-item">
-        <span class="meta-icon">📝</span>
-        <span class="word-count">{% capture word_count %}{{ content | number_of_words }}{% endcapture %}{{ word_count }} 字</span>
+        <span class="meta-key">file</span>
+        <span class="meta-value">./posts/{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug }}.md</span>
       </div>
       <div class="meta-item">
-        <span class="meta-icon">⏱️</span>
-        <span>阅读 {% capture words %}{{ content | number_of_words }}{% endcapture %}{% assign reading_time = words | divided_by: 400 %}{% if reading_time < 1 %}1{% else %}{{ reading_time }}{% endif %} 分钟</span>
+        <span class="meta-key">words</span>
+        <span class="meta-value word-count">{% capture word_count %}{{ content | number_of_words }}{% endcapture %}{{ word_count }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-key">time</span>
+        <span class="meta-value">{% capture words %}{{ content | number_of_words }}{% endcapture %}{% assign reading_time = words | divided_by: 400 %}{% if reading_time < 1 %}1{% else %}{{ reading_time }}{% endif %} min</span>
       </div>
       {% if page.last_modified_at %}
       <div class="meta-item">
-        <span class="meta-icon">🔄</span>
-        <span>更新于 {{ page.last_modified_at | date: "%Y-%m-%d" }}</span>
+        <span class="meta-key">mtime</span>
+        <span class="meta-value">{{ page.last_modified_at | date: "%Y-%m-%d" }}</span>
       </div>
       {% endif %}
     </div>
@@ -33,7 +37,7 @@ layout: default
   <!-- 文章目录 -->
   {% if content contains '<h2' or content contains '<h3' %}
   <nav class="toc" id="toc">
-    <h3 class="toc-title">📋 目录</h3>
+    <h3 class="toc-title">目录</h3>
     <div class="toc-content"></div>
   </nav>
   {% endif %}
@@ -52,11 +56,11 @@ layout: default
   
   <!-- 社交分享按钮 -->
   <div class="share-buttons">
-    <h4>分享文章：</h4>
-    <a href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url }}&title={{ page.title | url_encode }}" target="_blank" class="share-btn weibo" title="分享到微博">📱</a>
-    <a href="https://twitter.com/intent/tweet?url={{ page.url | absolute_url }}&text={{ page.title | url_encode }}" target="_blank" class="share-btn twitter" title="分享到 Twitter">🐦</a>
-    <button onclick="copyArticleLink()" class="share-btn copy" title="复制链接">🔗</button>
-    <button onclick="showQRCode()" class="share-btn qrcode" title="微信扫码阅读">💬</button>
+    <h4>分享文章</h4>
+    <a href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url }}&title={{ page.title | url_encode }}" target="_blank" class="share-btn weibo" title="分享到微博">[微博]</a>
+    <a href="https://twitter.com/intent/tweet?url={{ page.url | absolute_url }}&text={{ page.title | url_encode }}" target="_blank" class="share-btn twitter" title="分享到 Twitter">[X]</a>
+    <button onclick="copyArticleLink()" class="share-btn copy" title="复制链接">[链接]</button>
+    <button onclick="showQRCode()" class="share-btn qrcode" title="微信扫码阅读">[二维码]</button>
   </div>
 </article>
 
@@ -112,7 +116,7 @@ layout: default
 
 {% if relatedPosts.size > 0 %}
 <nav class="related-posts">
-  <h3 class="related-title">📌 相关阅读</h3>
+  <h3 class="related-title">相关阅读</h3>
   <ul class="related-list">
     {% for post in relatedPosts %}
     <li>
@@ -126,7 +130,7 @@ layout: default
 
 <!-- Giscus 评论系统 -->
 <div class="comments-section">
-  <h3 class="comments-title">💬 评论区</h3>
+  <h3 class="comments-title">评论区</h3>
   <script src="https://giscus.app/client.js"
           data-repo="oli-bot/oli-bot.github.io"
           data-repo-id="R_kgDORpCBmQ"

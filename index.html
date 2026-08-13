@@ -4,15 +4,25 @@ title: 首页
 ---
 
 <div class="home">
-  <h1 class="page-heading">你好，我是 oli-bot 👋</h1>
-  
-  <p class="intro">
-    一名后端开发工程师，喜欢科技和历史文化。<br>
-    这里记录我的技术学习、思考和实践。
-  </p>
+  <h1 class="page-heading">欢迎进入 oli-bot 的终端</h1>
 
+  <div class="term-window">
+    <div class="term-titlebar">
+      <span class="t-dot red"></span>
+      <span class="t-dot yellow"></span>
+      <span class="t-dot green"></span>
+      <span class="term-title">oli@blog: ~/blog — zsh</span>
+    </div>
+    <div class="term-body">
+      <p class="term-line"><span class="prompt">oli@blog:~$</span> whoami</p>
+      <p class="term-line out">oli-bot <span class="comment">// 一名后端开发工程师，喜欢科技和历史文化</span></p>
+      <p class="term-line"><span class="prompt">oli@blog:~$</span> cat ./README.txt</p>
+      <p class="term-line out">这里记录我的技术学习、思考和实践。</p>
+      <p class="term-line"><span class="prompt">oli@blog:~$</span> <span class="cursor">█</span></p>
+    </div>
+  </div>
 
-  <h2>📝 文章列表</h2>
+  <h2>文章列表</h2>
   
   <ul class="post-list">
     {% for post in paginator.posts %}

@@ -5,7 +5,7 @@ permalink: /tags/
 ---
 
 <div class="tags-page">
-  <h1 class="page-title">🏷️ 标签</h1>
+  <h1 class="page-title">标签</h1>
   
   {% assign tags = site.tags | sort %}
   <div class="tag-cloud">
@@ -33,90 +33,3 @@ permalink: /tags/
   {% endfor %}
 </div>
 
-<style>
-.tags-page .page-title {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 40px;
-}
-
-.tag-item {
-  display: inline-block;
-  padding: 8px 16px;
-  background: var(--bg-secondary);
-  border-radius: 20px;
-  color: var(--text-color);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s;
-}
-
-.tag-item:hover {
-  background: var(--primary-color);
-  color: white;
-}
-
-.tag-item .count {
-  color: var(--text-light);
-  font-size: 0.8rem;
-}
-
-.tag-item:hover .count {
-  color: rgba(255,255,255,0.8);
-}
-
-.separator {
-  border: none;
-  border-top: 1px solid var(--border-color);
-  margin: 40px 0;
-}
-
-.tag-section {
-  margin-bottom: 40px;
-}
-
-.tag-heading {
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-}
-
-.post-list {
-  list-style: none;
-  padding: 0;
-}
-
-.post-list li {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.post-list li:last-child {
-  border-bottom: none;
-}
-
-.post-list a {
-  color: var(--text-color);
-  text-decoration: none;
-}
-
-.post-list a:hover {
-  color: var(--primary-color);
-}
-
-.post-list time {
-  color: var(--text-light);
-  font-size: 0.85rem;
-}
-</style>
