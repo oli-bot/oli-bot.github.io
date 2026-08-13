@@ -1,12 +1,51 @@
 /* ==========================================================================
    TERMINAL://OLI-BOT —— 极客终端风主题
    --------------------------------------------------------------------------
-   默认（无 data-theme 或 data-theme="dark"）：黑底荧光绿 CRT 终端
-   data-theme="light"：复古纸面终端（paper terminal）
+   默认（无 data-theme 或 data-theme="light"）：清爽浅色终端
+   data-theme="dark"：黑底荧光绿 CRT 终端
    ========================================================================== */
 
 /* ---------- 1. 主题变量 ---------- */
 :root {
+  /* 浅色主题（默认）：清爽现代终端风 */
+  --bg: #f6f7f4;
+  --bg-secondary: #eef0eb;
+  --bg-tertiary: #e3e8df;
+  --bg-code: #fbfcfa;
+  --border: #d5dbd1;
+  --border-bright: #a9b8a8;
+  --text: #1c2b23;
+  --text-light: #4d6356;
+  --text-dim: #7e8e85;
+  --primary: #0e8a4e;
+  --primary-strong: #0b6e3f;
+  --primary-dim: #2ea86b;
+  --cyan: #0e7490;
+  --yellow: #9a6a00;
+  --purple: #7c3aed;
+  --red: #dc2626;
+  --orange: #c2560a;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 3px rgba(16, 24, 20, 0.07), 0 6px 18px rgba(16, 24, 20, 0.05);
+  --scanline: rgba(28, 43, 35, 0.028);
+  --grid-line: rgba(14, 138, 78, 0.04);
+  --selection: rgba(14, 138, 78, 0.16);
+  --tint: rgba(14, 138, 78, 0.07);
+  --vignette: rgba(60, 70, 62, 0.05);
+  --icon-glow: rgba(14, 138, 78, 0.18);
+  --hl-comment: #6b7f72;
+  --hl-keyword: #a82d78;
+  --hl-string: #7c5a00;
+  --hl-number: #6d3bb5;
+  --hl-function: #0b6e3f;
+  --hl-attr: #0e7490;
+  --hl-meta: #8a8d76;
+  --hl-deletion: #cf3f3f;
+}
+
+[data-theme="dark"] {
+  /* 暗色主题：黑底荧光绿 CRT 终端 */
   --bg: #0a0f0c;
   --bg-secondary: #0f1712;
   --bg-tertiary: #152119;
@@ -30,6 +69,9 @@
   --scanline: rgba(0, 0, 0, 0.16);
   --grid-line: rgba(0, 255, 102, 0.035);
   --selection: rgba(0, 255, 102, 0.28);
+  --tint: rgba(0, 255, 102, 0.08);
+  --vignette: rgba(0, 0, 0, 0.22);
+  --icon-glow: rgba(0, 255, 102, 0.2);
   --hl-comment: #5f8f6f;
   --hl-keyword: #ff79c6;
   --hl-string: #f1fa8c;
@@ -38,40 +80,6 @@
   --hl-attr: #8be9fd;
   --hl-meta: #6272a4;
   --hl-deletion: #ff5555;
-}
-
-[data-theme="light"] {
-  --bg: #f3efdf;
-  --bg-secondary: #ebe5d0;
-  --bg-tertiary: #e2dbc0;
-  --bg-code: #f8f5e9;
-  --border: #b9c0a5;
-  --border-bright: #7d8f6f;
-  --text: #21361f;
-  --text-light: #5c6f55;
-  --text-dim: #7c8c72;
-  --primary: #0f7a3d;
-  --primary-strong: #0a5c2f;
-  --primary-dim: #0f7a3d;
-  --cyan: #0e7c86;
-  --yellow: #8a6d1a;
-  --purple: #7a3e9d;
-  --red: #b3263e;
-  --orange: #a55313;
-  --glow: 0 0 0 transparent;
-  --glow-soft: none;
-  --shadow: 0 2px 10px rgba(70, 60, 30, 0.18);
-  --scanline: rgba(70, 60, 30, 0.045);
-  --grid-line: rgba(15, 122, 61, 0.05);
-  --selection: rgba(15, 122, 61, 0.18);
-  --hl-comment: #7a8b72;
-  --hl-keyword: #a33c8f;
-  --hl-string: #7a6a1f;
-  --hl-number: #6d3bb5;
-  --hl-function: #0f7a3d;
-  --hl-attr: #0e7c86;
-  --hl-meta: #8a8d76;
-  --hl-deletion: #b3263e;
 }
 
 /* ---------- 2. 基础 ---------- */
@@ -120,7 +128,7 @@ body::after {
       transparent 1px,
       transparent 3px
     ),
-    radial-gradient(ellipse at center, transparent 62%, rgba(0, 0, 0, 0.22) 100%);
+    radial-gradient(ellipse at center, transparent 62%, var(--vignette) 100%);
 }
 
 /* 滚动条 */
@@ -161,9 +169,9 @@ a:hover {
 .terminal-topbar {
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: var(--text-light);
-  padding: 5px 0;
+  padding: 6px 0;
 }
 
 .topbar-inner {
@@ -242,7 +250,7 @@ a:hover {
 .page-link:hover {
   color: var(--primary);
   border-color: var(--border-bright);
-  background: rgba(0, 255, 102, 0.06);
+  background: var(--tint);
   text-shadow: var(--glow-soft);
 }
 
@@ -344,11 +352,11 @@ a:hover {
 
 .post-list li {
   position: relative;
-  margin-bottom: 22px;
-  padding: 16px 18px 16px 34px;
+  margin-bottom: 26px;
+  padding: 18px 20px 18px 36px;
   border: 1px solid var(--border);
   border-left: 3px solid var(--primary);
-  background: linear-gradient(90deg, rgba(0, 255, 102, 0.05), transparent 65%);
+  background: linear-gradient(90deg, var(--tint), transparent 65%);
   border-radius: 3px;
   transition: all 0.25s;
 }
@@ -375,8 +383,8 @@ a:hover {
 .post-meta {
   display: block;
   color: var(--text-light);
-  font-size: 0.76rem;
-  margin-bottom: 4px;
+  font-size: 0.78rem;
+  margin-bottom: 6px;
 }
 
 .post-meta::before {
@@ -385,8 +393,8 @@ a:hover {
 }
 
 .post-list h3 {
-  margin: 4px 0 8px;
-  font-size: 1.12rem;
+  margin: 6px 0 10px;
+  font-size: 1.14rem;
   line-height: 1.5;
 }
 
@@ -432,9 +440,9 @@ a:hover {
 .site-footer {
   border-top: 1px solid var(--border);
   background: var(--bg-secondary);
-  padding: 22px 0;
+  padding: 26px 0;
   color: var(--text-light);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   text-align: center;
 }
 
@@ -828,7 +836,7 @@ a:hover {
 }
 
 .post-content tbody tr:hover {
-  background: rgba(0, 255, 102, 0.05);
+  background: var(--tint);
 }
 
 /* 分割线 */
@@ -1069,7 +1077,7 @@ pre:hover .copy-code-btn {
 }
 
 .tag:hover {
-  background: rgba(0, 255, 102, 0.08);
+  background: var(--tint);
   box-shadow: var(--glow-soft);
 }
 
@@ -1266,7 +1274,7 @@ pre:hover .copy-code-btn {
 .pagination a:hover,
 .pagination-prev:hover,
 .pagination-next:hover {
-  background: rgba(0, 255, 102, 0.08);
+  background: var(--tint);
   box-shadow: var(--glow-soft);
 }
 
@@ -1341,7 +1349,7 @@ pre:hover .copy-code-btn {
 }
 
 .search-box button:hover {
-  background: rgba(0, 255, 102, 0.1);
+  background: var(--tint);
   box-shadow: var(--glow-soft);
 }
 
@@ -1640,7 +1648,7 @@ mark {
 .project-icon {
   font-size: 2.4rem;
   margin: 10px 0 12px;
-  filter: drop-shadow(0 0 8px rgba(0, 255, 102, 0.2));
+  filter: drop-shadow(0 0 8px var(--icon-glow));
 }
 
 .project-title {
@@ -1761,7 +1769,7 @@ mark {
 }
 
 .not-found-link:hover {
-  background: rgba(0, 255, 102, 0.1);
+  background: var(--tint);
   box-shadow: var(--glow-soft);
 }
 
