@@ -1985,3 +1985,1309 @@ body, .site-header, .site-footer, .post, .page-link, .tag-item,
   transform: scale(1.2);
   color: var(--primary);
 }
+
+/* ==========================================================================
+   27. 风格系统 —— /styleselect 命令面板可切换（data-style 与 data-theme 正交）
+   --------------------------------------------------------------------------
+   data-style="default"（不设属性）：极客终端风（当前默认）
+   其余 10 种风格通过 /styleselect 面板切换，每种含浅色/深色两套配色。
+   现有 data-theme 浅/深切换按钮对每种风格仍然有效。
+   ========================================================================== */
+
+/* 27.0 风格基础变量 */
+:root {
+  /* 正文字体族（默认保持终端等宽字体栈，与改版前一致） */
+  --font-body: 'JetBrains Mono', 'Fira Code', ui-monospace, 'SF Mono', SFMono-Regular,
+    Menlo, Monaco, Consolas, 'Liberation Mono', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans Mono CJK SC', monospace;
+  /* 代码字体族（所有风格统一保持等宽） */
+  --font-code: 'JetBrains Mono', 'Fira Code', ui-monospace, 'SF Mono', SFMono-Regular,
+    Menlo, Monaco, Consolas, 'Liberation Mono', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans Mono CJK SC', monospace;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+/* ==========================================================================
+   27.1 风格一：paper —— 纸墨杂志风
+   衬线排版 · 米白纸底 · 深红点缀，像一本排版精良的纸质杂志
+   ========================================================================== */
+[data-style="paper"] {
+  --bg: #faf6ee;
+  --bg-secondary: #f3ede0;
+  --bg-tertiary: #ece4d2;
+  --bg-code: #f6f1e6;
+  --border: #ddd2bc;
+  --border-bright: #bfae8d;
+  --text: #2e2a24;
+  --text-light: #5d5548;
+  --text-dim: #94897a;
+  --primary: #a63d2b;
+  --primary-strong: #8c3223;
+  --primary-dim: #c25644;
+  --cyan: #3a6b8f;
+  --yellow: #9a7b1e;
+  --purple: #6b4fa3;
+  --red: #b3362c;
+  --orange: #b45f1b;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 2px rgba(70, 55, 30, 0.08), 0 8px 24px rgba(70, 55, 30, 0.06);
+  --scanline: transparent;
+  --grid-line: transparent;
+  --selection: rgba(166, 61, 43, 0.14);
+  --tint: rgba(166, 61, 43, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(166, 61, 43, 0.15);
+  --hl-comment: #8a7f6b;
+  --hl-keyword: #8b2f56;
+  --hl-string: #7a5a12;
+  --hl-number: #5b3fa8;
+  --hl-function: #8c3223;
+  --hl-attr: #3a6b8f;
+  --hl-meta: #91846c;
+  --hl-deletion: #b3362c;
+}
+
+[data-style="paper"][data-theme="dark"] {
+  --bg: #1e1a14;
+  --bg-secondary: #262119;
+  --bg-tertiary: #2f2920;
+  --bg-code: #1a1611;
+  --border: #3a3226;
+  --border-bright: #55493a;
+  --text: #d9cfbd;
+  --text-light: #a0927c;
+  --text-dim: #6f6454;
+  --primary: #e08a5a;
+  --primary-strong: #f0a878;
+  --primary-dim: #c07045;
+  --cyan: #7fb0c9;
+  --yellow: #d8b85c;
+  --purple: #a98fd8;
+  --red: #e06a5c;
+  --orange: #e0944f;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.28);
+  --scanline: transparent;
+  --grid-line: transparent;
+  --selection: rgba(224, 138, 90, 0.2);
+  --tint: rgba(224, 138, 90, 0.08);
+  --vignette: rgba(0, 0, 0, 0.25);
+  --icon-glow: rgba(224, 138, 90, 0.2);
+  --hl-comment: #8b7d66;
+  --hl-keyword: #e08aa8;
+  --hl-string: #d8c06a;
+  --hl-number: #b8a0e8;
+  --hl-function: #e08a5a;
+  --hl-attr: #7fb0c9;
+  --hl-meta: #7d7466;
+  --hl-deletion: #e06a5c;
+}
+
+/* ==========================================================================
+   27.2 风格二：aurora —— 午夜极光风
+   深蓝夜空 · 极光青绿/紫罗兰渐变点缀 · 玻璃拟态
+   ========================================================================== */
+[data-style="aurora"] {
+  --bg: #eef2f8;
+  --bg-secondary: #e4eaf3;
+  --bg-tertiary: #d8e2ef;
+  --bg-code: #f4f7fb;
+  --border: #c8d4e4;
+  --border-bright: #9fb2cc;
+  --text: #1f2735;
+  --text-light: #4a5a70;
+  --text-dim: #7d8ca1;
+  --primary: #0f9d8f;
+  --primary-strong: #0b7d72;
+  --primary-dim: #34b5a8;
+  --cyan: #2b7fc4;
+  --yellow: #c99a2e;
+  --purple: #7c5ce0;
+  --red: #d6455d;
+  --orange: #e07a3f;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 3px rgba(31, 39, 53, 0.08), 0 10px 30px rgba(31, 39, 53, 0.07);
+  --scanline: transparent;
+  --grid-line: rgba(15, 157, 143, 0.05);
+  --selection: rgba(15, 157, 143, 0.14);
+  --tint: rgba(15, 157, 143, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(15, 157, 143, 0.16);
+  --hl-comment: #6a7a8f;
+  --hl-keyword: #7a5cd0;
+  --hl-string: #12856e;
+  --hl-number: #c05bb0;
+  --hl-function: #0f9d8f;
+  --hl-attr: #2b7fc4;
+  --hl-meta: #7d8ca1;
+  --hl-deletion: #d6455d;
+}
+
+[data-style="aurora"][data-theme="dark"] {
+  --bg: #0a0f1e;
+  --bg-secondary: #0e1526;
+  --bg-tertiary: #131d33;
+  --bg-code: #0b1222;
+  --border: #1e2c47;
+  --border-bright: #30476e;
+  --text: #d7e3f5;
+  --text-light: #8ba0c0;
+  --text-dim: #5d7190;
+  --primary: #2dd4bf;
+  --primary-strong: #5eead4;
+  --primary-dim: #14b8a6;
+  --cyan: #38bdf8;
+  --yellow: #facc15;
+  --purple: #a78bfa;
+  --red: #fb7185;
+  --orange: #fb923c;
+  --glow: 0 0 8px rgba(45, 212, 191, 0.35);
+  --glow-soft: 0 0 18px rgba(45, 212, 191, 0.12);
+  --shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  --scanline: rgba(0, 0, 0, 0.18);
+  --grid-line: rgba(45, 212, 191, 0.04);
+  --selection: rgba(45, 212, 191, 0.22);
+  --tint: rgba(45, 212, 191, 0.08);
+  --vignette: rgba(0, 0, 0, 0.3);
+  --icon-glow: rgba(45, 212, 191, 0.2);
+  --hl-comment: #5f7196;
+  --hl-keyword: #c4a5fa;
+  --hl-string: #5eead4;
+  --hl-number: #f0abfc;
+  --hl-function: #2dd4bf;
+  --hl-attr: #38bdf8;
+  --hl-meta: #5d7190;
+  --hl-deletion: #fb7185;
+}
+
+/* ==========================================================================
+   27.3 风格三：amber —— 琥珀 CRT 风
+   复古单色终端 · 米黄纸/黑底 + 琥珀荧光
+   ========================================================================== */
+[data-style="amber"] {
+  --bg: #f8f0dc;
+  --bg-secondary: #f1e6cc;
+  --bg-tertiary: #e8d9b4;
+  --bg-code: #fdf6e3;
+  --border: #d8c79c;
+  --border-bright: #b8a271;
+  --text: #4a3a1e;
+  --text-light: #6d5a33;
+  --text-dim: #96825a;
+  --primary: #a8680a;
+  --primary-strong: #8a5606;
+  --primary-dim: #c9862e;
+  --cyan: #7a6a2e;
+  --yellow: #a8791a;
+  --purple: #8a6a4a;
+  --red: #a84a1e;
+  --orange: #b05c14;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 3px rgba(74, 58, 30, 0.1), 0 8px 22px rgba(74, 58, 30, 0.08);
+  --scanline: transparent;
+  --grid-line: transparent;
+  --selection: rgba(168, 104, 10, 0.15);
+  --tint: rgba(168, 104, 10, 0.07);
+  --vignette: transparent;
+  --icon-glow: rgba(168, 104, 10, 0.16);
+  --hl-comment: #8f7c54;
+  --hl-keyword: #9a4e18;
+  --hl-string: #7a5a10;
+  --hl-number: #8a5a2a;
+  --hl-function: #8a5606;
+  --hl-attr: #7a6a2e;
+  --hl-meta: #97876a;
+  --hl-deletion: #a84a1e;
+}
+
+[data-style="amber"][data-theme="dark"] {
+  --bg: #0d0a00;
+  --bg-secondary: #161106;
+  --bg-tertiary: #1f1809;
+  --bg-code: #0f0b00;
+  --border: #33290f;
+  --border-bright: #544516;
+  --text: #f2c077;
+  --text-light: #b08a4a;
+  --text-dim: #7a6134;
+  --primary: #ffb000;
+  --primary-strong: #ffca3d;
+  --primary-dim: #e09600;
+  --cyan: #c8a24a;
+  --yellow: #ffd166;
+  --purple: #d8a06a;
+  --red: #ff8a3d;
+  --orange: #ff9e3d;
+  --glow: 0 0 6px rgba(255, 176, 0, 0.5);
+  --glow-soft: 0 0 16px rgba(255, 176, 0, 0.18);
+  --shadow: 0 0 26px rgba(0, 0, 0, 0.55);
+  --scanline: rgba(0, 0, 0, 0.22);
+  --grid-line: rgba(255, 176, 0, 0.04);
+  --selection: rgba(255, 176, 0, 0.24);
+  --tint: rgba(255, 176, 0, 0.09);
+  --vignette: rgba(0, 0, 0, 0.3);
+  --icon-glow: rgba(255, 176, 0, 0.22);
+  --hl-comment: #8a7442;
+  --hl-keyword: #ff8a3d;
+  --hl-string: #ffd166;
+  --hl-number: #e8b84a;
+  --hl-function: #ffb000;
+  --hl-attr: #c8a24a;
+  --hl-meta: #8a7442;
+  --hl-deletion: #ff6a3d;
+}
+
+/* ==========================================================================
+   27.4 风格四：ocean —— 海洋清风风
+   清新蓝白 · 柔和圆角 · 舒缓阅读
+   ========================================================================== */
+[data-style="ocean"] {
+  --bg: #eef7fb;
+  --bg-secondary: #e3f1f8;
+  --bg-tertiary: #d4e9f3;
+  --bg-code: #f7fbfd;
+  --border: #c2dce8;
+  --border-bright: #93bccc;
+  --text: #17303f;
+  --text-light: #3d6277;
+  --text-dim: #7899ac;
+  --primary: #0e7490;
+  --primary-strong: #0b5f77;
+  --primary-dim: #2f97b3;
+  --cyan: #0891b2;
+  --yellow: #c99a2e;
+  --purple: #6d7fd8;
+  --red: #e0564f;
+  --orange: #e07f3f;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 2px 6px rgba(23, 48, 63, 0.07), 0 10px 28px rgba(23, 48, 63, 0.06);
+  --scanline: transparent;
+  --grid-line: rgba(14, 116, 144, 0.05);
+  --selection: rgba(14, 116, 144, 0.13);
+  --tint: rgba(14, 116, 144, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(14, 116, 144, 0.15);
+  --hl-comment: #6b8799;
+  --hl-keyword: #a04a7a;
+  --hl-string: #1f8a6d;
+  --hl-number: #5b5fc0;
+  --hl-function: #0e7490;
+  --hl-attr: #0891b2;
+  --hl-meta: #7899ac;
+  --hl-deletion: #e0564f;
+}
+
+[data-style="ocean"][data-theme="dark"] {
+  --bg: #081622;
+  --bg-secondary: #0c1e2e;
+  --bg-tertiary: #11283b;
+  --bg-code: #091926;
+  --border: #1a3a52;
+  --border-bright: #285a78;
+  --text: #c9e4f2;
+  --text-light: #7fb2cc;
+  --text-dim: #4f7b94;
+  --primary: #38bdf8;
+  --primary-strong: #7dd3fc;
+  --primary-dim: #0ea5e9;
+  --cyan: #22d3ee;
+  --yellow: #facc15;
+  --purple: #a78bfa;
+  --red: #fb7185;
+  --orange: #fb923c;
+  --glow: 0 0 8px rgba(56, 189, 248, 0.3);
+  --glow-soft: 0 0 16px rgba(56, 189, 248, 0.1);
+  --shadow: 0 0 28px rgba(0, 0, 0, 0.5);
+  --scanline: rgba(0, 0, 0, 0.16);
+  --grid-line: rgba(56, 189, 248, 0.045);
+  --selection: rgba(56, 189, 248, 0.2);
+  --tint: rgba(56, 189, 248, 0.07);
+  --vignette: rgba(0, 0, 0, 0.26);
+  --icon-glow: rgba(56, 189, 248, 0.18);
+  --hl-comment: #5f8199;
+  --hl-keyword: #f0a5c0;
+  --hl-string: #6ee7b7;
+  --hl-number: #a5b4fc;
+  --hl-function: #38bdf8;
+  --hl-attr: #22d3ee;
+  --hl-meta: #4f7b94;
+  --hl-deletion: #fb7185;
+}
+
+
+/* ==========================================================================
+   27.5 风格五：cyber —— 赛博霓虹风
+   深紫黑底 + 品红/青色霓虹灯管 · 高饱和发光
+   ========================================================================== */
+[data-style="cyber"] {
+  --bg: #f4f1f9;
+  --bg-secondary: #ebe6f4;
+  --bg-tertiary: #dfd7ee;
+  --bg-code: #faf8fd;
+  --border: #cfc3e2;
+  --border-bright: #a892c9;
+  --text: #231a33;
+  --text-light: #52456e;
+  --text-dim: #8577a3;
+  --primary: #d61f8e;
+  --primary-strong: #b21878;
+  --primary-dim: #e64fa8;
+  --cyan: #0aa2c0;
+  --yellow: #d97706;
+  --purple: #7c3aed;
+  --red: #e11d48;
+  --orange: #f97316;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 3px rgba(35, 26, 51, 0.09), 0 10px 28px rgba(35, 26, 51, 0.08);
+  --scanline: transparent;
+  --grid-line: rgba(214, 31, 142, 0.045);
+  --selection: rgba(214, 31, 142, 0.13);
+  --tint: rgba(214, 31, 142, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(214, 31, 142, 0.15);
+  --hl-comment: #7a6f94;
+  --hl-keyword: #b21878;
+  --hl-string: #0e8fa8;
+  --hl-number: #7c3aed;
+  --hl-function: #d61f8e;
+  --hl-attr: #0aa2c0;
+  --hl-meta: #8577a3;
+  --hl-deletion: #e11d48;
+}
+
+[data-style="cyber"][data-theme="dark"] {
+  --bg: #0e0618;
+  --bg-secondary: #150a24;
+  --bg-tertiary: #1d1033;
+  --bg-code: #10081d;
+  --border: #2d1a4d;
+  --border-bright: #4a2b78;
+  --text: #eadcfc;
+  --text-light: #a88fd6;
+  --text-dim: #6f5a99;
+  --primary: #ff2e88;
+  --primary-strong: #ff6aa8;
+  --primary-dim: #e01370;
+  --cyan: #00e5ff;
+  --yellow: #ffd166;
+  --purple: #b16bff;
+  --red: #ff3860;
+  --orange: #ff9e3d;
+  --glow: 0 0 8px rgba(255, 46, 136, 0.55);
+  --glow-soft: 0 0 20px rgba(255, 46, 136, 0.2);
+  --shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  --scanline: rgba(0, 0, 0, 0.2);
+  --grid-line: rgba(255, 46, 136, 0.05);
+  --selection: rgba(255, 46, 136, 0.25);
+  --tint: rgba(255, 46, 136, 0.09);
+  --vignette: rgba(0, 0, 0, 0.35);
+  --icon-glow: rgba(255, 46, 136, 0.22);
+  --hl-comment: #7a5fa0;
+  --hl-keyword: #ff2e88;
+  --hl-string: #00e5ff;
+  --hl-number: #b16bff;
+  --hl-function: #ff6aa8;
+  --hl-attr: #00e5ff;
+  --hl-meta: #6f5a99;
+  --hl-deletion: #ff3860;
+}
+
+/* ==========================================================================
+   27.6 风格六：warm —— 暖阳极简风
+   暖白大留白 · 焦糖橙点缀 · 大圆角无边框感（类 Notion）
+   ========================================================================== */
+[data-style="warm"] {
+  --bg: #faf8f5;
+  --bg-secondary: #f4f1ec;
+  --bg-tertiary: #ece7df;
+  --bg-code: #ffffff;
+  --border: #e5ded3;
+  --border-bright: #c9beb0;
+  --text: #292420;
+  --text-light: #6b6157;
+  --text-dim: #9a8f83;
+  --primary: #d97706;
+  --primary-strong: #b45309;
+  --primary-dim: #e8a33d;
+  --cyan: #5b7f8a;
+  --yellow: #c98a1e;
+  --purple: #8a6ab0;
+  --red: #d1493f;
+  --orange: #e07b2a;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 2px rgba(41, 36, 32, 0.05), 0 12px 32px rgba(41, 36, 32, 0.05);
+  --scanline: transparent;
+  --grid-line: transparent;
+  --selection: rgba(217, 119, 6, 0.14);
+  --tint: rgba(217, 119, 6, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(217, 119, 6, 0.14);
+  --hl-comment: #8a837a;
+  --hl-keyword: #c2410c;
+  --hl-string: #7a5a12;
+  --hl-number: #8a5ab0;
+  --hl-function: #b45309;
+  --hl-attr: #5b7f8a;
+  --hl-meta: #9a8f83;
+  --hl-deletion: #d1493f;
+}
+
+[data-style="warm"][data-theme="dark"] {
+  --bg: #16130f;
+  --bg-secondary: #1d1914;
+  --bg-tertiary: #262119;
+  --bg-code: #14110d;
+  --border: #332c22;
+  --border-bright: #4d4233;
+  --text: #e8e0d5;
+  --text-light: #a99b8a;
+  --text-dim: #776b5c;
+  --primary: #f59e0b;
+  --primary-strong: #fbbf24;
+  --primary-dim: #d97706;
+  --cyan: #7fb0b8;
+  --yellow: #e0b84a;
+  --purple: #b49ae0;
+  --red: #ef6a5a;
+  --orange: #f5923a;
+  --glow: 0 0 6px rgba(245, 158, 11, 0.28);
+  --glow-soft: 0 0 14px rgba(245, 158, 11, 0.1);
+  --shadow: 0 0 26px rgba(0, 0, 0, 0.5);
+  --scanline: transparent;
+  --grid-line: transparent;
+  --selection: rgba(245, 158, 11, 0.2);
+  --tint: rgba(245, 158, 11, 0.07);
+  --vignette: rgba(0, 0, 0, 0.24);
+  --icon-glow: rgba(245, 158, 11, 0.18);
+  --hl-comment: #8a7d6c;
+  --hl-keyword: #f59e0b;
+  --hl-string: #d8c06a;
+  --hl-number: #b49ae0;
+  --hl-function: #fbbf24;
+  --hl-attr: #7fb0b8;
+  --hl-meta: #776b5c;
+  --hl-deletion: #ef6a5a;
+}
+
+/* ==========================================================================
+   27.7 风格七：print —— 黑白印刷风
+   纯黑白高对比 · 粗边框零圆角 · 报纸排版
+   ========================================================================== */
+[data-style="print"] {
+  --bg: #ffffff;
+  --bg-secondary: #f2f2f2;
+  --bg-tertiary: #e6e6e6;
+  --bg-code: #fafafa;
+  --border: #000000;
+  --border-bright: #333333;
+  --text: #000000;
+  --text-light: #404040;
+  --text-dim: #757575;
+  --primary: #000000;
+  --primary-strong: #000000;
+  --primary-dim: #404040;
+  --cyan: #333333;
+  --yellow: #666666;
+  --purple: #444444;
+  --red: #b30000;
+  --orange: #8a3b00;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 3px 3px 0 rgba(0, 0, 0, 0.18);
+  --scanline: transparent;
+  --grid-line: transparent;
+  --selection: rgba(0, 0, 0, 0.12);
+  --tint: rgba(0, 0, 0, 0.05);
+  --vignette: transparent;
+  --icon-glow: rgba(0, 0, 0, 0.15);
+  --hl-comment: #666666;
+  --hl-keyword: #000000;
+  --hl-string: #333333;
+  --hl-number: #111111;
+  --hl-function: #000000;
+  --hl-attr: #333333;
+  --hl-meta: #666666;
+  --hl-deletion: #b30000;
+}
+
+[data-style="print"][data-theme="dark"] {
+  --bg: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --bg-code: #0d0d0d;
+  --border: #e5e5e5;
+  --border-bright: #b3b3b3;
+  --text: #f2f2f2;
+  --text-light: #b3b3b3;
+  --text-dim: #808080;
+  --primary: #ffffff;
+  --primary-strong: #ffffff;
+  --primary-dim: #c0c0c0;
+  --cyan: #cccccc;
+  --yellow: #999999;
+  --purple: #bbbbbb;
+  --red: #ff8080;
+  --orange: #d89a6a;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 3px 3px 0 rgba(255, 255, 255, 0.12);
+  --scanline: transparent;
+  --grid-line: transparent;
+  --selection: rgba(255, 255, 255, 0.16);
+  --tint: rgba(255, 255, 255, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(255, 255, 255, 0.14);
+  --hl-comment: #888888;
+  --hl-keyword: #ffffff;
+  --hl-string: #cccccc;
+  --hl-number: #dddddd;
+  --hl-function: #ffffff;
+  --hl-attr: #cccccc;
+  --hl-meta: #888888;
+  --hl-deletion: #ff8080;
+}
+
+/* ==========================================================================
+   27.8 风格八：sakura —— 樱花和风
+   樱粉米白 · 朱红点缀 · 和式衬线排版
+   ========================================================================== */
+[data-style="sakura"] {
+  --bg: #fdf6f3;
+  --bg-secondary: #f8ece8;
+  --bg-tertiary: #f2dfd9;
+  --bg-code: #fefaf8;
+  --border: #e8d0ca;
+  --border-bright: #d0a89e;
+  --text: #3a2b28;
+  --text-light: #6d544e;
+  --text-dim: #9c837c;
+  --primary: #c0392b;
+  --primary-strong: #a03023;
+  --primary-dim: #d9594c;
+  --cyan: #5f7f8f;
+  --yellow: #b08a2a;
+  --purple: #8a6fa8;
+  --red: #c0392b;
+  --orange: #c96f3f;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 3px rgba(58, 43, 40, 0.07), 0 10px 26px rgba(58, 43, 40, 0.06);
+  --scanline: transparent;
+  --grid-line: rgba(192, 57, 43, 0.04);
+  --selection: rgba(192, 57, 43, 0.12);
+  --tint: rgba(192, 57, 43, 0.05);
+  --vignette: transparent;
+  --icon-glow: rgba(192, 57, 43, 0.13);
+  --hl-comment: #94827c;
+  --hl-keyword: #a03023;
+  --hl-string: #8a6a1e;
+  --hl-number: #6a5fa8;
+  --hl-function: #c0392b;
+  --hl-attr: #5f7f8f;
+  --hl-meta: #9c837c;
+  --hl-deletion: #c0392b;
+}
+
+[data-style="sakura"][data-theme="dark"] {
+  --bg: #181214;
+  --bg-secondary: #20181b;
+  --bg-tertiary: #2a2024;
+  --bg-code: #14100f;
+  --border: #382b2f;
+  --border-bright: #54414a;
+  --text: #e6d5d0;
+  --text-light: #a88f88;
+  --text-dim: #7a6560;
+  --primary: #f0a8b8;
+  --primary-strong: #f5c0cc;
+  --primary-dim: #d4889a;
+  --cyan: #8fa8bc;
+  --yellow: #d8b45c;
+  --purple: #b49ad0;
+  --red: #e86a5e;
+  --orange: #e08a5a;
+  --glow: 0 0 6px rgba(240, 168, 184, 0.25);
+  --glow-soft: 0 0 14px rgba(240, 168, 184, 0.1);
+  --shadow: 0 0 26px rgba(0, 0, 0, 0.5);
+  --scanline: rgba(0, 0, 0, 0.16);
+  --grid-line: rgba(240, 168, 184, 0.04);
+  --selection: rgba(240, 168, 184, 0.18);
+  --tint: rgba(240, 168, 184, 0.07);
+  --vignette: rgba(0, 0, 0, 0.26);
+  --icon-glow: rgba(240, 168, 184, 0.18);
+  --hl-comment: #8a7670;
+  --hl-keyword: #f0a8b8;
+  --hl-string: #d8c06a;
+  --hl-number: #b49ad0;
+  --hl-function: #e89a8a;
+  --hl-attr: #8fa8bc;
+  --hl-meta: #7a6560;
+  --hl-deletion: #e86a5e;
+}
+
+
+/* ==========================================================================
+   27.9 风格九：forest —— 森林松木风
+   松绿苔藓 · 木色点缀 · 自然沉静
+   ========================================================================== */
+[data-style="forest"] {
+  --bg: #f2f5ee;
+  --bg-secondary: #e8eee2;
+  --bg-tertiary: #dbe4d2;
+  --bg-code: #f8faf5;
+  --border: #cdd8c2;
+  --border-bright: #a3b593;
+  --text: #23301f;
+  --text-light: #4c6144;
+  --text-dim: #7c9172;
+  --primary: #2f6b4f;
+  --primary-strong: #265743;
+  --primary-dim: #4d8a68;
+  --cyan: #4f7f8f;
+  --yellow: #9a7b2e;
+  --purple: #746f9a;
+  --red: #b34a35;
+  --orange: #a86a2a;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 3px rgba(35, 48, 31, 0.07), 0 10px 26px rgba(35, 48, 31, 0.06);
+  --scanline: transparent;
+  --grid-line: rgba(47, 107, 79, 0.05);
+  --selection: rgba(47, 107, 79, 0.13);
+  --tint: rgba(47, 107, 79, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(47, 107, 79, 0.15);
+  --hl-comment: #6f8471;
+  --hl-keyword: #7a4a2e;
+  --hl-string: #5a7a2e;
+  --hl-number: #5f6fa8;
+  --hl-function: #2f6b4f;
+  --hl-attr: #4f7f8f;
+  --hl-meta: #7c9172;
+  --hl-deletion: #b34a35;
+}
+
+[data-style="forest"][data-theme="dark"] {
+  --bg: #0c1510;
+  --bg-secondary: #111d16;
+  --bg-tertiary: #17261d;
+  --bg-code: #0a120d;
+  --border: #22382b;
+  --border-bright: #36543f;
+  --text: #d2e4d6;
+  --text-light: #8fae98;
+  --text-dim: #5f7f6a;
+  --primary: #7fc98f;
+  --primary-strong: #a5dcb0;
+  --primary-dim: #5aae72;
+  --cyan: #6fb0a8;
+  --yellow: #d8c06a;
+  --purple: #a89ad0;
+  --red: #e07a5e;
+  --orange: #e09a5a;
+  --glow: 0 0 7px rgba(127, 201, 143, 0.3);
+  --glow-soft: 0 0 16px rgba(127, 201, 143, 0.1);
+  --shadow: 0 0 26px rgba(0, 0, 0, 0.5);
+  --scanline: rgba(0, 0, 0, 0.16);
+  --grid-line: rgba(127, 201, 143, 0.04);
+  --selection: rgba(127, 201, 143, 0.2);
+  --tint: rgba(127, 201, 143, 0.07);
+  --vignette: rgba(0, 0, 0, 0.26);
+  --icon-glow: rgba(127, 201, 143, 0.18);
+  --hl-comment: #5f7f6a;
+  --hl-keyword: #a5dcb0;
+  --hl-string: #d8c06a;
+  --hl-number: #b49ad0;
+  --hl-function: #7fc98f;
+  --hl-attr: #6fb0a8;
+  --hl-meta: #5f7f6a;
+  --hl-deletion: #e07a5e;
+}
+
+/* ==========================================================================
+   27.10 风格十：space —— 星际深空风
+   近黑星空 · 星点背景 · 靛蓝科技光
+   ========================================================================== */
+[data-style="space"] {
+  --bg: #f0f2f7;
+  --bg-secondary: #e6e9f1;
+  --bg-tertiary: #d9dde9;
+  --bg-code: #f7f8fc;
+  --border: #c8cfdf;
+  --border-bright: #9aa6bf;
+  --text: #1c2233;
+  --text-light: #46506b;
+  --text-dim: #7d87a0;
+  --primary: #4f46e5;
+  --primary-strong: #3f37c9;
+  --primary-dim: #6d67eb;
+  --cyan: #0ea5b7;
+  --yellow: #c99a2e;
+  --purple: #7c6fd8;
+  --red: #d6455d;
+  --orange: #e07a3f;
+  --glow: 0 0 0 transparent;
+  --glow-soft: none;
+  --shadow: 0 1px 3px rgba(28, 34, 51, 0.08), 0 10px 28px rgba(28, 34, 51, 0.07);
+  --scanline: transparent;
+  --grid-line: rgba(79, 70, 229, 0.05);
+  --selection: rgba(79, 70, 229, 0.13);
+  --tint: rgba(79, 70, 229, 0.06);
+  --vignette: transparent;
+  --icon-glow: rgba(79, 70, 229, 0.15);
+  --hl-comment: #6a7490;
+  --hl-keyword: #7a3fc0;
+  --hl-string: #0f7a8a;
+  --hl-number: #5b5fc0;
+  --hl-function: #4f46e5;
+  --hl-attr: #0ea5b7;
+  --hl-meta: #7d87a0;
+  --hl-deletion: #d6455d;
+}
+
+[data-style="space"][data-theme="dark"] {
+  --bg: #060912;
+  --bg-secondary: #0a0f1c;
+  --bg-tertiary: #0f1626;
+  --bg-code: #070b15;
+  --border: #1a2340;
+  --border-bright: #2c3a63;
+  --text: #c9d6f2;
+  --text-light: #8496c0;
+  --text-dim: #57648a;
+  --primary: #818cf8;
+  --primary-strong: #a5b4fc;
+  --primary-dim: #6366f1;
+  --cyan: #22d3ee;
+  --yellow: #facc15;
+  --purple: #a78bfa;
+  --red: #fb7185;
+  --orange: #fb923c;
+  --glow: 0 0 8px rgba(129, 140, 248, 0.35);
+  --glow-soft: 0 0 18px rgba(129, 140, 248, 0.12);
+  --shadow: 0 0 30px rgba(0, 0, 0, 0.55);
+  --scanline: rgba(0, 0, 0, 0.18);
+  --grid-line: rgba(129, 140, 248, 0.05);
+  --selection: rgba(129, 140, 248, 0.2);
+  --tint: rgba(129, 140, 248, 0.07);
+  --vignette: rgba(0, 0, 0, 0.35);
+  --icon-glow: rgba(129, 140, 248, 0.2);
+  --hl-comment: #5f6d99;
+  --hl-keyword: #a5b4fc;
+  --hl-string: #67e8f9;
+  --hl-number: #c4b5fd;
+  --hl-function: #818cf8;
+  --hl-attr: #22d3ee;
+  --hl-meta: #57648a;
+  --hl-deletion: #fb7185;
+}
+
+/* ==========================================================================
+   27.11 风格专属外观覆盖（字体 / 圆角 / 背景纹理 / 发光强度）
+   ========================================================================== */
+
+/* ---- 衬线排版风格：纸墨杂志 / 樱花和风 / 黑白印刷 ---- */
+[data-style="paper"] body,
+[data-style="sakura"] body,
+[data-style="print"] body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun',
+    Georgia, 'Times New Roman', serif;
+}
+
+[data-style="paper"] .term-window,
+[data-style="sakura"] .term-window {
+  border-radius: 4px;
+}
+
+[data-style="paper"] blockquote {
+  border-left: 3px solid var(--primary);
+  font-style: italic;
+}
+
+/* ---- 印刷风：零圆角、硬边框、硬阴影 ---- */
+[data-style="print"] .term-window,
+[data-style="print"] .post-content pre,
+[data-style="print"] .project-card,
+[data-style="print"] .toc,
+[data-style="print"] .tag,
+[data-style="print"] .copy-code-btn,
+[data-style="print"] .post-meta-enhanced,
+[data-style="print"] #theme-toggle,
+[data-style="print"] #back-to-top,
+[data-style="print"] .search-box input,
+[data-style="print"] .search-box button {
+  border-radius: 0 !important;
+}
+
+[data-style="print"] .term-window,
+[data-style="print"] .post-content pre,
+[data-style="print"] .project-card,
+[data-style="print"] .toc,
+[data-style="print"] .post-meta-enhanced {
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.14);
+  border-width: 2px;
+}
+
+/* ---- 柔和圆角风格：海洋清风 / 暖阳极简 ---- */
+[data-style="ocean"] .term-window,
+[data-style="ocean"] .post-content pre,
+[data-style="ocean"] .project-card,
+[data-style="ocean"] .toc,
+[data-style="ocean"] .tag,
+[data-style="ocean"] .copy-code-btn,
+[data-style="ocean"] .post-meta-enhanced,
+[data-style="ocean"] #theme-toggle,
+[data-style="ocean"] #back-to-top,
+[data-style="ocean"] .search-box input,
+[data-style="ocean"] .search-box button,
+[data-style="warm"] .term-window,
+[data-style="warm"] .post-content pre,
+[data-style="warm"] .project-card,
+[data-style="warm"] .toc,
+[data-style="warm"] .tag,
+[data-style="warm"] .copy-code-btn,
+[data-style="warm"] .post-meta-enhanced,
+[data-style="warm"] #theme-toggle,
+[data-style="warm"] #back-to-top,
+[data-style="warm"] .search-box input,
+[data-style="warm"] .search-box button {
+  border-radius: 12px;
+}
+
+[data-style="warm"] .term-window,
+[data-style="warm"] .project-card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(41, 36, 32, 0.04), 0 14px 40px rgba(41, 36, 32, 0.07);
+}
+
+[data-style="warm"] .post-content pre {
+  border: 1px solid var(--border);
+}
+
+[data-style="warm"] .page-link {
+  border-radius: 8px;
+}
+
+[data-style="warm"] .tag {
+  border-radius: 999px;
+  padding: 3px 14px;
+}
+
+/* ---- 夜光风格：暗色下强化 CRT 扫描线与发光 ---- */
+[data-style="amber"][data-theme="dark"] .status-dot,
+[data-style="amber"][data-theme="dark"] .cursor {
+  text-shadow: 0 0 8px rgba(255, 176, 0, 0.8);
+}
+
+[data-style="amber"][data-theme="dark"] body::after,
+[data-style="cyber"][data-theme="dark"] body::after {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      var(--scanline) 0px,
+      var(--scanline) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse at center, transparent 58%, var(--vignette) 100%);
+}
+
+[data-style="cyber"][data-theme="dark"] .site-title {
+  text-shadow: 0 0 10px var(--primary), 0 0 24px rgba(255, 46, 136, 0.35);
+}
+
+/* ---- 星际深空：星空背景点阵 ---- */
+[data-style="space"][data-theme="dark"] body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 68% 12%, rgba(255, 255, 255, 0.35) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 34% 78%, rgba(255, 255, 255, 0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 82% 56%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 22% 44%, rgba(129, 140, 248, 0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 92% 84%, rgba(255, 255, 255, 0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 46% 30%, rgba(255, 255, 255, 0.28) 50%, transparent 50%),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.4) 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+[data-style="space"][data-theme="light"] body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1px 1px at 15% 30%, rgba(79, 70, 229, 0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 70% 18%, rgba(79, 70, 229, 0.25) 50%, transparent 50%),
+    radial-gradient(1px 1px at 85% 70%, rgba(14, 165, 183, 0.28) 50%, transparent 50%),
+    radial-gradient(1px 1px at 40% 80%, rgba(79, 70, 229, 0.22) 50%, transparent 50%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+/* ---- 极光风格：暗色下头部玻璃拟态 ---- */
+[data-style="aurora"][data-theme="dark"] .site-header {
+  background: linear-gradient(180deg, rgba(19, 29, 51, 0.75) 0%, rgba(10, 15, 30, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+[data-style="aurora"][data-theme="dark"] .term-window,
+[data-style="aurora"][data-theme="dark"] .project-card {
+  background: rgba(19, 29, 51, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+/* ==========================================================================
+   28. /styleselect 风格选择命令面板
+   ========================================================================== */
+
+/* ---- 浮动入口按钮（左下角） ---- */
+#style-select-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-bright);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  transition: all 0.25s;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+}
+
+#style-select-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+
+#style-select-btn .style-btn-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+#style-select-btn kbd {
+  font-size: 0.68rem;
+  opacity: 0.6;
+  border: 1px solid var(--border-bright);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-family: inherit;
+}
+
+/* ---- 顶栏当前风格指示器 ---- */
+.style-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.style-indicator .style-name {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ---- 面板遮罩 ---- */
+.style-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 10002;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10vh 16px 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+
+.style-panel-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---- 面板主体（终端窗口） ---- */
+.style-panel {
+  width: 560px;
+  max-width: 100%;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-bright);
+  border-radius: 8px;
+  box-shadow: var(--shadow), 0 24px 70px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transform: translateY(-14px) scale(0.98);
+  transition: transform 0.25s;
+}
+
+.style-panel-overlay.open .style-panel {
+  transform: translateY(0) scale(1);
+}
+
+.style-panel-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+}
+
+.style-panel-titlebar .t-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.style-panel-titlebar .t-dot.red    { background: #ff5f56; }
+.style-panel-titlebar .t-dot.yellow { background: #ffbd2e; }
+.style-panel-titlebar .t-dot.green  { background: #27c93f; }
+
+.style-panel-title {
+  flex: 1;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.style-panel-close {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.style-panel-close:hover {
+  color: var(--red);
+}
+
+/* ---- 命令输入行 ---- */
+.style-panel-body {
+  padding: 14px 16px 16px;
+  overflow-y: auto;
+}
+
+.style-cmdline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 9px 12px;
+  font-size: 0.88rem;
+}
+
+.style-cmdline .prompt {
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+#style-cmd-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  caret-color: var(--primary);
+}
+
+#style-cmd-input::placeholder {
+  color: var(--text-dim);
+}
+
+.style-cmd-hint {
+  margin-top: 10px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.style-cmd-hint b {
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.style-cmd-hint .cmd {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+/* ---- 命令输出区 ---- */
+.style-output {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  line-height: 1.7;
+  display: none;
+}
+
+.style-output .out-ok { color: var(--primary); }
+.style-output .out-err { color: var(--red); }
+
+/* ---- 风格列表 ---- */
+.style-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.style-list-head {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.style-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: all 0.18s;
+  font-size: 0.85rem;
+}
+
+.style-item:hover {
+  border-color: var(--primary);
+  background: var(--tint);
+  box-shadow: var(--glow-soft);
+}
+
+.style-item.active {
+  border-color: var(--primary);
+  box-shadow: var(--glow-soft);
+  background: var(--tint);
+}
+
+.style-item .style-index {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  min-width: 26px;
+}
+
+.style-item .style-name {
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.style-item.active .style-name {
+  color: var(--primary);
+}
+
+.style-item .style-id {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  min-width: 62px;
+}
+
+.style-item .style-desc {
+  color: var(--text-light);
+  font-size: 0.78rem;
+  flex: 1;
+}
+
+.style-item .style-check {
+  color: var(--primary);
+  font-size: 0.78rem;
+  visibility: hidden;
+}
+
+.style-item.active .style-check {
+  visibility: visible;
+}
+
+/* 预览提示 */
+.style-preview-tip {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-align: center;
+  opacity: 0.85;
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 768px) {
+  #style-select-btn {
+    left: 16px;
+    bottom: 80px;
+    padding: 0 10px;
+  }
+
+  #style-select-btn .style-btn-kbd { display: none; }
+
+  .style-panel-overlay {
+    padding: 6vh 10px 10px;
+  }
+
+  .style-panel {
+    max-height: 78vh;
+  }
+
+  .style-item {
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+
+  .style-item .style-desc {
+    flex-basis: 100%;
+    margin-left: 36px;
+  }
+}
+
+
+/* ---- 预览状态：缩短全局过渡时长，避免连续切换时的拖影闪烁 ---- */
+html.style-previewing *,
+html.style-previewing *::before,
+html.style-previewing *::after {
+  transition-duration: 0.08s !important;
+}
+
+/* ---- 列表项 hover 反馈（纯 CSS，不参与 JS 状态切换） ---- */
+.style-item {
+  will-change: background-color, border-color;
+}
+
