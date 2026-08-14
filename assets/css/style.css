@@ -3042,11 +3042,35 @@ body {
   box-shadow: var(--shadow), 0 24px 70px rgba(0, 0, 0, 0.35);
   overflow: hidden;
   transform: translateY(-14px) scale(0.98);
-  transition: transform 0.25s;
+  transition: transform 0.25s, background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+/* 面板内部元素：风格切换时平滑渐变，避免瞬时跳变 */
+.style-panel-titlebar,
+.style-panel-title,
+.style-panel-close,
+.style-cmdline,
+#style-cmd-input,
+.style-cmd-hint,
+.style-output,
+.style-list-head,
+.style-item,
+.style-item *,
+.style-list-empty,
+.style-preview-tip {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .style-panel-overlay.open .style-panel {
   transform: translateY(0) scale(1);
+}
+
+/* 面板作为系统工具：字体固定等宽（颜色/边框仍跟随风格变量）。
+   不同风格的衬线/等宽字体 metrics 不同，会撑高行框导致布局跳动；
+   固定字体后行高完全一致，任何风格切换下面板布局逐像素稳定。 */
+.style-panel,
+.style-panel * {
+  font-family: var(--font-code) !important;
 }
 
 .style-panel-titlebar {
@@ -3056,6 +3080,7 @@ body {
   padding: 10px 14px;
   background: var(--bg-tertiary);
   border-bottom: 1px solid var(--border);
+  line-height: 18px; /* 固定行高，避免字体切换时标题栏高度变化 */
 }
 
 .style-panel-titlebar .t-dot {
@@ -3111,6 +3136,9 @@ body {
   border-radius: 4px;
   padding: 9px 12px;
   font-size: 0.88rem;
+  line-height: 20px; /* 固定行高 */
+  height: 40px;      /* 固定总高（9px*2 padding + 20px 行高 + 2px border） */
+  box-sizing: border-box;
 }
 
 .style-cmdline .prompt {
@@ -3137,7 +3165,9 @@ body {
   margin-top: 10px;
   font-size: 0.72rem;
   color: var(--text-dim);
-  line-height: 1.8;
+  line-height: 20px;    /* 固定行高 */
+  height: 40px;         /* 固定高度（2 行容量）：字体 metrics 差异也不会改变布局 */
+  overflow: hidden;     /* 吸收字体行框撑高，文字 ink 区域不受影响 */
 }
 
 .style-cmd-hint b {
@@ -3150,13 +3180,13 @@ body {
   font-weight: 600;
 }
 
-/* ---- 命令输出区 ---- */
+/* ---- 命令输出区（常驻占位：始终预留一行高度，消息出现/消失不顶动列表） ---- */
 .style-output {
   margin-top: 10px;
   font-size: 0.8rem;
   color: var(--text-light);
-  line-height: 1.7;
-  display: none;
+  line-height: 20px;   /* 固定行高 */
+  min-height: 20px;    /* 固定一行容量 */
 }
 
 .style-output .out-ok { color: var(--primary); }
@@ -3175,6 +3205,7 @@ body {
   color: var(--text-dim);
   letter-spacing: 0.06em;
   margin-bottom: 2px;
+  line-height: 18px; /* 固定行高 */
 }
 
 .style-item {
@@ -3188,6 +3219,10 @@ body {
   cursor: pointer;
   transition: all 0.18s;
   font-size: 0.85rem;
+  line-height: 20px;  /* 固定行高 */
+  height: 39px;       /* 固定高度：列表项不随字体 metrics 变化 */
+  overflow: hidden;   /* 吸收字体行框撑高，文字不受影响 */
+  box-sizing: border-box;
 }
 
 .style-item:hover {
@@ -3240,6 +3275,16 @@ body {
   visibility: visible;
 }
 
+/* 空结果提示 */
+.style-list-empty {
+  padding: 10px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 5px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 20px;
+}
+
 /* 预览提示 */
 .style-preview-tip {
   margin-top: 10px;
@@ -3270,21 +3315,20 @@ body {
   .style-item {
     flex-wrap: wrap;
     gap: 4px 8px;
+    height: auto;      /* 移动端允许换行，高度自适应 */
+    overflow: visible;
   }
 
   .style-item .style-desc {
     flex-basis: 100%;
     margin-left: 36px;
   }
+
+  .style-cmd-hint {
+    height: 60px;      /* 移动端 3 行容量，同样锁定高度 */
+  }
 }
 
-
-/* ---- 预览状态：缩短全局过渡时长，避免连续切换时的拖影闪烁 ---- */
-html.style-previewing *,
-html.style-previewing *::before,
-html.style-previewing *::after {
-  transition-duration: 0.08s !important;
-}
 
 /* ---- 列表项 hover 反馈（纯 CSS，不参与 JS 状态切换） ---- */
 .style-item {

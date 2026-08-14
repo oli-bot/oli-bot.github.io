@@ -120,7 +120,7 @@
           </div>
           <div class="style-output" id="style-output"></div>
           <div class="style-list" id="style-list"></div>
-          <p class="style-preview-tip">提示：鼠标悬停可预览，点击后生效并记忆</p>
+          <p class="style-preview-tip">提示：悬停片刻（0.4s）预览风格，点击后生效并记忆</p>
         </div>
       </div>
     </div>
@@ -338,7 +338,6 @@
         previewTimer = null;
         if (previewing) {
           previewing = null;
-          html.classList.remove('style-previewing');
           html.setAttribute('data-style', getSavedStyle());
         }
       }
@@ -358,11 +357,12 @@
           stopPreview();
           return;
         }
+        // 400ms 防抖：人手正常移动（每项停留 150~300ms）不会触发预览，
+        // 只有真正停留在某个风格上才预览，避免连续切换造成的闪烁
         previewTimer = setTimeout(() => {
           previewing = sid;
-          html.classList.add('style-previewing');
           html.setAttribute('data-style', sid);
-        }, 120);
+        }, 400);
       });
       
       list.addEventListener('mouseout', (e) => {
@@ -381,7 +381,6 @@
         applyStyle(sid);
         updateIndicator();
         output.innerHTML = '<span class="out-ok">✓ 已应用风格：' + (STYLES.find(s => s.id === sid) || {}).name + '（已记忆，下次访问生效）</span>';
-        output.style.display = 'block';
         renderList('');
         input.value = '/styleselect';
       });
@@ -398,7 +397,7 @@ function renderList(filter) {
           );
         }
         if (items.length === 0) {
-          list.innerHTML = '<p class="style-output" style="display:block;color:var(--text-dim);">没有匹配的风格</p>';
+          list.innerHTML = '<p class="style-list-empty">没有匹配的风格</p>';
           return;
         }
         list.innerHTML = '<div class="style-list-head">' + (q ? '过滤结果' : '可用风格（共 ' + STYLES.length + ' 种）') + '</div>' + items.map((s, i) => {
@@ -421,7 +420,6 @@ function renderList(filter) {
       // ===== 命令处理 =====
       function runCommand(raw) {
         const cmd = raw.trim().toLowerCase();
-        output.style.display = 'block';
         
         if (!cmd) {
           output.innerHTML = '输入 <b>/styleselect</b> 查看风格列表';
@@ -478,7 +476,7 @@ function renderList(filter) {
         stopPreview();
         applyStyle(getSavedStyle());
         renderList('');
-        output.style.display = 'none';
+        output.innerHTML = '';
         input.value = '/styleselect';
         // 聚焦并选中命令文本
         input.focus();
