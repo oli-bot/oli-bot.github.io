@@ -1855,11 +1855,33 @@ body, .site-header, .site-footer, .post, .page-link, .tag-item,
     top: auto;
     bottom: 80px;
     right: 16px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.05rem;
+    opacity: 0.8;
   }
 
   #back-to-top {
     right: 16px;
     bottom: 26px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  /* 移动端悬浮按钮：向下滚动时隐藏（避免遮挡文章内容），向上滚动恢复 */
+  body.scrolling-down #theme-toggle,
+  body.scrolling-down #style-select-btn,
+  body.scrolling-down #back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(70px);
+    pointer-events: none;
+  }
+
+  /* 内容底部留白：保证最后一条内容可滚到悬浮按钮上方 */
+  .page-content {
+    padding-bottom: 110px;
   }
 
   .post-title {
@@ -3300,6 +3322,9 @@ body {
     left: 16px;
     bottom: 80px;
     padding: 0 10px;
+    height: 38px;
+    opacity: 0.8;
+    font-size: 0.78rem;
   }
 
   #style-select-btn .style-btn-kbd { display: none; }

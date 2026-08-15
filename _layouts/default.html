@@ -141,6 +141,30 @@
         window.addEventListener('scroll', updateReadingProgress);
         updateReadingProgress();
         
+        // ===== 1.5 移动端悬浮按钮：向下滚动隐藏、向上滚动恢复（避免遮挡内容） =====
+        let lastScrollY = window.scrollY;
+        let scrollTicking = false;
+        
+        function updateFloatButtons() {
+          const y = window.scrollY;
+          const delta = y - lastScrollY;
+          lastScrollY = y;
+          // 向下滚动超过 8px 且非页面顶部 → 隐藏；向上滚动或回到顶部 → 显示
+          if (delta > 8 && y > 80) {
+            document.body.classList.add('scrolling-down');
+          } else if (delta < -8 || y <= 80) {
+            document.body.classList.remove('scrolling-down');
+          }
+          scrollTicking = false;
+        }
+        
+        window.addEventListener('scroll', () => {
+          if (!scrollTicking) {
+            window.requestAnimationFrame(updateFloatButtons);
+            scrollTicking = true;
+          }
+        }, { passive: true });
+        
         // ===== 2. 代码复制按钮 =====
         document.querySelectorAll('.post-content pre').forEach(pre => {
           const btn = document.createElement('button');
