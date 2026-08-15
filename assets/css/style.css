@@ -1847,8 +1847,28 @@ body, .site-header, .site-footer, .post, .page-link, .tag-item,
     gap: 0;
   }
 
+  /* 移动端顶栏精简：隐藏域名/环境装饰文字，减少拥挤 */
+  .topbar-domain,
+  .topbar-env,
+  .topbar-sep {
+    display: none;
+  }
+
+  .topbar-left,
+  .topbar-right {
+    font-size: 0.68rem;
+    gap: 5px;
+  }
+
+  .terminal-topbar {
+    padding: 4px 0;
+  }
+
+  /* 移动端导航：缩小内边距，尽量一行排下 */
   .page-link {
-    margin: 3px 0;
+    padding: 4px 6px;
+    font-size: 0.78rem;
+    margin: 2px 0;
   }
 
   #theme-toggle {
