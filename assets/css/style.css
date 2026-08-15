@@ -3323,9 +3323,14 @@ body {
     bottom: 80px;
     padding: 0 10px;
     height: 38px;
+    width: 38px;
+    justify-content: center;
+    overflow: hidden;
     opacity: 0.8;
     font-size: 0.78rem;
   }
+
+  #style-select-btn .style-btn-label { display: none; }
 
   #style-select-btn .style-btn-kbd { display: none; }
 
