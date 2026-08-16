@@ -8,6 +8,9 @@ timezone: Asia/Shanghai
 # GitHub Pages 主题
 theme: minima
 
+# 站点版本（展示在顶栏，并用于静态资源 ?v= 缓存失效；发版时递增）
+site_version: 3.1.0
+
 # 社交链接
 github_username: oli-bot
 

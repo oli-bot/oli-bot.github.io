@@ -1,6 +1,12 @@
 ---
 layout: default
 ---
+{% comment %}字数/阅读时间统计：number_of_words 按空格分词，对中文不准确，改用字符数估算（中文阅读速度约 400 字/分钟）{% endcomment %}
+{% capture raw_text %}{{ content | strip_html | strip_newlines }}{% endcapture %}
+{% assign char_count = raw_text | size %}
+{% assign reading_time = char_count | divided_by: 400.0 | ceil %}
+{% if reading_time < 1 %}{% assign reading_time = 1 %}{% endif %}
+
 <article class="post">
   <header class="post-header">
     <h1 class="post-title">{{ page.title | escape }}</h1>
@@ -8,7 +14,7 @@ layout: default
       <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y年%m月%d日" }}</time>
       {% if page.author %}· {{ page.author }}{% endif %}
       {% if page.tags %}· {{ page.tags | join: ", " }}{% endif %}
-      <span class="reading-time">· 阅读约 {% capture words %}{{ content | number_of_words }}{% endcapture %}{% assign reading_time = words | divided_by: 400 %}{% if reading_time < 1 %}1{% else %}{{ reading_time }}{% endif %} 分钟</span>
+      <span class="reading-time">· 阅读约 {{ reading_time }} 分钟</span>
     </p>
     
     <!-- 增强的文章元信息 -->
@@ -18,12 +24,12 @@ layout: default
         <span class="meta-value">./posts/{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug }}.md</span>
       </div>
       <div class="meta-item">
-        <span class="meta-key">words</span>
-        <span class="meta-value word-count">{% capture word_count %}{{ content | number_of_words }}{% endcapture %}{{ word_count }}</span>
+        <span class="meta-key">chars</span>
+        <span class="meta-value word-count">{{ char_count }}</span>
       </div>
       <div class="meta-item">
         <span class="meta-key">time</span>
-        <span class="meta-value">{% capture words %}{{ content | number_of_words }}{% endcapture %}{% assign reading_time = words | divided_by: 400 %}{% if reading_time < 1 %}1{% else %}{{ reading_time }}{% endif %} min</span>
+        <span class="meta-value">{{ reading_time }} min</span>
       </div>
       {% if page.last_modified_at %}
       <div class="meta-item">
@@ -152,92 +158,4 @@ layout: default
 <!-- 返回顶部按钮 -->
 <button id="back-to-top" title="返回顶部" aria-label="返回顶部">↑</button>
 
-<script>
-// 自动生成目录
-document.addEventListener('DOMContentLoaded', function() {
-  const postContent = document.querySelector('.post-content');
-  const tocContent = document.querySelector('.toc-content');
-  
-  if (postContent && tocContent) {
-    const headings = postContent.querySelectorAll('h2, h3');
-    if (headings.length > 0) {
-      const ul = document.createElement('ul');
-      headings.forEach((heading, index) => {
-        const id = 'heading-' + index;
-        heading.id = id;
-        
-        const li = document.createElement('li');
-        li.className = heading.tagName.toLowerCase();
-        
-        const a = document.createElement('a');
-        a.href = '#' + id;
-        a.textContent = heading.textContent;
-        
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-      tocContent.appendChild(ul);
-    } else {
-      document.getElementById('toc').style.display = 'none';
-    }
-  }
-  
-  // 返回顶部按钮
-  const backToTop = document.getElementById('back-to-top');
-  
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 300) {
-      backToTop.classList.add('show');
-    } else {
-      backToTop.classList.remove('show');
-    }
-  });
-  
-  backToTop.addEventListener('click', function() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-});
-
-// 分享功能
-function copyArticleLink() {
-  const url = window.location.href;
-  navigator.clipboard.writeText(url).then(() => {
-    alert('✅ 链接已复制到剪贴板！');
-  }).catch(() => {
-    alert('❌ 复制失败，请手动复制链接');
-  });
-}
-
-function showQRCode() {
-  const url = window.location.href;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
-  
-  const modal = document.createElement('div');
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10001;
-    cursor: pointer;
-  `;
-  
-  modal.innerHTML = `
-    <div style="background: white; padding: 30px; border-radius: 12px; text-align: center;">
-      <img src="${qrUrl}" alt="二维码" style="margin-bottom: 15px;">
-      <p style="margin: 0; color: #333;">微信扫码阅读</p>
-    </div>
-  `;
-  
-  modal.addEventListener('click', () => modal.remove());
-  document.body.appendChild(modal);
-}
-</script>
+<script src="{{ "/assets/js/post.js" | relative_url }}?v={{ site.site_version }}" defer></script>

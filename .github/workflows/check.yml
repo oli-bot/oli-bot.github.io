@@ -1,0 +1,36 @@
+name: Link Check
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Build site
+        run: bundle exec jekyll build
+
+      - name: Check links with htmlproofer
+        # --disable-external：跳过外链检查（shields.io / pages.dev 等偶发不稳定），
+        # 如需检查外链，去掉该参数并加 --ignore-status-codes 429,403
+        run: |
+          gem install html-proofer --no-document
+          htmlproofer ./_site \
+            --disable-external \
+            --allow-hash-href \
+            --ignore-missing-alt

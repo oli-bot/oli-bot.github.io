@@ -110,15 +110,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // 实时搜索
+  // 实时搜索（300ms 防抖，避免每次击键都遍历全部数据）
+  let searchDebounceTimer = null;
   searchInput.addEventListener('input', function() {
-    if (this.value.length >= 2) {
-      performSearch();
-    } else if (this.value.length === 0) {
-      searchResults.innerHTML = '';
-      searchEmpty.style.display = 'none';
-      searchHint.style.display = 'block';
-    }
+    clearTimeout(searchDebounceTimer);
+    const value = this.value;
+    searchDebounceTimer = setTimeout(() => {
+      if (value.length >= 2) {
+        performSearch();
+      } else if (value.length === 0) {
+        searchResults.innerHTML = '';
+        searchEmpty.style.display = 'none';
+        searchHint.style.display = 'block';
+      }
+    }, 300);
   });
 });
 </script>
