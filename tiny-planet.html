@@ -1,0 +1,761 @@
+---
+# 童子军小星球：测试页面，与 jump-game 同类，不进 sitemap；
+# 显式 permalink 保持 URL /tiny-planet.html 不变
+sitemap: false
+permalink: /tiny-planet.html
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏕️ 童子军小安的环球露营</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
+  #app { width: 100%; height: 100%; }
+  canvas { display: block; }
+
+  /* ---------- 顶部徽章面板 ---------- */
+  #panel {
+    position: fixed; top: 16px; left: 16px; z-index: 10;
+    background: rgba(255,255,255,.88); backdrop-filter: blur(10px);
+    border-radius: 14px; padding: 12px 14px;
+    box-shadow: 0 4px 20px rgba(30,60,90,.15);
+    max-width: 230px;
+  }
+  #panel h1 { font-size: 15px; color: #2b4a3e; letter-spacing: .5px; }
+  #panel .sub { font-size: 11px; color: #7a8b84; margin: 2px 0 8px; }
+  #badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .badge {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 5px 2px; border-radius: 9px; font-size: 10px; color: #9aa8a1;
+    background: #eef1ef; transition: all .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .badge .ico { font-size: 17px; line-height: 1.15; filter: grayscale(1); opacity: .4; }
+  .badge .ico em { font-style: normal; font-size: 14px; }
+  .badge.got { background: #fff7e0; color: #6b5b2e; }
+  .badge.got .ico { filter: none; opacity: 1; transform: scale(1.15); }
+  .badge.pop { animation: pop .5s cubic-bezier(.34,1.8,.64,1); }
+  @keyframes pop { 0% { transform: scale(.4); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+  /* ---------- 底部提示 ---------- */
+  #hint {
+    position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+    z-index: 10; display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.85); backdrop-filter: blur(8px);
+    border-radius: 999px; padding: 8px 16px;
+    font-size: 12px; color: #48605a; box-shadow: 0 3px 14px rgba(30,60,90,.12);
+    white-space: nowrap;
+  }
+  #hint b { color: #2b6e52; }
+  #wanderBtn {
+    border: none; cursor: pointer; font-size: 12px; font-family: inherit;
+    background: #2f8f68; color: #fff; border-radius: 999px; padding: 4px 12px;
+    transition: background .2s;
+  }
+  #wanderBtn.off { background: #b9c6c0; }
+
+  /* ---------- 日记 ---------- */
+  #diary {
+    position: fixed; right: 16px; bottom: 14px; z-index: 10;
+    width: 250px; max-height: 42vh; overflow-y: auto;
+    background: rgba(255,253,246,.94); backdrop-filter: blur(10px);
+    border-radius: 14px; padding: 12px 14px;
+    box-shadow: 0 4px 20px rgba(30,60,90,.16);
+    scrollbar-width: thin;
+  }
+  #diary h2 { font-size: 13px; color: #8a5a2b; margin-bottom: 8px; border-bottom: 1px dashed #e4d5b8; padding-bottom: 6px; }
+  .entry { font-size: 12px; color: #55432c; line-height: 1.55; margin-bottom: 8px; animation: slideIn .4s ease; }
+  .entry .tag { display: inline-block; background: #ffe9b8; color: #8a5a2b; border-radius: 5px; padding: 0 6px; font-size: 10px; margin-right: 4px; }
+  .entry.old { opacity: .65; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Toast ---------- */
+  #toast {
+    position: fixed; top: 18px; left: 50%; transform: translate(-50%, -60px);
+    z-index: 30; background: rgba(43,74,62,.94); color: #fff;
+    font-size: 13px; padding: 9px 18px; border-radius: 999px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.2); transition: transform .35s cubic-bezier(.34,1.4,.64,1);
+    pointer-events: none;
+  }
+  #toast.show { transform: translate(-50%, 0); }
+
+  /* ---------- 开场 ---------- */
+  #intro {
+    position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center;
+    background: rgba(20,40,35,.42); backdrop-filter: blur(5px);
+    transition: opacity .4s;
+  }
+  #intro.hide { opacity: 0; pointer-events: none; }
+  #intro .card {
+    width: min(400px, 88vw); background: #fffdf6; border-radius: 20px;
+    padding: 28px 26px; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  }
+  #intro .card .emoji { font-size: 44px; }
+  #intro h2 { font-size: 20px; color: #2b4a3e; margin: 10px 0 12px; }
+  #intro p { font-size: 13px; color: #5d6f68; line-height: 1.8; text-align: left; }
+  #intro p b { color: #2f8f68; }
+  #startBtn {
+    margin-top: 18px; border: none; cursor: pointer; font-family: inherit;
+    background: linear-gradient(135deg, #2f8f68, #3aa87c); color: #fff;
+    font-size: 15px; font-weight: 600; padding: 11px 42px; border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(47,143,104,.4); transition: transform .15s;
+  }
+  #startBtn:active { transform: scale(.95); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<div id="panel">
+  <h1>🏕️ 童子军小安的环球露营</h1>
+  <div class="sub">探索徽章 <span id="badgeCount">0</span> / 6</div>
+  <div id="badges"></div>
+</div>
+
+<div id="hint">
+  🖱️ <b>拖拽</b>环视星球 · <b>滚轮</b>缩放 · <b>点击陆地</b>派小安过去
+  <button id="wanderBtn">🧭 自由漫步：开</button>
+</div>
+
+<div id="diary">
+  <h2>📖 小安的探险日记</h2>
+  <div id="entries"><div class="entry old">小安在营地旁生起了篝火，正等着出发……</div></div>
+</div>
+
+<div id="toast"></div>
+
+<div id="intro">
+  <div class="card">
+    <div class="emoji">🏕️🧭🌍</div>
+    <h2>童子军小安的环球露营</h2>
+    <p>
+      小安背起行囊，降落在一颗小小的星球上。<br>
+      <b>拖动</b>星球环顾四周，<b>滚轮</b>拉近拉远，<b>点击</b>任意陆地，小安就会背上背包走过去。<br>
+      每发现一种新地形，日记里就多一枚<b>探索徽章</b>——一共 6 枚，集齐会有惊喜！
+    </p>
+    <button id="startBtn">开始探险</button>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/OrbitControls.js';
+
+/* ============================================================
+   一、Simplex 噪声（决定整颗星球的地形与生物群落，全局唯一）
+============================================================ */
+function makeNoise3D(seed) {
+  const perm = new Uint8Array(512), p = new Uint8Array(256);
+  for (let i = 0; i < 256; i++) p[i] = i;
+  let s = seed >>> 0;
+  const rnd = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+  for (let i = 255; i > 0; i--) { const j = (rnd() * (i + 1)) | 0; [p[i], p[j]] = [p[j], p[i]]; }
+  for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
+  const grad3 = [[1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],[1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],[0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]];
+  const F3 = 1/3, G3 = 1/6;
+  return function (xin, yin, zin) {
+    const skew = (xin + yin + zin) * F3;
+    const i = Math.floor(xin + skew), j = Math.floor(yin + skew), k = Math.floor(zin + skew);
+    const t = (i + j + k) * G3;
+    const x0 = xin - (i - t), y0 = yin - (j - t), z0 = zin - (k - t);
+    let i1, j1, k1, i2, j2, k2;
+    if (x0 >= y0) {
+      if (y0 >= z0)      { i1=1;j1=0;k1=0; i2=1;j2=1;k2=0; }
+      else if (x0 >= z0) { i1=1;j1=0;k1=0; i2=1;j2=0;k2=1; }
+      else               { i1=0;j1=0;k1=1; i2=1;j2=0;k2=1; }
+    } else {
+      if (y0 < z0)       { i1=0;j1=0;k1=1; i2=0;j2=1;k2=1; }
+      else if (x0 < z0)  { i1=0;j1=1;k1=0; i2=0;j2=1;k2=1; }
+      else               { i1=0;j1=1;k1=0; i2=1;j2=1;k2=0; }
+    }
+    const x1 = x0-i1+G3, y1 = y0-j1+G3, z1 = z0-k1+G3;
+    const x2 = x0-i2+2*G3, y2 = y0-j2+2*G3, z2 = z0-k2+2*G3;
+    const x3 = x0-1+3*G3, y3 = y0-1+3*G3, z3 = z0-1+3*G3;
+    const ii = i & 255, jj = j & 255, kk = k & 255;
+    let n = 0;
+    let t0 = .6 - x0*x0 - y0*y0 - z0*z0;
+    if (t0 > 0) { const g = grad3[perm[ii+perm[jj+perm[kk]]] % 12]; t0 *= t0; n += t0*t0*(g[0]*x0+g[1]*y0+g[2]*z0); }
+    let t1 = .6 - x1*x1 - y1*y1 - z1*z1;
+    if (t1 > 0) { const g = grad3[perm[ii+i1+perm[jj+j1+perm[kk+k1]]] % 12]; t1 *= t1; n += t1*t1*(g[0]*x1+g[1]*y1+g[2]*z1); }
+    let t2 = .6 - x2*x2 - y2*y2 - z2*z2;
+    if (t2 > 0) { const g = grad3[perm[ii+i2+perm[jj+j2+perm[kk+k2]]] % 12]; t2 *= t2; n += t2*t2*(g[0]*x2+g[1]*y2+g[2]*z2); }
+    let t3 = .6 - x3*x3 - y3*y3 - z3*z3;
+    if (t3 > 0) { const g = grad3[perm[ii+1+perm[jj+1+perm[kk+1]]] % 12]; t3 *= t3; n += t3*t3*(g[0]*x3+g[1]*y3+g[2]*z3); }
+    return 32 * n; // 大约 [-1, 1]
+  };
+}
+const noise = makeNoise3D(20260927);
+
+function fbm(x, y, z, oct) {
+  let a = .5, f = 1, sum = 0, norm = 0;
+  for (let i = 0; i < oct; i++) { sum += a * noise(x*f, y*f, z*f); norm += a; f *= 2.03; a *= .5; }
+  return sum / norm;
+}
+
+/* ---- 海拔：大陆起伏 + 细节噪声，约 [-1,1]，0 为海平面 ---- */
+function elevAt(d) {
+  const c = fbm(d.x * 1.05, d.y * 1.05 + 3.7, d.z * 1.05, 4);          // 大陆形状
+  const detail = fbm(d.x * 3.4 + 11.2, d.y * 3.4, d.z * 3.4 + 7.8, 3); // 细节
+  return c * .95 + detail * .32;
+}
+/* ---- 湿度：决定森林 / 沙漠 ---- */
+function moistAt(d) {
+  return fbm(d.x * 1.9 + 23.1, d.y * 1.9 + 5.5, d.z * 1.9 + 14.2, 3);
+}
+/* ---- 该方向上的地表半径 ---- */
+function surfaceR(d) {
+  const e = elevAt(d);
+  return e > 0 ? R + e * 1.75 : R + e * .55;   // 陆地隆起明显，海底浅一些
+}
+
+/* ============================================================
+   二、生物群落判定（地形、配色、道具、徽章共用）
+============================================================ */
+const R = 10;                       // 海平面半径
+const B = {
+  WATER:     { id:'water',     name:'海洋',   icon:'🌊' },
+  BEACH:     { id:'beach',     name:'海滩',   icon:'🏖️', diary:'我在沙滩上捡到一个螺旋贝壳！海浪冲上来，把我的鞋袜全打湿啦。' },
+  GRASS:     { id:'grass',     name:'草原',   icon:'🌾', diary:'风吹过草浪，一浪一浪的。我躺着看了好久好久的云，差点睡着。' },
+  FOREST:    { id:'forest',    name:'森林',   icon:'🌲', diary:'森林里好安静，一只小鹿从树缝里一闪而过，远处还有啄木鸟在哒哒哒地敲树干。' },
+  DESERT:    { id:'desert',    name:'沙漠',   icon:'🌵', diary:'沙子烫脚！我喝掉了半壶水，还见到了传说中的仙人掌巨人，比我还高。' },
+  MOUNTAIN:  { id:'mountain',  name:'山地',   icon:'⛰️', diary:'我手脚并用爬上岩石山！从山顶看，整颗星球好像只有我的拳头那么大。' },
+  SNOW:      { id:'snow',      name:'雪原',   icon:'❄️', diary:'雪原冷极了，呼出的气都是白的。我堆了一个超小的雪人，还打了个大大的喷嚏。' },
+};
+const LAND_BIOMES = ['beach','grass','forest','desert','mountain','snow'];
+const REVISIT_LINES = {
+  beach:'又来到海边，这次找到了一根漂亮的海鸟羽毛。',
+  grass:'草原上蟋蟀在唱歌，我把帽檐压低，假装自己是一株草。',
+  forest:'捡到一根完美的树枝——可以当登山杖，也可以当魔法棒。',
+  desert:'发现一块被太阳晒得暖暖的石头，坐着休息了一会儿。',
+  mountain:'从高处往下看营地，帐篷只有一个橙色小点。',
+  snow:'打了个雪仗（一个人打的那种），然后赶紧跑回向阳的坡上。',
+};
+
+function biomeAt(d) {
+  const e = elevAt(d), m = moistAt(d), lat = Math.abs(d.y);
+  if (e < -0.02) return B.WATER;
+  if (e <  0.05) return B.BEACH;
+  if (e >  0.72) return B.SNOW;                  // 雪峰
+  if (e >  0.50) return B.MOUNTAIN;              // 岩石山
+  if (lat > 0.72) return B.SNOW;                 // 极地冰原
+  if (m < -0.16 && e < 0.42 && lat < 0.62) return B.DESERT;
+  if (m >  0.14) return B.FOREST;
+  return B.GRASS;
+}
+
+/* ============================================================
+   三、场景基础
+============================================================ */
+const app = document.getElementById('app');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+app.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#a5d8ef');
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .1, 500);
+camera.position.set(14, 16, 26);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = .06;
+controls.enablePan = false;
+controls.minDistance = 14;
+controls.maxDistance = 55;
+controls.autoRotate = false;
+controls.autoRotateSpeed = .55;
+
+// 灯光：暖阳 + 天光
+const sun = new THREE.DirectionalLight('#fff3d6', 2.2);
+sun.position.set(24, 30, 14);
+scene.add(sun);
+scene.add(new THREE.HemisphereLight('#cfeaff', '#5f7a55', .85));
+scene.add(new THREE.AmbientLight('#ffffff', .25));
+
+/* ============================================================
+   四、星球地形（低多边形 + 逐面生物群落配色）
+============================================================ */
+const PALETTE = {
+  deepSea:  new THREE.Color('#1c6ba0'),
+  shallow:  new THREE.Color('#4fb3d4'),
+  sand:     new THREE.Color('#ecd9a4'),
+  grass:    new THREE.Color('#7cc251'),
+  forest:   new THREE.Color('#3f9153'),
+  desert:   new THREE.Color('#e2b569'),
+  rock:     new THREE.Color('#8d8377'),
+  snow:     new THREE.Color('#f3f6f6'),
+};
+const landGeo = new THREE.IcosahedronGeometry(R, 5);   // 非索引，天然低多边形
+{
+  const pos = landGeo.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i).normalize();
+    const r = surfaceR(v);
+    pos.setXYZ(i, v.x * r, v.y * r, v.z * r);
+  }
+  // 逐面配色（同一面三个顶点同色 → 硬边低多边形风）
+  const colors = new Float32Array(pos.count * 3);
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), mid = new THREE.Vector3();
+  const tmp = new THREE.Color();
+  for (let f = 0; f < pos.count; f += 3) {
+    a.fromBufferAttribute(pos, f); b.fromBufferAttribute(pos, f+1); c.fromBufferAttribute(pos, f+2);
+    mid.copy(a).add(b).add(c).normalize();
+    const biome = biomeAt(mid), e = elevAt(mid);
+    if (biome === B.WATER) {
+      tmp.copy(PALETTE.shallow).lerp(PALETTE.deepSea, Math.min(1, (-e - .02) / .55));
+    } else if (biome === B.BEACH) tmp.copy(PALETTE.sand);
+    else if (biome === B.GRASS) tmp.copy(PALETTE.grass);
+    else if (biome === B.FOREST) tmp.copy(PALETTE.forest);
+    else if (biome === B.DESERT) tmp.copy(PALETTE.desert);
+    else if (biome === B.MOUNTAIN) tmp.copy(PALETTE.rock);
+    else tmp.copy(PALETTE.snow);
+    // 逐面轻微明暗抖动 → 手作感
+    const jitter = .93 + Math.random() * .12;
+    tmp.r *= jitter; tmp.g *= jitter; tmp.b *= jitter;
+    for (let k = 0; k < 3; k++) { colors.set([tmp.r, tmp.g, tmp.b], (f + k) * 3); }
+  }
+  landGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+}
+const planet = new THREE.Mesh(
+  landGeo,
+  new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 1, metalness: 0 })
+);
+scene.add(planet);
+
+/* ---- 海面（半透明低多边形水球） ---- */
+const water = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(R + .04, 3),
+  new THREE.MeshPhongMaterial({ color: '#4db8dd', transparent: true, opacity: .72, flatShading: true, shininess: 90, specular: '#bfeaff' })
+);
+scene.add(water);
+
+/* ---- 白云（几团低多边形小球组合，绕星球慢慢飘） ---- */
+const cloudGroup = new THREE.Group();
+const cloudMat = new THREE.MeshStandardMaterial({ color: '#ffffff', flatShading: true, roughness: 1 });
+for (let i = 0; i < 7; i++) {
+  const cl = new THREE.Group();
+  const n = 3 + (Math.random() * 3 | 0);
+  for (let j = 0; j < n; j++) {
+    const s = .35 + Math.random() * .45;
+    const ball = new THREE.Mesh(new THREE.IcosahedronGeometry(s, 1), cloudMat);
+    ball.position.set(j * .55 - n * .27, Math.random() * .18, Math.random() * .3 - .15);
+    ball.scale.y = .62;
+    cl.add(ball);
+  }
+  const dir = randomDir();
+  cl.position.copy(dir).multiplyScalar(R + 4.2);
+  cl.lookAt(0, 0, 0);
+  cloudGroup.add(cl);
+}
+scene.add(cloudGroup);
+
+function randomDir() {
+  const u = Math.random() * 2 - 1, t = Math.random() * Math.PI * 2, s = Math.sqrt(1 - u * u);
+  return new THREE.Vector3(s * Math.cos(t), u, s * Math.sin(t));
+}
+
+/* ============================================================
+   五、地表道具（树 / 松树 / 仙人掌 / 岩石 / 花）
+============================================================ */
+const props = new THREE.Group(); scene.add(props);
+const M = {
+  trunk:  new THREE.MeshStandardMaterial({ color: '#8a5a33', flatShading: true }),
+  leaf:   new THREE.MeshStandardMaterial({ color: '#2f7a40', flatShading: true }),
+  leafLight: new THREE.MeshStandardMaterial({ color: '#5cab50', flatShading: true }),
+  pineSnow: new THREE.MeshStandardMaterial({ color: '#3a7d55', flatShading: true }),
+  snow:   new THREE.MeshStandardMaterial({ color: '#f3f6f6', flatShading: true }),
+  cactus: new THREE.MeshStandardMaterial({ color: '#4c9e4f', flatShading: true }),
+  rock:   new THREE.MeshStandardMaterial({ color: '#9b9186', flatShading: true }),
+  tent:   new THREE.MeshStandardMaterial({ color: '#f08c3a', flatShading: true }),
+  tentDark: new THREE.MeshStandardMaterial({ color: '#d9702a', flatShading: true }),
+  fire:   new THREE.MeshStandardMaterial({ color: '#ff9b30', emissive: '#ff6a00', emissiveIntensity: 1.4, flatShading: true }),
+  skin:   new THREE.MeshStandardMaterial({ color: '#f2c69c', flatShading: true }),
+  shirt:  new THREE.MeshStandardMaterial({ color: '#c8a15a', flatShading: true }),
+  shorts: new THREE.MeshStandardMaterial({ color: '#5d6e4e', flatShading: true }),
+  hat:    new THREE.MeshStandardMaterial({ color: '#4a7856', flatShading: true }),
+  pack:   new THREE.MeshStandardMaterial({ color: '#7a4f2a', flatShading: true }),
+};
+const flowerColors = ['#ff7eb6', '#ffd166', '#ff6b6b', '#c084fc', '#fff'].map(c => new THREE.MeshStandardMaterial({ color: c, flatShading: true }));
+
+function placeOnSurface(obj, dir, r) {
+  obj.position.copy(dir).multiplyScalar(r);
+  obj.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+  props.add(obj);
+}
+
+function makeTree(pine = false, snowTip = false) {
+  const g = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(.05, .08, .3, 5), M.trunk);
+  trunk.position.y = .15; g.add(trunk);
+  if (pine) {
+    for (let i = 0; i < 3; i++) {
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(.3 - i * .075, .34, 6), M.pineSnow);
+      cone.position.y = .3 + i * .21; g.add(cone);
+    }
+    if (snowTip) {
+      const tip = new THREE.Mesh(new THREE.ConeGeometry(.1, .18, 6), M.snow);
+      tip.position.y = .95; g.add(tip);
+    }
+  } else {
+    const blob = new THREE.Mesh(new THREE.IcosahedronGeometry(.32, 0), M.leafLight);
+    blob.position.y = .48; blob.scale.y = 1.15; g.add(blob);
+    const blob2 = new THREE.Mesh(new THREE.IcosahedronGeometry(.2, 0), M.leaf);
+    blob2.position.set(.12, .62, .08); g.add(blob2);
+  }
+  return g;
+}
+function makeCactus() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(.1, .12, .7, 6), M.cactus);
+  body.position.y = .35; g.add(body);
+  const arm = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .28, 6), M.cactus);
+  arm.position.set(.15, .45, 0); arm.rotation.z = -Math.PI / 2.4; g.add(arm);
+  const arm2 = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .22, 6), M.cactus);
+  arm2.position.set(-.14, .32, .05); arm2.rotation.z = Math.PI / 2.2; g.add(arm2);
+  return g;
+}
+function makeRock() {
+  const rock = new THREE.Mesh(new THREE.IcosahedronGeometry(.16 + Math.random() * .22, 0), M.rock);
+  rock.scale.y = .55 + Math.random() * .3;
+  rock.rotation.set(Math.random(), Math.random(), Math.random());
+  const g = new THREE.Group(); g.add(rock); return g;
+}
+function makeFlower() {
+  const g = new THREE.Group();
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .14, 4), M.leaf);
+  stem.position.y = .07; g.add(stem);
+  const head = new THREE.Mesh(new THREE.IcosahedronGeometry(.06, 0), flowerColors[Math.random() * flowerColors.length | 0]);
+  head.position.y = .16; g.add(head);
+  return g;
+}
+
+// 按生物群落撒道具
+function scatter(count, want, factory) {
+  let placed = 0, guard = 0;
+  while (placed < count && guard++ < count * 60) {
+    const dir = randomDir();
+    if (biomeAt(dir) !== want) continue;
+    const obj = factory();
+    const s = .8 + Math.random() * .5;
+    obj.scale.setScalar(s);
+    placeOnSurface(obj, dir, surfaceR(dir));
+    placed++;
+  }
+}
+scatter(85, B.FOREST,   () => makeTree(Math.random() < .35, false));
+scatter(30, B.SNOW,     () => makeTree(true, true));
+scatter(22, B.DESERT,   makeCactus);
+scatter(45, B.MOUNTAIN, makeRock);
+scatter(14, B.BEACH,    makeRock);
+scatter(16, B.GRASS,    makeTree);
+scatter(40, B.GRASS,    makeFlower);
+scatter(12, B.FOREST,   makeRock);
+
+/* ============================================================
+   六、营地：帐篷 + 篝火 + 炊烟
+============================================================ */
+const campDir = new THREE.Vector3(.15, .35, .91).normalize();   // 初始营地位置
+// 若营地落在水里就换地方
+{
+  let guard = 0;
+  while (biomeAt(campDir) === B.WATER && guard++ < 999) campDir.copy(randomDir());
+}
+const campPos = campDir.clone().multiplyScalar(surfaceR(campDir));
+const campGroup = new THREE.Group();
+campGroup.position.copy(campPos);
+campGroup.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), campDir);
+scene.add(campGroup);
+
+const tent = new THREE.Group();
+{
+  const body = new THREE.Mesh(new THREE.ConeGeometry(.62, .85, 4), M.tent);
+  body.position.y = .42; body.rotation.y = Math.PI / 4; tent.add(body);
+  const door = new THREE.Mesh(new THREE.ConeGeometry(.2, .45, 4), M.tentDark);
+  door.position.set(0, .22, .42); door.rotation.y = Math.PI / 4; tent.add(door);
+}
+tent.position.set(.7, 0, -.2);
+campGroup.add(tent);
+
+const fireGroup = new THREE.Group(); campGroup.add(fireGroup);
+{
+  for (let i = 0; i < 3; i++) {
+    const log = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, .42, 5), M.trunk);
+    log.rotation.z = Math.PI / 2.6; log.rotation.y = i * Math.PI / 3;
+    fireGroup.add(log);
+  }
+}
+const flame = new THREE.Mesh(new THREE.ConeGeometry(.11, .3, 6), M.fire);
+flame.position.y = .16; fireGroup.add(flame);
+const fireLight = new THREE.PointLight('#ff9440', 6, 5, 2);
+fireLight.position.y = .5; fireGroup.add(fireLight);
+
+// 炊烟粒子
+const smokeMat = new THREE.MeshBasicMaterial({ color: '#dfe6e8', transparent: true });
+const smokes = [];
+for (let i = 0; i < 4; i++) {
+  const p = new THREE.Mesh(new THREE.IcosahedronGeometry(.07, 0), smokeMat.clone());
+  p.userData.life = i * .7;
+  p.userData.h = Math.random() * 6.28;
+  smokes.push(p); campGroup.add(p);
+}
+
+/* ============================================================
+   七、童子军小安
+============================================================ */
+const scout = new THREE.Group();
+const bodyGroup = new THREE.Group();  // 用于走路时的上下颠簸
+scout.add(bodyGroup);
+{
+  // 腿（走路时摆动）
+  const legL = new THREE.Mesh(new THREE.CylinderGeometry(.04, .045, .17, 5), M.shorts);
+  legL.position.set(.055, .085, 0); legL.geometry.translate(0, -.06, 0); legL.position.y = .16;
+  const legR = legL.clone(); legR.position.x = -.055;
+  legL.name = 'legL'; legR.name = 'legR';
+  bodyGroup.add(legL, legR);
+  // 身体
+  const body = new THREE.Mesh(new THREE.CapsuleGeometry(.105, .13, 4, 8), M.shirt);
+  body.position.y = .34; bodyGroup.add(body);
+  // 背包
+  const pack = new THREE.Mesh(new THREE.BoxGeometry(.14, .17, .08), M.pack);
+  pack.position.set(0, .36, -.12); bodyGroup.add(pack);
+  // 头
+  const head = new THREE.Mesh(new THREE.SphereGeometry(.095, 10, 8), M.skin);
+  head.position.y = .55; bodyGroup.add(head);
+  // 童子军帽：帽檐 + 帽顶
+  const brim = new THREE.Mesh(new THREE.CylinderGeometry(.13, .13, .02, 10), M.hat);
+  brim.position.y = .61; bodyGroup.add(brim);
+  const top = new THREE.Mesh(new THREE.ConeGeometry(.1, .09, 10), M.hat);
+  top.position.y = .66; bodyGroup.add(top);
+}
+scene.add(scout);
+
+// 小安状态
+let scoutDir = campDir.clone();        // 单位方向（站在哪）
+let targetDir = null;                  // 目标方向
+let forwardDir = campDir.clone();      // 朝向
+let walkT = 0;                         // 走路动画相位
+let pauseTimer = 2;                    // 到达后歇脚
+let wanderOn = true;
+const WALK_SPEED = .38;                // 弧度/秒
+
+function setOrientation() {
+  const up = scoutDir;
+  const q1 = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
+  const curFwd = new THREE.Vector3(0, 0, 1).applyQuaternion(q1);
+  const desired = forwardDir.clone().sub(up.clone().multiplyScalar(forwardDir.dot(up)));
+  if (desired.lengthSq() > 1e-6) {
+    desired.normalize();
+    const cross = new THREE.Vector3().crossVectors(curFwd, desired);
+    const ang = Math.atan2(cross.dot(up), curFwd.dot(desired));
+    const q2 = new THREE.Quaternion().setFromAxisAngle(up, ang);
+    scout.quaternion.copy(q2.multiply(q1));
+  } else {
+    scout.quaternion.copy(q1);
+  }
+}
+
+function pickWanderTarget() {
+  let guard = 0;
+  let d;
+  do { d = randomDir(); } while (biomeAt(d) === B.WATER && guard++ < 200);
+  if (biomeAt(d) !== B.WATER) targetDir = d;
+}
+
+function scoutArrive() {
+  targetDir = null;
+  pauseTimer = 1.6 + Math.random() * 1.6;
+  const biome = biomeAt(scoutDir);
+  if (biome === B.WATER) return;
+  discover(biome);
+  if (wanderOn) setTimeout(() => { if (!targetDir && wanderOn && started) pickWanderTarget(); }, pauseTimer * 1000);
+}
+
+/* ============================================================
+   八、探索 / 徽章 / 日记
+============================================================ */
+const visited = new Set();
+const badgesEl = document.getElementById('badges');
+const badgeCountEl = document.getElementById('badgeCount');
+const entriesEl = document.getElementById('entries');
+let entryCount = 0;
+
+LAND_BIOMES.forEach(id => {
+  const b = Object.values(B).find(x => x.id === id);
+  const div = document.createElement('div');
+  div.className = 'badge'; div.id = 'badge-' + id;
+  div.innerHTML = `<span class="ico"><em>?</em></span><span>${b.name}</span>`;
+  badgesEl.appendChild(div);
+});
+
+function addEntry(tag, text, important = false) {
+  entryCount++;
+  const div = document.createElement('div');
+  div.className = 'entry' + (entryCount > 3 && !important ? ' old' : '');
+  div.innerHTML = `<span class="tag">${tag}</span>${text}`;
+  entriesEl.prepend(div);
+  while (entriesEl.children.length > 8) entriesEl.lastChild.remove();
+}
+
+function discover(biome) {
+  const first = !visited.has(biome.id);
+  if (first) {
+    visited.add(biome.id);
+    const el = document.getElementById('badge-' + biome.id);
+    el.classList.add('got', 'pop');
+    el.querySelector('.ico').innerHTML = biome.icon;
+    badgeCountEl.textContent = visited.size;
+    addEntry('📍' + biome.name, biome.diary, true);
+    toast(biome.icon + ' 发现新地形：「' + biome.name + '」！徽章 +1');
+    if (visited.size === LAND_BIOMES.length) {
+      setTimeout(() => {
+        addEntry('🎖️ 集齐徽章！', '六枚探索徽章全部到手！小安坐在山顶看日落，觉得这是他度过过的、最好的一个露营周末。', true);
+        toast('🎖️ 探索徽章全部集齐，小安是最棒的童子军！');
+      }, 800);
+    }
+  } else {
+    addEntry('🔁' + biome.name, REVISIT_LINES[biome.id] || '又转了一圈。');
+  }
+}
+
+let toastTimer = null;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ============================================================
+   九、交互：点击星球 → 派小安过去
+============================================================ */
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+let downX = 0, downY = 0, downT = 0, started = false;
+
+renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; downT = performance.now(); });
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!started) return;
+  const moved = Math.hypot(e.clientX - downX, e.clientY - downY);
+  if (moved > 6 || performance.now() - downT > 450) return;   // 是拖拽，不是点击
+  pointer.x = (e.clientX / innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const hit = raycaster.intersectObject(planet, false)[0];
+  if (!hit) return;
+  const dir = hit.point.clone().normalize();
+  const biome = biomeAt(dir);
+  if (biome === B.WATER) { toast('🌊 前面是大海，小安摇摇头：我可不会游泳！'); return; }
+  targetDir = dir;
+  toast('小安朝「' + biome.name + '」出发啦 🎒');
+});
+
+// 空闲 8 秒后缓慢自转展示
+let idleTimer = null;
+controls.addEventListener('start', () => { controls.autoRotate = false; clearTimeout(idleTimer); });
+controls.addEventListener('end', () => {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { controls.autoRotate = true; }, 8000);
+});
+
+const wanderBtn = document.getElementById('wanderBtn');
+wanderBtn.addEventListener('click', () => {
+  wanderOn = !wanderOn;
+  wanderBtn.textContent = wanderOn ? '🧭 自由漫步：开' : '🧭 自由漫步：关';
+  wanderBtn.classList.toggle('off', !wanderOn);
+  if (wanderOn && !targetDir) pickWanderTarget();
+});
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('intro').classList.add('hide');
+  started = true;
+  toast('小安出发了！点击陆地指挥他，或者让他自己逛 🌍');
+  pickWanderTarget();
+});
+
+/* ============================================================
+   十、主循环
+============================================================ */
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), .05);
+  const t = clock.elapsedTime;
+
+  // --- 小安移动（球面大圆路径） ---
+  if (targetDir) {
+    const from = scoutDir.clone().normalize();
+    const to = targetDir.clone().normalize();
+    const angle = from.angleTo(to);
+    const step = Math.min(angle, WALK_SPEED * dt);
+    const ratio = angle > 1e-6 ? step / angle : 1;
+    scoutDir.copy(from).lerp(to, ratio).normalize();
+    // 前进方向（切向）
+    forwardDir.copy(to).sub(from.clone().multiplyScalar(from.dot(to)));
+    if (forwardDir.lengthSq() > 1e-9) forwardDir.normalize();
+    walkT += dt * 11;
+    if (angle < .025) scoutArrive();
+  } else {
+    walkT *= .9;
+  }
+
+  // --- 小安姿态 ---
+  const r = surfaceR(scoutDir);
+  scout.position.copy(scoutDir).multiplyScalar(r);
+  setOrientation();
+  const legL = bodyGroup.getObjectByName('legL'), legR = bodyGroup.getObjectByName('legR');
+  const swing = Math.abs(targetDir) > 0 ? Math.sin(walkT) * .55 : 0;
+  if (legL) legL.rotation.x = swing;
+  if (legR) legR.rotation.x = -swing;
+  bodyGroup.position.y = Math.abs(Math.sin(walkT)) * .022;
+
+  // --- 水面微动 ---
+  water.rotation.y += dt * .02;
+
+  // --- 云飘动 ---
+  cloudGroup.rotation.y += dt * .015;
+  cloudGroup.rotation.x = Math.sin(t * .05) * .05;
+
+  // --- 篝火闪烁 + 炊烟 ---
+  fireLight.intensity = 6 + Math.sin(t * 13) * 1.2 + Math.sin(t * 29) * .6;
+  flame.scale.setScalar(1 + Math.sin(t * 15) * .12);
+  flame.rotation.y += dt * 2;
+  for (const p of smokes) {
+    p.userData.life += dt;
+    if (p.userData.life > 2.8) p.userData.life = 0;
+    const life = p.userData.life;
+    const localUp = new THREE.Vector3(0, 1, 0);
+    p.position.set(
+      Math.sin(life * 2 + p.userData.h) * .08,
+      .55 + life * .55,
+      Math.cos(life * 1.7) * .08
+    );
+    p.scale.setScalar(.5 + life * .9);
+    p.material.opacity = Math.max(0, .55 - life * .2);
+    void localUp;
+  }
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
