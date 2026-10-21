@@ -1,4 +1,4 @@
-// ===== 文章页脚本：目录生成 / 返回顶部 / 社交分享 / 代码高亮 =====
+// ===== 文章页脚本：目录生成 / 返回顶部 / 社交分享 =====
 (function() {
   'use strict';
 
@@ -89,9 +89,4 @@
     modal.addEventListener('click', () => modal.remove());
     document.body.appendChild(modal);
   };
-
-  // ===== 3. 代码高亮（highlight.js 由 default.html 在 post 页加载，defer 执行时已就绪） =====
-  if (window.hljs) {
-    document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
-  }
 })();
