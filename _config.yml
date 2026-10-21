@@ -18,9 +18,8 @@ github_username: oli-bot
 markdown: kramdown
 kramdown:
   input: GFM
-  # 代码高亮由客户端 highlight.js 完成，禁用服务端 Rouge 避免双重渲染
-  syntax_highlighter_opts:
-    disable: true
+  # 代码高亮由服务端 Rouge 完成（构建时渲染），终端配色见 assets/css/style.css
+  syntax_highlighter: rouge
 
 # 文章设置
 permalink: /posts/:year/:month/:day/:title/

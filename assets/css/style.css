@@ -1056,6 +1056,102 @@ pre:hover .copy-code-btn {
 .hljs-emphasis { font-style: italic; }
 .hljs-strong { font-weight: 700; }
 
+/* Rouge 服务端高亮：token 类为 Pygments 短类名，复用上面 .hljs 的终端配色变量 */
+.highlight {
+  background: transparent;
+  color: var(--text);
+}
+
+.highlight .c,
+.highlight .ch,
+.highlight .cm,
+.highlight .c1,
+.highlight .cs {
+  color: var(--hl-comment);
+  font-style: italic;
+}
+
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt,
+.highlight .ow {
+  color: var(--hl-keyword);
+}
+
+.highlight .s,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s2,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sx,
+.highlight .sr,
+.highlight .s1,
+.highlight .ss,
+.highlight .ld,
+.highlight .gi {
+  color: var(--hl-string);
+}
+
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il {
+  color: var(--hl-number);
+}
+
+.highlight .nf,
+.highlight .fm {
+  color: var(--hl-function);
+}
+
+.highlight .na,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .vm,
+.highlight .nd,
+.highlight .nl {
+  color: var(--hl-attr);
+}
+
+.highlight .nb,
+.highlight .bp,
+.highlight .nc,
+.highlight .no,
+.highlight .ne,
+.highlight .nn {
+  color: var(--hl-attr);
+}
+
+.highlight .nt {
+  color: var(--hl-keyword);
+}
+
+.highlight .cp,
+.highlight .cpf {
+  color: var(--hl-meta);
+}
+
+.highlight .gd {
+  color: var(--hl-deletion);
+}
+
+.highlight .ge { font-style: italic; }
+.highlight .gs { font-weight: 700; }
+
 /* ---------- 13. 标签 ---------- */
 .post-tags {
   margin-top: 40px;
