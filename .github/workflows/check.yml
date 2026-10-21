@@ -29,8 +29,7 @@ jobs:
         # --disable-external：跳过外链检查（shields.io / pages.dev 等偶发不稳定），
         # 如需检查外链，去掉该参数并加 --ignore-status-codes 429,403
         run: |
-          gem install html-proofer --no-document
+          gem install html-proofer -v '~> 5.0' --no-document
           htmlproofer ./_site \
             --disable-external \
-            --allow-hash-href \
-            --ignore-missing-alt
+            --allow-hash-href
