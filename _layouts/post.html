@@ -63,10 +63,10 @@ layout: default
   <!-- 社交分享按钮 -->
   <div class="share-buttons">
     <h4>分享文章</h4>
-    <a href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url }}&title={{ page.title | url_encode }}" target="_blank" class="share-btn weibo" title="分享到微博">[微博]</a>
-    <a href="https://twitter.com/intent/tweet?url={{ page.url | absolute_url }}&text={{ page.title | url_encode }}" target="_blank" class="share-btn twitter" title="分享到 Twitter">[X]</a>
-    <button onclick="copyArticleLink()" class="share-btn copy" title="复制链接">[链接]</button>
-    <button onclick="showQRCode()" class="share-btn qrcode" title="微信扫码阅读">[二维码]</button>
+    <a href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url }}&title={{ page.title | url_encode }}" target="_blank" rel="noopener noreferrer" class="share-btn weibo" title="分享到微博">[微博]</a>
+    <a href="https://twitter.com/intent/tweet?url={{ page.url | absolute_url }}&text={{ page.title | url_encode }}" target="_blank" rel="noopener noreferrer" class="share-btn twitter" title="分享到 Twitter">[X]</a>
+    <button id="share-copy-link" class="share-btn copy" title="复制链接">[链接]</button>
+    <button id="share-qrcode" class="share-btn qrcode" title="微信扫码阅读">[二维码]</button>
   </div>
 </article>
 
