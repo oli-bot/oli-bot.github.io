@@ -51,16 +51,16 @@
   });
 
   // ===== 2. 社交分享 =====
-  window.copyArticleLink = function() {
+  function copyArticleLink() {
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => {
       alert('✅ 链接已复制到剪贴板！');
     }).catch(() => {
       alert('❌ 复制失败，请手动复制链接');
     });
-  };
+  }
 
-  window.showQRCode = function() {
+  function showQRCode() {
     const url = window.location.href;
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
 
@@ -88,5 +88,13 @@
 
     modal.addEventListener('click', () => modal.remove());
     document.body.appendChild(modal);
-  };
+  }
+
+  // 分享按钮事件绑定（post.html 已去掉内联 onclick，改由 id 统一绑定）
+  document.addEventListener('DOMContentLoaded', function() {
+    const copyBtn = document.getElementById('share-copy-link');
+    if (copyBtn) copyBtn.addEventListener('click', copyArticleLink);
+    const qrBtn = document.getElementById('share-qrcode');
+    if (qrBtn) qrBtn.addEventListener('click', showQRCode);
+  });
 })();

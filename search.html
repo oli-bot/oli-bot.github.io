@@ -2,13 +2,15 @@
 layout: default
 title: 搜索
 permalink: /search/
+sitemap: false
 ---
 
 <div class="search-page">
   <h1 class="page-title">搜索文章</h1>
   
   <div class="search-box">
-    <input type="text" id="search-input" placeholder="输入关键词搜索..." autocomplete="off">
+    <label class="visually-hidden" for="search-input">搜索关键词</label>
+    <input type="text" id="search-input" placeholder="输入关键词搜索..." autocomplete="off" aria-label="搜索关键词">
     <button id="search-button">搜索</button>
   </div>
   
@@ -23,21 +25,6 @@ permalink: /search/
   </div>
 </div>
 
-<!-- 搜索数据 -->
-<script>
-const searchData = [
-  {% for post in site.posts %}
-  {
-    title: {{ post.title | jsonify }},
-    url: {{ post.url | relative_url | jsonify }},
-    date: {{ post.date | date: "%Y-%m-%d" | jsonify }},
-    tags: {{ post.tags | jsonify }},
-    content: {{ post.content | strip_html | strip_newlines | jsonify }}
-  }{% unless forloop.last %},{% endunless %}
-  {% endfor %}
-];
-</script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('search-input');
@@ -45,6 +32,18 @@ document.addEventListener('DOMContentLoaded', function() {
   const searchResults = document.getElementById('search-results');
   const searchEmpty = document.getElementById('search-empty');
   const searchHint = document.getElementById('search-hint');
+  
+  // 搜索数据改为构建时生成的 /search.json，首次搜索时按需拉取并缓存（原为全站全文内联）
+  let searchData = null;
+  let searchDataLoading = null;
+  function loadSearchData() {
+    if (!searchDataLoading) {
+      searchDataLoading = fetch('{{ "/search.json" | relative_url }}')
+        .then(response => response.json())
+        .then(data => { searchData = data; return data; });
+    }
+    return searchDataLoading;
+  }
   
   function performSearch() {
     const query = searchInput.value.trim().toLowerCase();
@@ -57,6 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     searchHint.style.display = 'none';
+    
+    if (!searchData) {
+      loadSearchData().then(() => performSearch()).catch(() => {});
+      return;
+    }
     
     const results = searchData.filter(post => {
       return post.title.toLowerCase().includes(query) || 

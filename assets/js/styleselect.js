@@ -212,6 +212,10 @@
   function closePanel() {
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
+    // 面板关闭后若焦点还在面板内，送回触发按钮，避免焦点滞留在 aria-hidden 区域
+    if (document.activeElement && overlay.contains(document.activeElement)) {
+      btn.focus();
+    }
     // 恢复已保存的风格（丢弃预览）
     applyStyle(getSavedStyle());
   }

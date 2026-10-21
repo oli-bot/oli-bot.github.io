@@ -355,15 +355,15 @@ permalink: /3d-galaxy.html
   <script type="importmap">
   {
     "imports": {
-      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      "three": "./lib/three.module.min.js",
+      "three/addons/": "./lib/"
     }
   }
   </script>
 
   <script type="module">
     import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { OrbitControls } from 'three/addons/OrbitControls.js';
 
     const canvas = document.getElementById('scene');
     const scene = new THREE.Scene();
