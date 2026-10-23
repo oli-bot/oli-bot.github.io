@@ -17,6 +17,15 @@ MCP Server 本质上就是一段 Python 或 Node.js 程序。
 
 ---
 
+<div class="mermaid">
+graph LR
+  A[AI 应用 / 宿主] -->|stdio / SSE / HTTP| B[MCP Server]
+  B --> C[Tool 工具]
+  B --> D[Resource 资源]
+  B --> E[Prompt 提示模板]
+  C --> F[本地文件 / 外部 API]
+</div>
+
 ## 一、使用 Python 搭建
 
 ### 1. 安装 uv

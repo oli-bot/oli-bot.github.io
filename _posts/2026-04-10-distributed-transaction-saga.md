@@ -42,6 +42,15 @@ public class OrderSaga {
 | 编排式（Orchestration） | 流程集中、易调试 | 协调者变单点 |
 | 协作式（Choreography） | 无中心、松耦合 | 流程隐晦、难追踪 |
 
+<div class="mermaid">
+graph LR
+  A[创建订单] --> B[扣减库存]
+  B --> C[扣减余额]
+  C --> D[事务完成]
+  C -. 失败 .-> E[补偿: 恢复库存]
+  E -.-> F[补偿: 取消订单]
+</div>
+
 ## 实践建议
 
 1. **优先本地事务 + 发件箱模式**，别一上来就上分布式事务

@@ -75,6 +75,14 @@ location /v1/chat/completions {
 }
 ```
 
+<div class="mermaid">
+graph TD
+  A[客户端] --> B[网关<br/>健康检查 / 限流 / 超时兜底]
+  B --> C[vLLM 副本 1<br/>多 GPU 张量并行]
+  B --> D[vLLM 副本 2]
+  B --> E[vLLM 副本 3]
+</div>
+
 ## 降级策略
 
 - 峰值前扩容，按 token 容量而不是请求数

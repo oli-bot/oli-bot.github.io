@@ -97,4 +97,69 @@
     const qrBtn = document.getElementById('share-qrcode');
     if (qrBtn) qrBtn.addEventListener('click', showQRCode);
   });
+
+  // 图片 / Mermaid 图表灯箱：点击放大，Esc 或点击任意处关闭
+  document.addEventListener('DOMContentLoaded', function() {
+    const content = document.querySelector('.post-content');
+    if (!content) return;
+    let overlay = null;
+    let lastFocus = null;
+
+    function onKey(e) {
+      if (e.key === 'Escape') closeLightbox();
+    }
+
+    function closeLightbox() {
+      if (!overlay) return;
+      overlay.remove();
+      overlay = null;
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    function openLightbox(node, captionText) {
+      closeLightbox();
+      lastFocus = document.activeElement;
+      overlay = document.createElement('div');
+      overlay.className = 'lightbox';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      const clone = node.cloneNode(true);
+      if (clone.tagName === 'svg') {
+        clone.style.width = '92vw';
+        clone.style.height = 'auto';
+        clone.style.maxWidth = '94vw';
+        clone.style.maxHeight = '88vh';
+      }
+      overlay.appendChild(clone);
+      if (captionText) {
+        const cap = document.createElement('div');
+        cap.className = 'lightbox-caption';
+        cap.textContent = captionText;
+        overlay.appendChild(cap);
+      }
+      overlay.addEventListener('click', closeLightbox);
+      document.body.appendChild(overlay);
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', onKey);
+    }
+
+    content.querySelectorAll('img').forEach(function(img) {
+      if (img.closest('a')) return;
+      img.setAttribute('tabindex', '0');
+      img.addEventListener('click', function() { openLightbox(img, img.getAttribute('alt')); });
+      img.addEventListener('keydown', function(e) { if (e.key === 'Enter') openLightbox(img, img.getAttribute('alt')); });
+    });
+
+    content.querySelectorAll('.mermaid').forEach(function(box) {
+      box.setAttribute('tabindex', '0');
+      function open() {
+        const svg = box.querySelector('svg');
+        if (svg) openLightbox(svg, null);
+      }
+      box.addEventListener('click', open);
+      box.addEventListener('keydown', function(e) { if (e.key === 'Enter') open(); });
+    });
+  });
 })();

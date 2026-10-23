@@ -159,3 +159,13 @@ layout: default
 <button id="back-to-top" title="返回顶部" aria-label="返回顶部">↑</button>
 
 <script src="{{ "/assets/js/post.js" | relative_url }}?v={{ site.site_version }}" defer></script>
+{% if content contains 'class="mermaid"' %}
+<script src="{{ "/lib/mermaid.min.js" | relative_url }}?v={{ site.site_version }}" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!window.mermaid) return;
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    mermaid.initialize({ startOnLoad: true, theme: dark ? 'dark' : 'default' });
+  });
+</script>
+{% endif %}

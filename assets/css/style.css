@@ -877,6 +877,49 @@ a:hover {
   box-shadow: var(--glow-soft);
 }
 
+/* Mermaid 图表（构建内容为 .mermaid 容器，页面按需加载 lib/mermaid.min.js 渲染） */
+.post-content .mermaid {
+  text-align: center;
+  margin: 22px 0;
+  cursor: zoom-in;
+}
+
+.post-content .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 图片 / 图表灯箱（点击放大，逻辑在 post.js） */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.88);
+  cursor: zoom-out;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.lightbox img,
+.lightbox svg {
+  max-width: 94vw;
+  max-height: 88vh;
+  background: var(--bg);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+}
+
+.lightbox-caption {
+  color: #e8e8e8;
+  font-size: 0.9rem;
+}
+
 /* 键盘按键 */
 .post-content kbd {
   background: var(--bg-tertiary);

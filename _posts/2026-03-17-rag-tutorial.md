@@ -49,6 +49,17 @@ RAG 将文档切分成片段，只把相关的片段发给大模型，解决了�
 
 ---
 
+<div class="mermaid">
+graph LR
+  subgraph prep [提问前: 准备知识库]
+    A[文档] --> B[分片] --> C[Embedding] --> D[(向量数据库)]
+  end
+  subgraph qa [提问后: 检索生成]
+    E[用户问题] --> F[检索相关片段] --> G[重排] --> H[拼接上下文] --> I[LLM 生成] --> J[回答]
+  end
+  D --> F
+</div>
+
 ## 三、逐步拆解
 
 ### 1. 分片
