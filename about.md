@@ -30,66 +30,36 @@ permalink: /about/
   <section class="about-section">
     <h2 class="sec-title"><span class="sec-prompt">~$</span> ls ~/skills</h2>
     <div class="skill-grid">
+      {% for cat in site.data.about.skills %}
       <div class="skill-cat">
-        <h3>后端开发</h3>
-        <div class="skill-bar" style="--w:90%"><span>Go</span><div class="skill-fill"><i></i></div><b>90</b></div>
-        <div class="skill-bar" style="--w:85%"><span>Python</span><div class="skill-fill"><i></i></div><b>85</b></div>
-        <div class="skill-bar" style="--w:75%"><span>Java</span><div class="skill-fill"><i></i></div><b>75</b></div>
-        <div class="skill-bar" style="--w:70%"><span>C#</span><div class="skill-fill"><i></i></div><b>70</b></div>
-        <div class="skill-bar" style="--w:80%"><span>Node.js</span><div class="skill-fill"><i></i></div><b>80</b></div>
+        <h3>{{ cat.category }}</h3>
+        {% for skill in cat.items %}
+        <div class="skill-bar" style="--w:{{ skill.level }}%"><span>{{ skill.name }}</span><div class="skill-fill"><i></i></div><b>{{ skill.level }}</b></div>
+        {% endfor %}
       </div>
-      <div class="skill-cat">
-        <h3>数据库</h3>
-        <div class="skill-bar" style="--w:85%"><span>PostgreSQL</span><div class="skill-fill"><i></i></div><b>85</b></div>
-        <div class="skill-bar" style="--w:80%"><span>MySQL</span><div class="skill-fill"><i></i></div><b>80</b></div>
-        <div class="skill-bar" style="--w:75%"><span>Redis</span><div class="skill-fill"><i></i></div><b>75</b></div>
-        <div class="skill-bar" style="--w:70%"><span>MongoDB</span><div class="skill-fill"><i></i></div><b>70</b></div>
-      </div>
-      <div class="skill-cat">
-        <h3>云原生 &amp; DevOps</h3>
-        <div class="skill-bar" style="--w:85%"><span>Docker</span><div class="skill-fill"><i></i></div><b>85</b></div>
-        <div class="skill-bar" style="--w:70%"><span>Kubernetes</span><div class="skill-fill"><i></i></div><b>70</b></div>
-        <div class="skill-bar" style="--w:80%"><span>CI/CD</span><div class="skill-fill"><i></i></div><b>80</b></div>
-        <div class="skill-bar" style="--w:85%"><span>Linux</span><div class="skill-fill"><i></i></div><b>85</b></div>
-      </div>
-      <div class="skill-cat">
-        <h3>其他</h3>
-        <div class="skill-bar" style="--w:90%"><span>Git</span><div class="skill-fill"><i></i></div><b>90</b></div>
-        <div class="skill-bar" style="--w:90%"><span>API 设计</span><div class="skill-fill"><i></i></div><b>90</b></div>
-        <div class="skill-bar" style="--w:75%"><span>微服务</span><div class="skill-fill"><i></i></div><b>75</b></div>
-        <div class="skill-bar" style="--w:75%"><span>分布式系统</span><div class="skill-fill"><i></i></div><b>75</b></div>
-      </div>
+      {% endfor %}
     </div>
   </section>
 
   <section class="about-section">
     <h2 class="sec-title"><span class="sec-prompt">~$</span> cat ~/hobbies.txt</h2>
     <div class="hobby-chips">
-      <span class="hobby-chip">💻 技术探索与开源项目</span>
-      <span class="hobby-chip">📚 历史文化与人文地理</span>
-      <span class="hobby-chip">🌍 旅行与摄影</span>
-      <span class="hobby-chip">🎮 游戏与科技产品</span>
+      {% for hobby in site.data.about.hobbies %}
+      <span class="hobby-chip">{{ hobby }}</span>
+      {% endfor %}
     </div>
   </section>
 
   <section class="about-section">
     <h2 class="sec-title"><span class="sec-prompt">~$</span> ./contact.sh</h2>
     <div class="social-links">
-      <a href="https://github.com/oli-bot" class="social-link" target="_blank" rel="noopener">
-        <span class="social-icon">GitHub</span>
-        <span class="social-name">@oli-bot</span>
+      {% for link in site.data.about.socials %}
+      <a href="{% if link.absolute %}{{ link.url | absolute_url }}{% else %}{{ link.url }}{% endif %}" class="social-link"{% if link.external %} target="_blank" rel="noopener"{% endif %}>
+        <span class="social-icon">{{ link.label }}</span>
+        <span class="social-name">{{ link.name }}</span>
         <span class="social-arrow">→</span>
       </a>
-      <a href="https://oli-bot.github.io" class="social-link">
-        <span class="social-icon">博客</span>
-        <span class="social-name">oli-bot.github.io</span>
-        <span class="social-arrow">→</span>
-      </a>
-      <a href="{{ "/feed.xml" | absolute_url }}" class="social-link">
-        <span class="social-icon">RSS</span>
-        <span class="social-name">订阅博客</span>
-        <span class="social-arrow">→</span>
-      </a>
+      {% endfor %}
     </div>
     <ul class="contact-list">
       <li><span class="contact-prompt">&gt;_</span> 在博客文章下留言</li>

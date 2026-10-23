@@ -1,0 +1,63 @@
+# 关于页数据（about.md 循环渲染：技能、爱好、社交链接）
+skills:
+  - category: "后端开发"
+    items:
+      - name: "Go"
+        level: 90
+      - name: "Python"
+        level: 85
+      - name: "Java"
+        level: 75
+      - name: "C#"
+        level: 70
+      - name: "Node.js"
+        level: 80
+  - category: "数据库"
+    items:
+      - name: "PostgreSQL"
+        level: 85
+      - name: "MySQL"
+        level: 80
+      - name: "Redis"
+        level: 75
+      - name: "MongoDB"
+        level: 70
+  - category: "云原生 &amp; DevOps"
+    items:
+      - name: "Docker"
+        level: 85
+      - name: "Kubernetes"
+        level: 70
+      - name: "CI/CD"
+        level: 80
+      - name: "Linux"
+        level: 85
+  - category: "其他"
+    items:
+      - name: "Git"
+        level: 90
+      - name: "API 设计"
+        level: 90
+      - name: "微服务"
+        level: 75
+      - name: "分布式系统"
+        level: 75
+
+hobbies:
+  - "💻 技术探索与开源项目"
+  - "📚 历史文化与人文地理"
+  - "🌍 旅行与摄影"
+  - "🎮 游戏与科技产品"
+
+socials:
+  - label: "GitHub"
+    name: "@oli-bot"
+    url: "https://github.com/oli-bot"
+    external: true
+  - label: "博客"
+    name: "oli-bot.github.io"
+    url: "https://oli-bot.github.io"
+  - label: "RSS"
+    name: "订阅博客"
+    url: "/feed.xml"
+    absolute: true

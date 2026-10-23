@@ -1,0 +1,56 @@
+# 项目页数据（projects.html 循环渲染，新增项目只改这里）
+- icon: "💼"
+  title: "资产管家 (Assets Pocket)"
+  description: "极简风格的个人资产管理与物品记录工具：资产大盘统计、物品 CRUD、折旧与日均成本分析、自定义分类。"
+  tags:
+    - React
+    - Vite
+    - PWA
+    - TypeScript
+  links:
+    - label: "GitHub"
+      url: "https://github.com/oli-bot/assets_manager"
+    - label: "在线预览"
+      url: "https://assets-manager-dyf.pages.dev"
+
+- icon: "🌊"
+  title: "Mangrove Guide"
+  description: "红树林导览系统：Godot 实现的 iOS 沉浸式探索客户端（地图探索 + 图鉴）、Vue 管理后台与 Web 用户端、基于 .NET 的后端服务，部署在 Cloudflare Pages。"
+  tags:
+    - Godot
+    - Vue
+    - .NET
+    - Cloudflare Pages
+  links:
+    - label: "GitHub"
+      url: "https://github.com/oli-bot/mangrove_guide"
+    - label: "在线预览"
+      url: "https://mangrove-guide.pages.dev"
+
+- icon: "🌾"
+  title: "农HayWire · 农产品行情情报站"
+  description: "农产品批发价格行情看板，每日通过 GitHub Actions 自动抓取农业农村部官方价格数据，提供行情看板与每周行情周报。"
+  tags:
+    - HTML
+    - Python
+    - GitHub Actions
+    - Cloudflare Pages
+  links:
+    - label: "GitHub"
+      url: "https://github.com/oli-bot/haywire-cn"
+    - label: "在线预览"
+      url: "https://haywire-cn.pages.dev/"
+
+- icon: "🪴"
+  title: "植物养护 · PlantCare"
+  description: "移动端植物养护 PWA：真实相机拍照 + 设备端 AI 植物识别（TensorFlow.js + MobileNet）、浇水/施肥护理任务与日历提醒、成长日记、成就系统与本地数据备份，厚涂插画风格软 UI。"
+  tags:
+    - React
+    - Vite
+    - PWA
+    - TensorFlow.js
+  links:
+    - label: "GitHub"
+      url: "https://github.com/oli-bot/plant-care-app"
+    - label: "在线预览"
+      url: "https://plant-care-app-9se.pages.dev"
