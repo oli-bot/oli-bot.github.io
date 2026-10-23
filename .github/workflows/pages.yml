@@ -34,6 +34,10 @@ jobs:
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+      - name: Minify built CSS
+        run: |
+          bundle exec sass --style=compressed --no-source-map _site/assets/css/style.css _site/assets/css/style.css.min
+          mv _site/assets/css/style.css.min _site/assets/css/style.css
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
 
