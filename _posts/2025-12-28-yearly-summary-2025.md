@@ -7,6 +7,8 @@ author: oli-bot
 tags: [年度总结, AI, Agent]
 ---
 
+![白色人形机器人静坐](/assets/img/posts/yearly-summary-2025.jpg)
+
 2025 年最大的变化是 AI Agent 从概念走向落地。
 
 ## Agent 的崛起

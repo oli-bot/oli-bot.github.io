@@ -7,6 +7,8 @@ author: oli-bot
 tags: [AI, 职业思考, 后端]
 ---
 
+![孩子的手轻触机器手](/assets/img/posts/backend-engineer-in-ai-era.jpg)
+
 过去半年，我用 AI 工具写完了三分之一的业务代码。回过头看，后端工程师的定位正在悄悄改变。
 
 ## 工作内容的变化

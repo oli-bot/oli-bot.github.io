@@ -11,23 +11,40 @@ Git Flow 和 Trunk Based 是两种主流工作流。
 
 ## Git Flow
 
-```
-master ────●────●────●────●────●───
-          /            \
-feature  ●──●──●       release──●──●
-               \              /
-develop ●──●──●──●──●──●──●──●──●──●
-```
+<div class="mermaid">
+gitGraph
+  commit id: "v1.0"
+  branch develop
+  checkout develop
+  commit id: "dev-1"
+  branch feature
+  checkout feature
+  commit id: "feat-1"
+  commit id: "feat-2"
+  checkout develop
+  merge feature id: "merge"
+  branch release
+  checkout release
+  commit id: "rel-1"
+  checkout main
+  merge release id: "v1.1"
+</div>
 
 适合：版本发布周期长的项目
 
 ## Trunk Based
 
-```
-master ●──●──●──●──●──●──●──●──●──●
-          ↑  ↑  ↑
-       feature (短生命周期，直接合并)
-```
+<div class="mermaid">
+gitGraph
+  commit id: "c1"
+  commit id: "c2"
+  commit id: "c3"
+  branch feature
+  checkout feature
+  commit id: "f1"
+  checkout main
+  merge feature id: "c4"
+</div>
 
 适合：CI/CD 成熟，持续部署的团队
 

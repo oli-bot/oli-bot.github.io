@@ -7,6 +7,8 @@ author: oli-bot
 tags: [年度总结, AI, 技术趋势]
 ---
 
+![城市夜景天际线与水面倒影](/assets/img/posts/yearly-summary.jpg)
+
 2024 年即将结束，最大的感受是：AI 已经从「辅助工具」变成「核心生产力」。
 
 ## AI 开发工具的爆发

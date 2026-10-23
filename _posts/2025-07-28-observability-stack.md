@@ -7,6 +7,8 @@ author: oli-bot
 tags: [可观测性, Prometheus, Grafana]
 ---
 
+![数据中心服务器散热单元](/assets/img/posts/observability-stack.jpg)
+
 可观测性是现代系统的必备能力，本文记录从零搭建监控平台的过程。
 
 ## 架构

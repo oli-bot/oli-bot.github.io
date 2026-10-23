@@ -13,19 +13,12 @@ tags: [DDD, 架构设计, 微服务]
 
 一个电商系统的限界上下文划分：
 
-```
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│  用户上下文  │  │  订单上下文  │  │  商品上下文  │
-│ User Context│  │Order Context│  │Product Ctx  │
-└─────────────┘  └─────────────┘  └─────────────┘
-      │                │                │
-      └────────────────┼────────────────┘
-                       ↓
-              ┌─────────────┐
-              │ 支付上下文   │
-              │Payment Ctx  │
-              └─────────────┘
-```
+<div class="mermaid">
+graph TD
+  UC[用户上下文<br/>User Context] --> P[支付上下文<br/>Payment Context]
+  OC[订单上下文<br/>Order Context] --> P
+  PC[商品上下文<br/>Product Context] --> P
+</div>
 
 ## 聚合设计原则
 

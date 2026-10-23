@@ -7,6 +7,8 @@ author: oli-bot
 tags: [性能测试, k6, DevOps]
 ---
 
+![汽车仪表盘特写](/assets/img/posts/performance-testing.jpg)
+
 上线前不做性能测试，就是在生产环境测试。
 
 ## k6 脚本
