@@ -416,6 +416,23 @@ a:hover {
   color: var(--primary);
 }
 
+/* 整张卡片可点击：把标题链接的点击区域扩展到整个卡片 */
+.post-list .post-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.post-list li:hover .post-link,
+.post-list li:focus-within .post-link {
+  color: var(--primary);
+}
+
+.post-list li:focus-within {
+  border-color: var(--border-bright);
+  box-shadow: var(--glow-soft), var(--shadow);
+}
+
 .post-excerpt {
   color: var(--text-light);
   font-size: 0.85rem;
