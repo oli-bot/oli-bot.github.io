@@ -1000,80 +1000,8 @@ pre:hover .copy-code-btn {
 }
 
 /* ---------- 12. 代码高亮（内置终端配色） ---------- */
-.hljs {
-  background: transparent;
-  color: var(--text);
-}
 
-.hljs-comment,
-.hljs-quote {
-  color: var(--hl-comment);
-  font-style: italic;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-literal,
-.hljs-type,
-.hljs-doctag {
-  color: var(--hl-keyword);
-}
-
-.hljs-string,
-.hljs-regexp,
-.hljs-addition,
-.hljs-attribute {
-  color: var(--hl-string);
-}
-
-.hljs-number,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-link {
-  color: var(--hl-number);
-}
-
-.hljs-title,
-.hljs-section,
-.hljs-function .hljs-title,
-.hljs-title.function_ {
-  color: var(--hl-function);
-}
-
-.hljs-attr,
-.hljs-variable,
-.hljs-template-variable,
-.hljs-params,
-.hljs-property {
-  color: var(--hl-attr);
-}
-
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-selector-class,
-.hljs-selector-id,
-.hljs-class .hljs-title {
-  color: var(--hl-attr);
-}
-
-.hljs-name,
-.hljs-tag {
-  color: var(--hl-keyword);
-}
-
-.hljs-meta,
-.hljs-meta .hljs-keyword {
-  color: var(--hl-meta);
-}
-
-.hljs-deletion {
-  color: var(--hl-deletion);
-}
-
-.hljs-emphasis { font-style: italic; }
-.hljs-strong { font-weight: 700; }
-
-/* Rouge 服务端高亮：token 类为 Pygments 短类名，复用上面 .hljs 的终端配色变量 */
+/* Rouge 服务端高亮：token 类为 Pygments 短类名，复用 --hl-* 终端配色变量 */
 .highlight {
   background: transparent;
   color: var(--text);
